@@ -1,2 +1,2 @@
 # Food-Delivery
-A full-stack web application for ordering food
+A full-stack MERN web application for ordering food
