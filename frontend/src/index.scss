@@ -1,0 +1,43 @@
+// Components
+@import './components/navbar/_navbar.scss';
+@import './components/header/_header.scss';
+@import './components/exploreMenu/_exploreMenu.scss';
+@import './components/foodDisplay/_foodDisplay.scss';
+@import './components/foodItem/_foodItem.scss';
+@import './components/appDownload/_appDownload.scss';
+@import './components/footer/_footer.scss';
+
+// Pages
+@import './pages/home/_home.scss';
+@import './pages/cart/_cart.scss';
+@import './pages/checkout/_checkout.scss';
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: 'Outfit', sans-serif;
+}
+
+body {
+  min-height: 100vh;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.app {
+  width: 80%;
+  margin: auto
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
