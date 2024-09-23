@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import { StoreContext } from '../../context/StoreContext'
 import FoodItem from '../foodItem/FoodItem'
 
-const FoodDisplay = ({ category }: { category: string }) => {
+const FoodDisplay: React.FC<FoodDisplayProps> = ({ category }) => {
     const { food_list } = useContext(StoreContext)
 
     return (

@@ -1,7 +1,7 @@
 import React from 'react'
 import { menu_list } from '../../assets/assets'
 
-const ExploreMenu = ({ category, setCategory }: { category: string, setCategory: React.Dispatch<React.SetStateAction<string>> }) => {
+const ExploreMenu: React.FC<ExploreMenuProps> = ({ category, setCategory }) => {
   return (
     <div className='explore-menu' id='explore-menu'>
         <h1>Explore our menu</h1>

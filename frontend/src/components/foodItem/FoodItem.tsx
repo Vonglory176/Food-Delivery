@@ -1,8 +1,8 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext } from 'react'
 import { assets } from '../../assets/assets'
 import { StoreContext } from '../../context/StoreContext'
 
-const FoodItem = ({id, name, image, description, price}: {id: number, name: string, image: string, description: string, price: number}) => {
+const FoodItem: React.FC<FoodItemProps> = ({id, name, image, description, price}) => {
     const { cartItems, addToCart, removeFromCart } = useContext(StoreContext)
   
     return (
