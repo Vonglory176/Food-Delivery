@@ -60,7 +60,29 @@ import bag_icon from './bag_icon.png'
 import logout_icon from './logout_icon.png'
 import parcel_icon from './parcel_icon.png'
 
-export const assets = {
+// interface Assets {
+//     logo: string;
+//     basket_icon: string;
+//     header_img: string;
+//     search_icon: string;
+//     rating_starts: string;
+//     add_icon_green: string;
+//     add_icon_white: string;
+//     remove_icon_red: string;
+//     app_store: string;
+//     play_store: string;
+//     linkedin_icon: string;
+//     facebook_icon: string;
+//     twitter_icon: string;
+//     cross_icon: string;
+//     selector_icon: string;
+//     profile_icon: string;
+//     logout_icon: string;
+//     bag_icon: string;
+//     parcel_icon: string;
+// }
+
+export const assets: AssetsType = {
     logo,
     basket_icon,
     header_img,
@@ -82,7 +104,12 @@ export const assets = {
     parcel_icon
 }
 
-export const menu_list = [
+// interface Menu {
+//     menu_name: string;
+//     menu_image: string;
+// }
+
+export const menu_list: MenuType[] = [
     {
         menu_name: "Salad",
         menu_image: menu_1
@@ -114,9 +141,20 @@ export const menu_list = [
     {
         menu_name: "Noodles",
         menu_image: menu_8
-    }]
+    }
+]
 
-export const food_list = [
+// interface Food {
+//     _id: string;
+//     name: string;
+//     image: string;
+//     price: number;
+//     description: string;
+//     category: string;
+// }
+
+
+export const food_list: FoodType[] = [
     {
         _id: "1",
         name: "Greek salad",
