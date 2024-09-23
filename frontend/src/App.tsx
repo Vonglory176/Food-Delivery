@@ -1,18 +1,23 @@
-import React from 'react'
+import { useState } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import Navbar from './components/navbar/Navbar'
 import Home from './pages/home/Home'
 import Cart from './pages/cart/Cart'
 import Checkout from './pages/checkout/Checkout'
 import Footer from './components/footer/Footer'
+import LoginPopup from './components/loginPopup/LoginPopup'
 
-// VIDEO --> https://youtu.be/DBMPXJJfQEA?t=7944 || TS: 2:12:24
+// VIDEO --> https://youtu.be/DBMPXJJfQEA?t=12229 || TS: 3:23:49
 
 const App = () => {
+  const [showLogin, setShowLogin] = useState(false)
+
   return (
     <>
+      {showLogin && <LoginPopup setShowLogin={setShowLogin} />}
+
       <div className='app'>
-        <Navbar />
+        <Navbar setShowLogin={setShowLogin} />
 
         <Routes>
           <Route path='/' element={<Home />} />
@@ -27,3 +32,11 @@ const App = () => {
 }
 
 export default App
+
+
+/* TODO:
+
+  Make menu carousel PC friendly
+  Fix search button in navbar
+  Make footer links
+*/
