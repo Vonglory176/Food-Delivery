@@ -1,0 +1,44 @@
+// Components
+@import './components/sidebar/_sidebar.scss';
+@import './components/navbar/_navbar.scss';
+
+// Pages
+@import './pages/add/_add.scss';
+@import './pages/list/_list.scss';
+@import './pages/orders/_orders.scss';
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Outfit', sans-serif;
+    scroll-behavior: smooth;
+}
+
+body {
+    min-height: 100vh;
+    background-color: #fcfcfc;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+hr {
+    border: none;
+    height: 1px;
+    background-color: #a9a9a9;
+}
+
+// .App {}
+
+.app-content {
+    display: flex;
+}
+
+.flex-col {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
