@@ -1,0 +1,49 @@
+import express from "express"
+import cors from "cors"
+import { connectDB } from "./config/db.js"
+import { notFoundHandler, errorHandler } from "./middleware/errorMiddleware.js"
+import foodRouter from "./routes/foodRoute.js"
+
+
+
+
+// App Config
+const app = express()
+const port = 4000
+// const url = "http://localhost:4000"
+
+
+
+// Middlewares
+app.use(express.json())
+app.use(cors())
+
+
+
+// DB Config
+connectDB()
+
+
+
+// API Endpoints
+app.use("/api/food", foodRouter)
+app.use("/images", express.static("uploads")) // path.join(__dirname, "uploads")
+
+
+
+// Error Handling (These fire when a request error occurs (above) in Routes)
+app.use(notFoundHandler)
+app.use(errorHandler)
+
+
+
+app.get("/", (req, res) => {
+    res.send("API is running...")
+})
+
+app.listen(port, () => {
+    console.log(`Server is running at http://localhost:${port}`)
+})
+
+// mongodb+srv://Vonglory176:LrapX4tXO5gnTnwg@cluster0.kl50m.mongodb.net/?
+// retryWrites=true&w=majority&appName=Cluster0
