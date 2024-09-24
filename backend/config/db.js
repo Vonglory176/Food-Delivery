@@ -8,6 +8,3 @@ export const connectDB = async () => {
         console.log("Connected to MongoDB")
     })
 }
-// mongodb+srv://Vonglory176:LrapX4tXO5gnTnwg@cluster0.kl50m.mongodb.net/MERN-Food-Delivery-Project-Database
-// mongodb+srv://Vonglory176:LrapX4tXO5gnTnwg@cluster0.kl50m.mongodb.net/?
-// retryWrites=true&w=majority&appName=Cluster0
