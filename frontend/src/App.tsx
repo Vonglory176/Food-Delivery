@@ -7,7 +7,7 @@ import Checkout from './pages/checkout/Checkout'
 import Footer from './components/footer/Footer'
 import LoginPopup from './components/loginPopup/LoginPopup'
 
-// VIDEO --> https://youtu.be/DBMPXJJfQEA?t=12229 || TS: 3:23:49
+// VIDEO --> https://youtu.be/DBMPXJJfQEA?t=18719 || TS: 5:11:59
 
 const App = () => {
   const [showLogin, setShowLogin] = useState(false)
@@ -16,7 +16,7 @@ const App = () => {
     <>
       {showLogin && <LoginPopup setShowLogin={setShowLogin} />}
 
-      <div className='app'>
+      <div className='App'>
         <Navbar setShowLogin={setShowLogin} />
 
         <Routes>
