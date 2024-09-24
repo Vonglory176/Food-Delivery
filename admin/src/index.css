@@ -1,0 +1,116 @@
+.sidebar {
+  width: 18%;
+  min-height: 100vh;
+  border: 1.5px solid #a9a9a9;
+  border-top: 0;
+  font-size: max(1vw, 10px);
+}
+.sidebar-options {
+  padding-top: 50px;
+  padding-left: 20%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.sidebar-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid #a9a9a9;
+  border-right: 0;
+  padding: 8px 10px;
+  border-radius: 3px 0 0 3px;
+  cursor: pointer;
+}
+.sidebar-option.active {
+  background-color: #fff0ed;
+  border-color: tomato;
+}
+@media (max-width: 900px) {
+  .sidebar-option p {
+    display: none;
+  }
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 4%;
+}
+.navbar .logo {
+  width: max(10%, 80px);
+}
+.navbar .profile {
+  width: 40px;
+}
+
+.add {
+  width: 70%;
+  margin-left: max(5vw, 25px);
+  margin-top: 50px;
+  color: #6d6d6d;
+  font-size: 16px;
+}
+.add form {
+  gap: 20px;
+}
+.add-img-upload img {
+  width: 120px;
+}
+.add-product-name, .add-product-description {
+  width: max(40%, 280px);
+}
+.add-product-name input, .add-product-description textarea {
+  padding: 10px;
+}
+.add-category-price {
+  display: flex;
+  gap: 30px;
+}
+.add-category-price select, .add-category-price input {
+  max-width: 120px;
+  padding: 10px;
+}
+.add-btn {
+  max-width: 120px;
+  border: none;
+  padding: 10px;
+  background-color: black;
+  color: white;
+  cursor: pointer;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Outfit", sans-serif;
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  background-color: #fcfcfc;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+hr {
+  border: none;
+  height: 1px;
+  background-color: #a9a9a9;
+}
+
+.app-content {
+  display: flex;
+}
+
+.flex-col {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}/*# sourceMappingURL=index.css.map */

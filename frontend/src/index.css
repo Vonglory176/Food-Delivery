@@ -602,17 +602,17 @@ a {
   color: inherit;
 }
 
-.app {
+.App {
   width: 80%;
   margin: auto;
 }
 @media (max-width: 1024px) {
-  .app {
+  .App {
     width: 90%;
   }
 }
 @media (max-width: 768px) {
-  .app {
+  .App {
     width: 95%;
   }
 }
