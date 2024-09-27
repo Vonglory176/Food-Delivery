@@ -1,9 +1,10 @@
+import dotenv from "dotenv"
 import express from "express"
 import cors from "cors"
 import { connectDB } from "./config/db.js"
 import { notFoundHandler, errorHandler } from "./middleware/errorMiddleware.js"
 import foodRouter from "./routes/foodRoute.js"
-
+import userRouter from "./routes/userRoute.js"
 
 
 
@@ -28,7 +29,7 @@ connectDB()
 // API Endpoints
 app.use("/api/food", foodRouter)
 app.use("/images", express.static("uploads")) // path.join(__dirname, "uploads")
-
+app.use("/api/user", userRouter)
 
 
 // Error Handling (These fire when a request error occurs (above) in Routes)
