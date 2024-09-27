@@ -22,12 +22,15 @@ const createFood = async (req, res, next) => {
             image: image_filename
         })
 
-
         const newFood = await food.save()
+
+        const successMessage = "Food created successfully"
         res.status(200).json({
             success: true, 
-            message: "Food created successfully" // , newFood
+            message: successMessage, // , newFood
         })
+        
+        console.log(successMessage)
 
     } catch (error) {
 
@@ -36,11 +39,6 @@ const createFood = async (req, res, next) => {
 
         error.action = "Creating food"
         next(error)
-
-        // res.status(500).json({
-        //     success: false,
-        //     message: "Error creating food" // error
-        // })
     }
 }
 
@@ -56,6 +54,8 @@ const getFood = async (req, res, next) => {
             success: true,
             foodList: foods
         })
+
+        console.log("Foods fetched successfully")
 
     } catch (error) {
 
@@ -85,10 +85,12 @@ const removeFood = async (req, res, next) => {
 
         await foodModel.findByIdAndDelete(req.body.id)
 
+        const successMessage = "Food removed successfully"
         res.status(200).json({
             success: true,
-            message: "Food removed successfully"
+            message: successMessage
         })
+        console.log(successMessage)
 
     } catch (error) {
 
