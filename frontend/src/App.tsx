@@ -7,7 +7,7 @@ import Checkout from './pages/checkout/Checkout'
 import Footer from './components/footer/Footer'
 import LoginPopup from './components/loginPopup/LoginPopup'
 
-// VIDEO --> https://youtu.be/DBMPXJJfQEA?t=18719 || TS: 5:11:59
+// VIDEO --> https://youtu.be/DBMPXJJfQEA?t=24309 || TS: 6:45:09
 
 const App = () => {
   const [showLogin, setShowLogin] = useState(false)
