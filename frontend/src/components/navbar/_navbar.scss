@@ -59,6 +59,17 @@
         }
     }
 
+    &-profile {
+        position: relative;
+
+        &-dropdown {
+            position: absolute;
+            display: none;
+            right: 0;
+            z-index: 1;
+        }
+    }
+
     @media (max-width: 1023px) {
         .logo {
             width: 140px;
