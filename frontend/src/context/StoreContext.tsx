@@ -16,6 +16,7 @@ export const StoreContext = createContext<StoreContextType>({
 const StoreContextProvider: React.FC<StoreContextProviderProps> = ({ children }) => {
 
     const [cartItems, setCartItems] = useState<any>({})
+    const [token, setToken] = useState<string | null>(localStorage.getItem('token'))
 
     const cartHasItems = Boolean(Object.keys(cartItems).length > 0)
     const deliveryFee = cartHasItems ? 5 : 0
@@ -75,6 +76,10 @@ const StoreContextProvider: React.FC<StoreContextProviderProps> = ({ children })
         cartTotal,
         addToCart,
         removeFromCart,
+        
+        token,
+        setToken,
+        
         // getTotalCartAmount
     }
 
