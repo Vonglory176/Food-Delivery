@@ -30,7 +30,7 @@ const Cart = () => {
               <div>
 
                 <div className="cart-items-title cart-items-item" key={index}>
-                  <img src={item.image} alt={item.name} />
+                  <img src={import.meta.env.VITE_FRONTEND_URL + '/images/' + item.image} alt={item.name} />
                   <p>{item.name}</p>
                   <p>{item.price}</p>
                   <p>{cartItems[item._id]}</p>
