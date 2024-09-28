@@ -2,9 +2,12 @@ import dotenv from "dotenv"
 import express from "express"
 import cors from "cors"
 import { connectDB } from "./config/db.js"
-import { notFoundHandler, errorHandler } from "./middleware/errorMiddleware.js"
+
 import foodRouter from "./routes/foodRoute.js"
 import userRouter from "./routes/userRoute.js"
+import cartRouter from "./routes/cartRoute.js"
+import orderRouter from "./routes/orderRoute.js"
+import { notFoundHandler, errorHandler } from "./middleware/errorMiddleware.js"
 
 
 
@@ -30,6 +33,8 @@ connectDB()
 app.use("/api/food", foodRouter)
 app.use("/images", express.static("uploads")) // path.join(__dirname, "uploads")
 app.use("/api/user", userRouter)
+app.use("/api/cart", cartRouter)
+app.use("/api/order", orderRouter)
 
 
 // Error Handling (These fire when a request error occurs (above) in Routes)
