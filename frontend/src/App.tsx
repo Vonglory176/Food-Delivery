@@ -40,19 +40,31 @@ export default App
 
 /* TODO:
 
-  Make menu carousel PC friendly
-  Fix search button in navbar
-  Make footer links
+  // Frontent -----
 
-  Change <p> into buttons / links (Navbar)
-  Swap out <hr> (among others) in Navbar dropdown
-  Change Token to Access/Refresh system
-  Change way token is sent / parsed
-  Change fetch calls to proper Protocols
-  Put fetch calls in seperate files?
+    Make menu carousel PC friendly
+    Fix search button in navbar
+    Make footer links
+    Change <p> into buttons / links (Navbar)
+    Swap out <hr> (among others) in Navbar dropdown
+    Put fetch calls in seperate files?
+    Change redirection when logged out to use Router (Checkout)
+    Update id navs to include links so they work in other pages
+    Increase size of code input in checkout
+    
+    // Backend -----
+    
+    Change fetch calls to proper Protocols
+    Change Token to Access/Refresh system
+    Change way token is sent / parsed
 
-  Change redirection when logged out to use Router (Checkout)
-  If logged out with cart items, append to server cart after login (If an item exists already, no change)
+    If logged out with cart items, append to server cart after login (If an item exists already, no change)
 
-  Add AdminAuthMiddleware w/Token use
+  // Admin -----
+
+    Add login/signup system with dummy account
+    Disable Add/Remove features for production version
+    Add AdminAuthMiddleware w/Token use
+
+
 */
