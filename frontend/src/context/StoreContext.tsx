@@ -1,5 +1,6 @@
-import { createContext, useState } from "react";
-import { food_list } from "../assets/assets";
+import axios from "axios";
+import { createContext, useEffect, useState } from "react";
+// import { food_list } from "../assets/assets";
 
 export const StoreContext = createContext<StoreContextType>({
     food_list: [],
@@ -17,13 +18,15 @@ const StoreContextProvider: React.FC<StoreContextProviderProps> = ({ children })
 
     const [cartItems, setCartItems] = useState<any>({})
     const [token, setToken] = useState<string | null>(localStorage.getItem('token'))
+    const [food_list, setFoodList] = useState<any>([])
 
     const cartHasItems = Boolean(Object.keys(cartItems).length > 0)
     const deliveryFee = cartHasItems ? 5 : 0
 
-    const addToCart = (itemId: number | string) => {
+    const addToCart = async (itemId: number | string) => {
         if (itemId === undefined || itemId === null) return
 
+        // Local Cart
         const id = Number(itemId)
         if (!cartItems[id]) {
             setCartItems((prev: any) => ({ ...prev, [id]: 1 }))
@@ -31,11 +34,26 @@ const StoreContextProvider: React.FC<StoreContextProviderProps> = ({ children })
         else {
             setCartItems((prev: any) => ({ ...prev, [id]: prev[id] + 1 }))
         }
+
+        // Server Cart
+        try {
+            if (token) {
+                const response = await axios.post(import.meta.env.VITE_FRONTEND_URL + '/api/cart/add', {itemId},{headers: {
+                    // 'Authorization': `Bearer ${token}`
+                    token
+                }})
+
+                if (!response.data.success) throw new Error
+            }            
+        } catch (error) {
+            console.error("ERROR: Could not update cart in server")
+        }
     }
     
-    const removeFromCart = (itemId: number | string) => {
+    const removeFromCart = async (itemId: number | string) => {
         if (itemId === undefined || itemId === null) return
 
+        // Local Cart
         const id = Number(itemId)
         if (cartItems[id] === 1) {
             setCartItems((prev: any) => {
@@ -44,6 +62,32 @@ const StoreContextProvider: React.FC<StoreContextProviderProps> = ({ children })
             })
         } else {
             setCartItems((prev: any) => ({ ...prev, [id]: prev[id] - 1 }))
+        }
+
+        // Server Cart
+        try {
+            if (token) {
+                const response = await axios.post(import.meta.env.VITE_FRONTEND_URL + '/api/cart/remove', {itemId},{headers: {
+                    // 'Authorization': `Bearer ${token}`
+                    token
+                }})
+
+                if (!response.data.success) throw new Error
+            }            
+        } catch (error) {
+            console.error("ERROR: Could not update cart in server")
+        }
+    }
+
+    const loadCartData = async (token: string) => {
+        try {
+            const response = await axios.get(import.meta.env.VITE_FRONTEND_URL + '/api/cart/get', {headers: {
+                // 'Authorization': `Bearer ${token}`
+                token
+            }})
+            setCartItems(response.data.cartData)
+        } catch (error) {
+            console.error("ERROR: Could not load cart data")
         }
     }
 
@@ -62,10 +106,27 @@ const StoreContextProvider: React.FC<StoreContextProviderProps> = ({ children })
     const cartSubtotal = getCartSubtotal()
     const cartTotal = cartSubtotal + deliveryFee
 
-    // useEffect(() => {
-    //     console.log(cartItems)
-    //     console.log(cartItems.length)
-    // }, [cartItems])    
+    const fetchFoodList = async () => {
+        try {
+            const response = await axios.get(import.meta.env.VITE_FRONTEND_URL + '/api/food/list')
+            setFoodList(response.data.foodList || [])
+        } catch (error) {
+            console.log("ERROR: Could not fetch food list")
+        }
+    }
+
+    // Load data from server
+    useEffect(() => {
+        const loadData = async () => {
+            await fetchFoodList()
+            const token = localStorage.getItem('token')
+            if(token) {
+                setToken(token)
+                await loadCartData(token)
+            }
+        }
+        loadData()
+    }, [])
 
     const contextValue: StoreContextType = {
         food_list,
@@ -74,11 +135,11 @@ const StoreContextProvider: React.FC<StoreContextProviderProps> = ({ children })
         deliveryFee,
         cartSubtotal,
         cartTotal,
+        token,
+        setToken,
         addToCart,
         removeFromCart,
         
-        token,
-        setToken,
         
         // getTotalCartAmount
     }
