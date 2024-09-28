@@ -67,6 +67,33 @@
             display: none;
             right: 0;
             z-index: 1;
+
+            li {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                cursor: pointer;
+
+                &:hover {
+                    color: tomato;
+                }
+            }
+
+            img {
+                width: 20px;
+            }
+        }
+
+        &:hover &-dropdown {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            background-color: #fff4f2;
+            padding: 12px 25px;
+            border-radius: 4px;
+            border: 1px solid tomato;
+            outline: 2px solid white;
+            list-style: none;
         }
     }
 
