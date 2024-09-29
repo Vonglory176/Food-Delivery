@@ -36,9 +36,17 @@
     }
 
     &-social-icons {
-        img {
+        display: flex;
+        gap: 15px;
+
+        a, img {
+            display: block;
             width: 40px;
-            margin-right: 15px;
+            height: 40px;
+        }
+
+        img {
+            pointer-events: none;
         }
     }
 
