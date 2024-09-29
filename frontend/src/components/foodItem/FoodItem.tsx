@@ -1,9 +1,9 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { assets } from '../../assets/assets'
-import { StoreContext } from '../../context/StoreContext'
+import { useStore } from '../../context/StoreContext'
 
 const FoodItem: React.FC<FoodItemProps> = ({id, name, image, description, price}) => {
-    const { cartItems, addToCart, removeFromCart } = useContext(StoreContext)
+    const { cartItems, updateCart } = useStore()
   
     return (
     <div className='food-item'>
@@ -17,7 +17,7 @@ const FoodItem: React.FC<FoodItemProps> = ({id, name, image, description, price}
 
             {cartItems[id] && <>
                 {/* Remove from cart button */}
-                <button className='remove-from-cart-btn' onClick={() => removeFromCart(id)} aria-label='Remove from cart'>
+                <button className='remove-from-cart-btn' onClick={() => updateCart(id, 'remove')} aria-label='Remove from cart'>
                     <img className='remove' src={assets.remove_icon_red} alt="Minus icon" />
                 </button>
 
@@ -26,7 +26,7 @@ const FoodItem: React.FC<FoodItemProps> = ({id, name, image, description, price}
             </>}
 
             {/* Add to cart button */}
-            <button className='add-to-cart-btn' onClick={() => addToCart(id)} aria-label='Add to cart'>
+            <button className='add-to-cart-btn' onClick={() => updateCart(id, 'add')} aria-label='Add to cart'>
                 <img className='add' src={!cartItems[id] ? assets.add_icon_white : assets.add_icon_green} alt="Add icon" />
             </button>
         </div>
