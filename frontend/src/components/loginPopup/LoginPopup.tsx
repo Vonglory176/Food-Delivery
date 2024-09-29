@@ -1,42 +1,57 @@
 import React, { useContext, useState } from 'react'
 import { assets } from '../../assets/assets'
-import axios from 'axios'
-import { StoreContext } from '../../context/StoreContext'
+import { useStore } from '../../context/StoreContext'
+import { loginHook } from '../../hooks/userHooks'
+import { validateLoginForm } from '../../helpers/helper'
 
-const LoginPopup: React.FC<LoginPopupProps> = ({ setShowLogin }) => {
-  const { setToken } = useContext(StoreContext)
+const LoginPopup: React.FC<LoginPopupProps> = () => {
+  const { setToken, setShowLogin } = useStore()
   const [currentState, setCurrentState] = useState<string>("Sign Up")
   const [data, setData] = useState<any>({
-    name: '',
-    email: '',
-    password: '',
+    name: 'test',
+    email: 'test@gmail.com',
+    password: 'abc123@W',
+    terms: false
+  })
+
+  const [errors, setErrors] = useState<any>({
+    name: false,
+    email: false,
+    password: false,
+    terms: false,
+    errorExists: false,
   })
 
   const stateIsSignUp = currentState === "Sign Up"
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setData({ ...data, [e.target.name]: e.target.value })
+  // Reset Errors
+  const resetErrors = () => {
+    setErrors({ name: false, email: false, password: false, terms: false, errorExists: false })
   }
 
+  const changeFormState = (state: string) => {
+    setCurrentState(state)
+    resetErrors()
+  }
+
+  // Handle Change
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value, checked } = e.target
+    setData({ ...data, [name]: name === 'terms' ? checked : value })
+  }
+
+  // Handle Login
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    const url = import.meta.env.VITE_BACKEND_URL + 'api/user' + (stateIsSignUp ? '/signup' : '/login')
+    // Validating Inputs
+    if (!validateLoginForm(data, setErrors, stateIsSignUp)) return
+    else resetErrors()
 
-    if (!stateIsSignUp) {
-      const response = await axios.post(url, data)
-      console.log(response)
-
-      if (response.data.success) {
-        setToken(response.data.token)
-        localStorage.setItem('token', response.data.token)
-        setShowLogin(false)
-      }
-      else {
-        alert(response.data.message)
-      }
-    }
+    // Sending Data
+    loginHook(data, stateIsSignUp ? 'register' : 'login', setToken, setShowLogin, setErrors)
   }
+
 
   return (
     <div className='login-popup'>
@@ -52,26 +67,47 @@ const LoginPopup: React.FC<LoginPopupProps> = ({ setShowLogin }) => {
 
         {/* Inputs */}
         <div className="login-popup-inputs">
-          {stateIsSignUp && <input onChange={handleChange} value={data.name} type="text" name='name' placeholder='Your name' required />} {/* Hide for Login */}
-          <input onChange={handleChange} value={data.email} type="email" name='email' placeholder='Your email' required />
-          <input onChange={handleChange} value={data.password} type="password" name='password' placeholder='Your password' required />
+
+          {/* Name */}
+          {stateIsSignUp &&
+            <div className="login-popup-inputs-wrapper">
+              <input onChange={handleChange} className={errors.name ? 'error' : ''} value={data.name} type="text" name='name' placeholder='Your name' />
+              {errors.name && <p className='error-text'>{errors.name}</p>}
+            </div>
+          }
+
+          {/* Email */}
+          <div className="login-popup-inputs-wrapper">
+            <input onChange={handleChange} className={errors.email ? 'error' : ''} value={data.email} type="email" name='email' placeholder='Your email' />
+            {errors.email && <p className='error-text'>{errors.email}</p>}
+          </div>
+
+          {/* Password */}
+          <div className="login-popup-inputs-wrapper">
+            <input onChange={handleChange} className={errors.password ? 'error' : ''} value={data.password} type="password" name='password' placeholder='Your password' />
+            {errors.password && <p className='error-text'>{errors.password}</p>}
+          </div>
+
         </div>
+
+        {/* Submit Button */}
 
         <button type='submit'>{currentState === "Sign Up" ? "Create Account" : "Login"}</button>
 
         {/* Terms & Conditions / Privacy Policy */}
-        <div className="login-popup-condition">
-          <input type="checkbox" required />
-          <p>By continuing, you agree to our <span>Terms & Conditions</span> & <span>Privacy Policy</span></p>
-        </div>
+        {stateIsSignUp && <div className="login-popup-condition">
+          <input onChange={handleChange} className={errors.terms ? 'error' : ''} type="checkbox" name='terms' checked={data.terms} required />
+          <p>By continuing, you agree to our <a href="/" aria-label='Terms & Conditions'>Terms & Conditions</a> & <a href="/" aria-label='Privacy Policy'>Privacy Policy</a></p>
+          {/* {errors.terms && <p className='error-text'>{errors.terms}</p>} */}
+        </div>}
 
         {/* State Switcher */}
         {!stateIsSignUp ?
-          <p>Create a new account? <span onClick={() => setCurrentState("Sign Up")}>Sign Up</span></p>
+          <p>Create a new account? <button type='button' className='login-popup-signup' onClick={() => changeFormState("Sign Up")} aria-label='Sign Up'>Sign Up</button></p>
 
           :
 
-          <p>Already have an account? <span onClick={() => setCurrentState("Login")}>Login</span></p>
+          <p>Already have an account? <button className='login-popup-login' onClick={() => changeFormState("Login")} aria-label='Login'>Login</button></p>
         }
       </form>
     </div>
