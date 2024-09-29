@@ -1,35 +1,42 @@
-import React, { useContext, useState } from 'react'
+import React, { useState } from 'react'
 import { assets } from '../../assets/assets'
 import { Link, useNavigate } from 'react-router-dom'
-import { StoreContext } from '../../context/StoreContext'
+import { useStore } from '../../context/StoreContext'
 
-const Navbar: React.FC<NavbarProps> = ({ setShowLogin }) => {
+const Navbar: React.FC<NavbarProps> = () => {
   const [menu, setMenu] = useState<string>("Home")
-  const { cartHasItems, token, setToken } = useContext(StoreContext) // getTotalCartAmount
+  const { cartHasItems, token, setToken, setShowLogin } = useStore() // getTotalCartAmount
 
   const navigate = useNavigate()
 
   const logout = () => {
     localStorage.removeItem('token')
     setToken(null)
-    navigate('/')
+    // navigate('/')
+  }
+
+  const handleScrollTo = (id: string) => {
+    navigate('/#' + id) // Navigate to the home page
+    setMenu(menu)
   }
 
   return (
     <div className='navbar'>
-      <Link to={"/"}><img src={assets.logo} alt="logo" /></Link>
+
+      <Link to={"/"} aria-label='Home'><img src={assets.logo} alt="logo" /></Link>
+
       <ul className="navbar-menu">
         <li>
-          <Link to={"/"} onClick={() => setMenu("Home")} className={menu === "Home" ? "active" : ""}>Home</Link>
+          <Link to={"/"} aria-label='Home' >Home</Link>
         </li>
         <li>
-          <a href="#explore-menu" onClick={() => setMenu("Menu")} className={menu === "Menu" ? "active" : ""}>Menu</a>
+          <a href="#explore-menu" onClick={() => handleScrollTo("explore-menu")} aria-label='Menu' >Menu</a>
         </li>
         <li>
-          <a href="#app-download" onClick={() => setMenu("Mobile-App")} className={menu === "Mobile-App" ? "active" : ""}>Mobile-App</a>
+          <a href="#app-download" onClick={() => handleScrollTo("app-download")} aria-label='Mobile App' >Mobile App</a>
         </li>
         <li>
-          <a href="#footer" onClick={() => setMenu("Contact Us")} className={menu === "Contact Us" ? "active" : ""}>Contact Us</a>
+          <a href="#footer" aria-label='Contact Us'>Contact Us</a>
         </li>
       </ul>
 
@@ -43,20 +50,31 @@ const Navbar: React.FC<NavbarProps> = ({ setShowLogin }) => {
         </div>
 
         {!token ?
-          <button onClick={() => setShowLogin(true)}>Sign In</button>
+
+          // Login Button
+          <button onClick={() => setShowLogin(true)} aria-label='Sign In' >Sign In</button>
+
           :
+
+          // Profile Dropdown
           <div className="navbar-profile">
+
             <img src={assets.profile_icon} alt="" />
+
             <ul className="nav-profile-dropdown">
-              <li onClick={() => navigate('/myorders')}>
+
+              <li>
                 <img src={assets.bag_icon} alt="" />
-                <p>Orders</p>
+                <Link to={"/myorders"} aria-label='Orders'>Orders</Link>
               </li>
-              <hr />
+
+              {/* <hr /> */}
+
               <li>
                 <img src={assets.logout_icon} alt="" />
-                <p onClick={logout}>Logout</p>
+                <button onClick={logout} aria-label='Logout'>Logout</button>
               </li>
+
             </ul>
           </div>
           // <button onClick={() => setToken(null)}>Logout</button>
