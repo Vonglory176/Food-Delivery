@@ -33,7 +33,7 @@
         img {
             width: 7.5vw;
             min-width: 80px;
-            cursor: pointer;
+            // cursor: pointer;
             border-radius: 50%;
             transition: 0.2s;            
         }
@@ -42,7 +42,7 @@
             margin-top: 10px;
             color: #747474;
             font-size: max(1.4vw, 16px);
-            cursor: pointer;
+            // cursor: pointer;
         }
 
         hr {
@@ -53,9 +53,22 @@
         }
     
         &-item {
-            .active {
-                border: 4px solid tomato;
-                padding: 2px;
+            // width: 100%;
+            // max-width: 105px;
+            min-height: 117px;
+            border: none;
+            outline: none;
+            background-color: transparent;
+            cursor: pointer;
+
+            img {
+                will-change: transform;
+                pointer-events: none;
+
+                &.active {                
+                    border: 4px solid tomato;
+                    padding: 2px;
+                }
             }
         }        
     }
