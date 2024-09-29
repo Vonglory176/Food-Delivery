@@ -1,11 +1,11 @@
-import { useContext, useEffect, useState } from 'react'
-import { StoreContext } from '../../context/StoreContext'
-import axios from 'axios'
+import { useEffect, useState } from 'react'
+import { useStore } from '../../context/StoreContext'
 import { useNavigate } from 'react-router-dom'
+import { placeOrderHook } from '../../hooks/orderHooks'
 
 const Checkout = () => {
   const navigate = useNavigate()
-  const { cartSubtotal, deliveryFee, cartTotal, token, food_list, cartItems } = useContext(StoreContext)
+  const { cartSubtotal, deliveryFee, cartTotal, token, food_list, cartItems, cartHasItems } = useStore()
   const [data, setData] = useState<any>({
     firstName: '',
     lastName: '',
@@ -41,28 +41,30 @@ const Checkout = () => {
     }
 
     // Place order
-    try {
-      const response = await axios.post(import.meta.env.VITE_BACKEND_URL + '/api/order/place', orderData, {
-        headers: {
-          // 'Authorization': `Bearer ${token}`
-          token
-        }
-      })
+    placeOrderHook(orderData, token)
 
-      // If order is not successful, throw an error
-      if (!response.data.success) throw new Error(response.data.message || "ERROR: Could not place order")
+    // try {
+    //   const response = await axios.post(import.meta.env.VITE_BACKEND_URL + '/api/order/place', orderData, {
+    //     headers: {
+    //       'Authorization': `Bearer ${token}`
+    //       // token
+    //     }
+    //   })
 
-      // Else redirect to payment page
-      window.location.replace(response.data.sessionUrl)
+    //   // If order is not successful, throw an error
+    //   if (!response.data.success) throw new Error(response.data.message || "ERROR: Could not place order")
 
-    } catch (error) {
-      console.error(error)
-    }
+    //   // Else redirect to payment page
+    //   window.location.replace(response.data.sessionUrl)
+
+    // } catch (error) {
+    //   console.error(error)
+    // }
   }
 
   useEffect(() => {
-    if (!token || cartItems.length !> 0) navigate('/cart')
-  }, [token])
+    if (!token || !cartHasItems) navigate('/cart')
+  }, [token, cartHasItems])
 
   return (
     <form className='checkout' onSubmit={handleSubmit}>
