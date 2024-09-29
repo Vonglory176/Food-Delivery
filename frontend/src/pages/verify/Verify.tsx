@@ -1,6 +1,6 @@
-import axios from 'axios'
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
+import { verifyPayment } from '../../hooks/orderHooks'
 
 const Verify = () => {
 
@@ -9,24 +9,24 @@ const Verify = () => {
     const orderId = searchParams.get('orderId')
     const navigate = useNavigate()
 
-    const verifyPayment = async () => {
-        try {
-            const response = await axios.post(import.meta.env.VITE_BACKEND_URL + '/api/order/verify', { success, orderId })
+    // const verifyPayment = async () => {
+    //     try {
+    //         const response = await axios.post(import.meta.env.VITE_BACKEND_URL + '/api/order/verify', { success, orderId })
 
-            if (response.data.success) {
-                navigate('/myorders')
-            }
-            else {
-                navigate('/')
-            }
+    //         if (response.data.success) {
+    //             navigate('/myorders')
+    //         }
+    //         else {
+    //             navigate('/')
+    //         }
 
-        } catch (error) {
-            console.log(error)
-        }
-    }
+    //     } catch (error) {
+    //         console.log(error)
+    //     }
+    // }
 
     useEffect(() => {
-        verifyPayment()
+        verifyPayment(success, orderId, navigate)
     }, [])
 
     return (
