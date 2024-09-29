@@ -24,6 +24,11 @@
 
     &-search-icon {
         position: relative;
+
+        a {
+            display: block;
+            height: 100%;
+        }
         
         .dot {
             position: absolute;
@@ -33,6 +38,10 @@
             border-radius: 5px;
             top: -8px;
             right: -8px;
+        }
+
+        img {
+            pointer-events: none;
         }
     }
 
@@ -81,6 +90,7 @@
 
             img {
                 width: 20px;
+                pointer-events: none;
             }
         }
 
