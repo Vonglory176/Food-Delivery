@@ -1,9 +1,9 @@
 import React, { useContext } from 'react'
-import { StoreContext } from '../../context/StoreContext'
+import { StoreContext, useStore } from '../../context/StoreContext'
 import FoodItem from '../foodItem/FoodItem'
 
 const FoodDisplay: React.FC<FoodDisplayProps> = ({ category }) => {
-    const { food_list } = useContext(StoreContext)
+    const { food_list } = useStore()
 
     return (
         <div className='food-display' id='food-display'>
