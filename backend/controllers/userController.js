@@ -1,11 +1,11 @@
-import userModel from "../models/userModel"
+import userModel from "../models/userModel.js"
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
 import validator from 'validator'
-import { createAccessToken } from "../helpers/helper"
+import { createAccessToken, createRefreshToken, sendLoginDetails } from "../helpers/helper.js"
 
 // Login User
-export const loginUser = async (req, res) => {
+const loginUser = async (req, res, next) => {
     console.log("\n IN LOGIN USER --------------------------- \n")
     const { email, password } = req.body
 
@@ -18,16 +18,24 @@ export const loginUser = async (req, res) => {
         }
 
         // Validating Email
-        if (!validator.isEmail(email)) throw { status: 400, clientMessage: 'Invalid email' }
+        if (!validator.isEmail(email)) return res.status(400).json({success: false, error: {
+            type: "email",
+            message: "Invalid email"
+        }})
 
         // Check if user exists and password matches
         const user = await userModel.findOne({ email })
         if (!user || !(await bcrypt.compare(password, user.password))) {
-            throw { status: 400, clientMessage: 'Email or password is incorrect' }
+            return res.status(400).json({success: false, error: {
+                type: "email",
+                message: "Email or password is incorrect"
+            }})
         }
 
-        const token = createAccessToken(user._id)
-        res.status(200).json({ success: true, token })
+        // const token = createAccessToken(user)
+        // res.status(200).json({ success: true, token })
+
+        sendLoginDetails(res, user)
 
         console.log("User logged in successfully")
 
@@ -46,7 +54,7 @@ export const loginUser = async (req, res) => {
 // }
 
 // Register User
-export const registerUser = async (req, res) => {
+const registerUser = async (req, res, next) => {
     console.log("\n IN REGISTER USER --------------------------- \n")
     const { name, email, password } = req.body
 
@@ -55,17 +63,32 @@ export const registerUser = async (req, res) => {
     try {
         // Check if all required fields are present
         if (!requiredFields.every(field => field in req.body)) {
-            throw { status: 400, clientMessage: 'Missing required fields' }
+            return res.status(400).json({success: false, error: {
+                type: "fields",
+                message: "Missing required fields"
+            }})
         }
 
         // Check if user already exists
         const exists = await userModel.findOne({ email })
-        if (exists) throw { status: 400, clientMessage: 'User already exists' }
+        if (exists) return res.status(409).json({success: false, error: {
+            type: "email",
+            message: "Existing user found with the same email"
+        }})
         
         // Validating Name & Email & Password
-        if (typeof req.body.name !== 'string' || !validator.isAlpha(req.body.name.replace(/\s/g, ''))) throw { status: 400, clientMessage: 'Invalid name' }
-        if (!validator.isEmail(email)) throw { status: 400, clientMessage: 'Invalid email' }
-        if (!validator.isStrongPassword(password)) throw { status: 400, clientMessage: 'Password is not strong enough' }
+        if (typeof req.body.name !== 'string' || !validator.isAlpha(req.body.name.replace(/\s/g, ''))) return res.status(400).json({success: false, error: {
+            type: "name",
+            message: "Invalid name. Only letters and spaces are allowed."
+        }})
+        if (!validator.isEmail(email)) return res.status(400).json({success: false, error: {
+            type: "email",
+            message: "Invalid email"
+        }})
+        if (!validator.isStrongPassword(password)) return res.status(400).json({success: false, error: {
+            type: "password",
+            message: "Password is not strong enough"
+        }})
 
         // Hashing Password
         const salt = await bcrypt.genSalt(10)
@@ -79,12 +102,14 @@ export const registerUser = async (req, res) => {
         })
 
         const newUser = await user.save()
-        const token = createAccessToken(newUser._id)
+        const token = createAccessToken(newUser)
 
-        res.status(200).json({
-            success: true, 
-            token: token
-        })
+        // res.status(200).json({
+        //     success: true, 
+        //     token: token
+        // })
+
+        sendLoginDetails(res, newUser)
 
         console.log("User created successfully")
 
@@ -97,3 +122,44 @@ export const registerUser = async (req, res) => {
         next(error)
     }
 }
+
+// Generate Access Token
+const generateAccessToken = (req, res) => {
+
+    console.log("\n IN ACCESS TOKEN GENERATION --------------------------- \n")
+
+    try {
+        const {refreshToken} = req.cookies
+        console.log("Refresh Token: " + refreshToken)
+    
+        // If no refreshToken found, return an error
+        // if (!refreshToken) return res.status(403).json({success: false, error: "No refresh token found"})
+        // if (!refreshToken) return res.status(403).json({success: false, message: "User is not logged in"})
+        if (!refreshToken) return res.status(200).json({success: false, message: "Please log in to obtain a new token"})
+    
+        // Verify the refreshToken, returning an error if expired
+        jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, decoded) => {
+            if (err) return res.status(403).json({success: false, error: "Refresh token is not valid"})
+    
+            // If valid, generate and return a new accessToken
+            const accessToken = accessTokenHelper({id: decoded.user.id})
+            return res.status(200).json({success: true, accessToken})
+        })
+        
+    } catch (error) {
+
+        console.log("\n ERROR IN ACCESS TOKEN GENERATION --------------------------- \n")
+        console.log(error)
+
+        error.action = "Generating Access Token"
+        next(error)
+    }
+}
+
+export {
+    loginUser,
+    registerUser,
+    generateAccessToken
+}
+
+
