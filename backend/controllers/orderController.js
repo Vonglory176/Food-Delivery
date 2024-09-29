@@ -1,11 +1,11 @@
-import orderModel from "../models/orderModel"
-import userModel from "../models/userModel"
+import orderModel from "../models/orderModel.js"
+import userModel from "../models/userModel.js"
 import Stripe from "stripe"
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
 
 // Place an order
-export const placeOrder = async (req, res) => {
+const placeOrder = async (req, res, next) => {
     console.log("\n IN PLACE ORDER --------------------------- \n")
 
     const { userId, items, amount, address } = req.body
@@ -76,7 +76,7 @@ export const placeOrder = async (req, res) => {
 }
 
 // Verify order
-export const verifyOrder = async (req, res) => {
+const verifyOrder = async (req, res, next) => {
     console.log("\n IN VERIFY ORDER --------------------------- \n")
 
     const { orderId, success } = req.body
@@ -122,7 +122,7 @@ export const verifyOrder = async (req, res) => {
 }
 
 // User orders (Client Side)
-export const userOrders = async (req, res) => {
+const userOrders = async (req, res, next) => {
     console.log("\n IN USER ORDER LIST --------------------------- \n")
 
     const { userId } = req.body
@@ -154,7 +154,7 @@ export const userOrders = async (req, res) => {
 }
 
 // Admin orders (Admin Side)
-export const adminOrders = async (req, res) => {
+const adminOrders = async (req, res, next) => {
     console.log("\n IN ADMIN ORDER LIST --------------------------- \n")
 
     // const requiredFields = ["userId"]
@@ -185,7 +185,7 @@ export const adminOrders = async (req, res) => {
 
 
 // Admin update order status
-export const adminUpdateOrderStatus = async (req, res) => {
+const adminUpdateOrderStatus = async (req, res, next) => {
     console.log("\n IN ADMIN UPDATE ORDER STATUS --------------------------- \n")
 
     const { orderId, status } = req.body
@@ -214,3 +214,14 @@ export const adminUpdateOrderStatus = async (req, res) => {
         next(error)
     }
 }
+
+
+export {
+    placeOrder,
+    verifyOrder,
+    userOrders,
+    adminOrders,
+    adminUpdateOrderStatus
+}
+
+

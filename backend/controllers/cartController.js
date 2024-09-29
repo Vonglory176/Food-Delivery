@@ -1,7 +1,7 @@
-import userModel from "../models/userModel";
+import userModel from "../models/userModel.js";
 
 // Add Items to cart
-export const addToCart = async (req, res) => {
+const addToCart = async (req, res, next) => {
     console.log("\n IN ADD TO CART --------------------------- \n")
 
     const { userId, itemId } = req.body
@@ -45,7 +45,7 @@ export const addToCart = async (req, res) => {
 }
 
 // Remove Items from cart
-export const removeFromCart = async (req, res) => {
+const removeFromCart = async (req, res, next) => {
     console.log("\n IN REMOVE FROM CART --------------------------- \n")
 
     const { userId, itemId } = req.body
@@ -88,7 +88,7 @@ export const removeFromCart = async (req, res) => {
 }
 
 // Get cart items
-export const getCart = async (req, res) => {
+const getCart = async (req, res, next) => {
     console.log("\n IN GET CART --------------------------- \n")
 
     const { userId } = req.body
@@ -119,3 +119,5 @@ export const getCart = async (req, res) => {
         next(error)
     }  
 }
+
+export { addToCart, removeFromCart, getCart }
