@@ -55,7 +55,7 @@ const List = () => {
               <p>{item.description}</p>
               <p>{item.category}</p>
               <p>{item.price}</p>
-              <p onClick={() => handleRemove(item._id)} className='cursor'>X</p>
+              <button onClick={() => handleRemove(item._id)} className='cursor' aria-label='Remove'>X</button>
             </div>
           )
         })}
