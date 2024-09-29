@@ -1,11 +1,11 @@
 import { useContext } from 'react'
-import { StoreContext } from '../../context/StoreContext'
+import { StoreContext, useStore } from '../../context/StoreContext'
 // import { assets } from '../../assets/assets'
 import { useNavigate } from 'react-router-dom'
 
 const Cart = () => {
 
-  const { cartItems, food_list, removeFromCart, cartSubtotal, cartTotal, deliveryFee, cartHasItems } = useContext(StoreContext)
+  const { cartItems, food_list, removeFromCart, cartSubtotal, cartTotal, deliveryFee, cartHasItems, token, setShowLogin } = useStore()
   const navigate = useNavigate()
 
   return (
@@ -79,7 +79,7 @@ const Cart = () => {
             </div>
           </div>
 
-          <button onClick={() => navigate("/checkout")} className={cartHasItems ? "" : "disabled"} disabled={!cartHasItems}>PROCEED TO CHECKOUT</button>
+          <button onClick={() => token ? navigate("/checkout") : setShowLogin(true)} className={cartHasItems ? "" : "disabled"} disabled={cartHasItems ? false : true}>PROCEED TO CHECKOUT</button>
 
         </div>
 
