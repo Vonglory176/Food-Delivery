@@ -1,11 +1,16 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { loadCartHook, updateCartHook } from "../hooks/cartHooks";
+import { updateCartHook } from "../hooks/cartHooks";
 import { getFoodHook } from "../hooks/foodHooks";
-import { logoutHook } from "../hooks/userHooks";
+import { loginSignupHook, logoutHook } from "../hooks/userHooks";
 import axios from "axios";
+import { useLocation } from "react-router-dom";
+import { generateAccessTokenHook } from "../hooks/authHooks";
 // import { food_list } from "../assets/assets";
 
 const StoreContext = createContext<StoreContextType>({
+    isLoggedIn: Boolean(sessionStorage.getItem('accessToken')),
+    setIsLoggedIn: () => {},
+
     accessToken: null,
     setAccessToken: () => {},
 
@@ -26,12 +31,18 @@ const StoreContext = createContext<StoreContextType>({
 
 export const useStore = () => useContext(StoreContext)
 
+
+
+
+
+
 const StoreContextProvider: React.FC<StoreContextProviderProps> = ({ children }) => {
+    const location = useLocation()
 
     const [showLogin, setShowLogin] = useState<boolean>(false)
     const [cartItems, setCartItems] = useState<any>({})
-    const [accessToken, setAccessToken] = useState<string | null>(localStorage.getItem('accessToken'))
-    const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false)
+    // const [accessToken, setAccessToken] = useState<string | null>(localStorage.getItem('accessToken'))
+    const [isLoggedIn, setIsLoggedIn] = useState<boolean>(Boolean(sessionStorage.getItem('accessToken')))
     const [food_list, setFoodList] = useState<any>([])
 
     const cartHasItems = Boolean(Object.keys(cartItems).length > 0)
@@ -42,74 +53,110 @@ const StoreContextProvider: React.FC<StoreContextProviderProps> = ({ children })
 
     // LOGIN / DATA SYNC ---
     useEffect(() => {
-        const loadData = async () => {
-            await getFoodHook(setFoodList)
-            // const token = localStorage.getItem('token')
-            // if(token) {
-            //     setToken(token)
 
-            //     await loadCartHook(token, setCartItems)
-            // }
+        const fetchFoodList = async () => { // Fire if food_list is empty
+            if (food_list.length !> 0) await getFoodHook(setFoodList)
         }
-        loadData()
-    }, [])
 
-    // Maintains login status between pages
-    useEffect(() => {
         const maintainLoginStatus = async () => {
-            const response = await generateAccessToken()
-            if (response !== null) logoutHook(updateAuthState)
+            
+            // Is AccessToken in Session Storage?
+            if (sessionStorage.getItem('accessToken')) {
+                const success = await generateAccessToken()
+
+                // If failure (403 Response), logout
+                if (!success) userLogout()
+            }
         }
-  
+
+        fetchFoodList()
         maintainLoginStatus()
-        // closeModal()
-      }, [location.pathname])
 
-// CART ACTIONS ////////////////////////////////////////////////////////////////////////////////////////////////    
+    }, [location.pathname])
 
-    // TOKEN STATE REFRESH (For SETTING the sessions access token)
-    const updateAuthState = (data) => {
+    // useEffect(() => {
+    //     const maintainLoginStatus = async () => {
+    //         const response = await generateAccessToken()
+    //         if (response !== null) userLogout()
+    //     }
+  
+    //     maintainLoginStatus()
+    //     // closeModal()
+    // }, [location.pathname])
+
+
+
+// USER ACTIONS ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    // LOGIN / SIGNUP
+    const userLoginSignup = async (data: any, action: 'register' | 'login', setErrors) => {
+
+        // Getting data via Hook
+        const response = await loginSignupHook(data, action)
+
+        if (response?.data?.success) {
+            const {accessToken, user} = response.data
+            updateAuthState({accessToken, user})
+            setShowLogin(false)
+            setIsLoggedIn(true)
+        }
+        else {            
+            const type = response?.data?.error?.type || "email"
+            const message = response?.data?.error?.message || "Internal Server Error"
+            // console.log(type, message)
+
+            // const {type="email", message="Internal Server Error"} = error?.response?.data?.error
+            
+
+            setErrors(prev => ({...prev, [type]: message}))
+        }
+    }
+
+    // LOGOUT
+    const userLogout = async () => {
+        await logoutHook()
+        updateAuthState({accessToken: null, user: null})
+    }
+
+
+// AUTH STATE ////////////////////////////////////////////////////////////////////////////////////////////////    
+
+    // TOKEN STATE UPDATE - (Access Token in Session Storage)
+    const updateAuthState = ({accessToken, user}) => {
         // console.log("Updating information!") // , data
 
         // If a token is given, save it. Otherwise remove it
-        if (data.accessToken) sessionStorage.setItem('accessToken', data.accessToken)
+        if (accessToken) sessionStorage.setItem('accessToken', accessToken)
         else sessionStorage.removeItem('accessToken')
 
         // Update the session state
-        setAccessToken(data.accessToken)
-        setIsLoggedIn(data.accessToken? true : false)
+        setIsLoggedIn(Boolean(accessToken))
+        console.log("Information Updated!")
     }
 
     // TOKEN GENERATION (For getting/refreshing the sessions access token)
     const generateAccessToken = async () => {
+        console.log("Generating Access Token")
 
-        try {
-            // Making the request
-            const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/user/generate_access_token`)
+        // Making the request
+        const response = await generateAccessTokenHook()
 
-            // Updating the auth state
-            if (response.data.success) {
-                const {accessToken, user} = response.data   
-                updateAuthState({
-                    accessToken,
-                    user
-                })
-        
-                return null
-            }
-        
-        } catch (error) { 
-            console.log(error)
-        }
-        
-        return false
+        // If 403 FORBIDDEN, logout the user
+        if (response.status === 403) return false
+
+        const newAccessToken = response?.data?.accessToken || null
+        const user = response?.data?.user || null
+
+        if (newAccessToken && user) updateAuthState({ accessToken: newAccessToken, user })
+
+        return true
     }
         
     // CUSTOM FETCH CALL FOR AUTHORIZATION REQUIREMENTS
     async function authCustomFetch(url, options = {}) {
+
         // Inject the Authorization header with the access token
         const accessToken = sessionStorage.getItem('accessToken')
-        
         if (accessToken) {
             options.headers = {
                 ...options.headers,
@@ -129,7 +176,7 @@ const StoreContextProvider: React.FC<StoreContextProviderProps> = ({ children })
                 response = await axios({ url, ...options })
             }
             else { // Otherwise (refresh-token was lost/expired), logout and send user to login/signup
-                logoutHook(updateAuthState)
+                userLogout()
                 // window.location.replace("/?login")
             }
         }
@@ -183,11 +230,17 @@ const StoreContextProvider: React.FC<StoreContextProviderProps> = ({ children })
 // EXPORT ////////////////////////////////////////////////////////////////////////////////////////////////
 
     const contextValue: StoreContextType = {
-        accessToken,
+        // accessToken,
         // setAccessToken,
 
         showLogin,
         setShowLogin,
+
+        isLoggedIn,
+        setIsLoggedIn,
+
+        userLoginSignup,
+        userLogout,
 
         food_list,
 
@@ -202,6 +255,7 @@ const StoreContextProvider: React.FC<StoreContextProviderProps> = ({ children })
         cartTotal,
 
         authCustomFetch: (url, options) => authCustomFetch(url, options, generateAccessToken),
+        // updateAuthState
     }
 
     return <StoreContext.Provider value={contextValue}>
