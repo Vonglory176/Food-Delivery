@@ -3,11 +3,12 @@ import axios from "axios"
 // CART HOOKS ////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Get Cart (Server)
-export const loadCartHook = async (token: string, setCartItems: React.Dispatch<React.SetStateAction<any>>) => {
+export const loadCartHook = async (authCustomFetch, setCartItems: React.Dispatch<React.SetStateAction<any>>) => {
     try {
-        const response = await axios.get(import.meta.env.VITE_BACKEND_URL + '/api/cart/get', {
+        const response = await authCustomFetch(import.meta.env.VITE_BACKEND_URL + '/api/cart/get', {}, {
             headers: {
-                'Authorization': `Bearer ${token}`
+                'Method': 'GET',
+                // 'Authorization': `Bearer ${token}`
             }
         })
 
@@ -19,15 +20,17 @@ export const loadCartHook = async (token: string, setCartItems: React.Dispatch<R
 }
 
 // Update Cart (Server)
-export const updateCartHook = async (itemId: number | string, token: string, action: 'add' | 'remove') => {
+export const updateCartHook = async (authCustomFetch, itemId: number | string, action: 'add' | 'remove') => {
     try {
-        const response = await axios.patch(import.meta.env.VITE_BACKEND_URL + '/api/cart/' + action, { itemId }, {
+        const response = await authCustomFetch(import.meta.env.VITE_BACKEND_URL + '/api/cart/' + action, { itemId }, {
             headers: {
-                'Authorization': `Bearer ${token}`
+                'Method': 'PATCH',
+                // 'Authorization': `Bearer ${token}`
             }
         })
 
         if (!response.data.success) throw new Error
+
     } catch (error) {
         console.error("ERROR: Could not update cart in server")
     }
