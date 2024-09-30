@@ -355,7 +355,7 @@
 }
 .explore-menu-list-item {
   min-height: 117px;
-  max-width: 212px;
+  max-height: 212px;
   border: none;
   outline: none;
   background-color: transparent;
