@@ -120,6 +120,9 @@
   color: #49557e;
   font-size: 18px;
 }
+.navbar-menu a:hover {
+  color: tomato;
+}
 .navbar-right {
   display: flex;
   align-items: center;
@@ -191,11 +194,21 @@
   flex-direction: column;
   gap: 10px;
   background-color: #fff4f2;
-  padding: 12px 25px;
+  padding: 12px 25px 12px 20px;
   border-radius: 4px;
   border: 1px solid tomato;
   outline: 2px solid white;
   list-style: none;
+}
+.navbar-profile:hover .navbar-profile-dropdown button {
+  color: black;
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  transition: 0s;
+}
+.navbar-profile:hover .navbar-profile-dropdown button:hover {
+  color: tomato;
 }
 @media (max-width: 1023px) {
   .navbar .logo {
@@ -342,6 +355,7 @@
 }
 .explore-menu-list-item {
   min-height: 117px;
+  max-width: 212px;
   border: none;
   outline: none;
   background-color: transparent;
