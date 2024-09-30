@@ -3,11 +3,12 @@ import axios from "axios"
 // ORDER HOOKS ////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Place Order
-export const placeOrderHook = async (orderData: any, token: string) => {
+export const placeOrderHook = async (authCustomFetch, orderData: any) => {
     try {
-        const response = await axios.post(import.meta.env.VITE_BACKEND_URL + '/api/order/place', orderData, {
+        const response = await authCustomFetch(import.meta.env.VITE_BACKEND_URL + '/api/order/place', orderData, {
             headers: {
-                'Authorization': `Bearer ${token}`
+                'Method': 'POST',
+                // 'Authorization': `Bearer ${token}`
             }
         })
 
@@ -23,11 +24,12 @@ export const placeOrderHook = async (orderData: any, token: string) => {
 }
 
 // Get Orders
-export const getOrdersHook = async (token: string, setData: React.Dispatch<React.SetStateAction<any>>) => {
+export const getOrdersHook = async (authCustomFetch, setData: React.Dispatch<React.SetStateAction<any>>) => {
     try {
-        const response = await axios.post(import.meta.env.VITE_BACKEND_URL + '/api/order/user-list', {}, {
+        const response = await authCustomFetch(import.meta.env.VITE_BACKEND_URL + '/api/order/user-list', {}, {
             headers: {
-                'Authorization': `Bearer ${token}`
+                'Method': 'GET',
+                // 'Authorization': `Bearer ${token}`
             }
         })
 
