@@ -5,15 +5,9 @@ import { useStore } from '../../context/StoreContext'
 
 const Navbar: React.FC<NavbarProps> = () => {
   const [menu, setMenu] = useState<string>("Home")
-  const { cartHasItems, token, setToken, setShowLogin } = useStore() // getTotalCartAmount
+  const { cartHasItems, isLoggedIn, userLogout, setShowLogin } = useStore() // getTotalCartAmount
 
   const navigate = useNavigate()
-
-  const logout = () => {
-    localStorage.removeItem('token')
-    setToken(null)
-    // navigate('/')
-  }
 
   const handleScrollTo = (id: string) => {
     navigate('/#' + id) // Navigate to the home page
@@ -27,7 +21,7 @@ const Navbar: React.FC<NavbarProps> = () => {
 
       <ul className="navbar-menu">
         <li>
-          <Link to={"/"} aria-label='Home' >Home</Link>
+          <Link to={"/"} aria-label='Home'>Home</Link>
         </li>
         <li>
           <a href="#explore-menu" onClick={() => handleScrollTo("explore-menu")} aria-label='Menu' >Menu</a>
@@ -49,7 +43,7 @@ const Navbar: React.FC<NavbarProps> = () => {
           {/* <div className={getTotalCartAmount() === 0 ? "" : "dot"}></div> */}
         </div>
 
-        {!token ?
+        {!isLoggedIn ?
 
           // Login Button
           <button onClick={() => setShowLogin(true)} aria-label='Sign In' >Sign In</button>
@@ -61,7 +55,7 @@ const Navbar: React.FC<NavbarProps> = () => {
 
             <img src={assets.profile_icon} alt="" />
 
-            <ul className="nav-profile-dropdown">
+            <ul className="navbar-profile-dropdown">
 
               <li>
                 <img src={assets.bag_icon} alt="" />
@@ -72,12 +66,11 @@ const Navbar: React.FC<NavbarProps> = () => {
 
               <li>
                 <img src={assets.logout_icon} alt="" />
-                <button onClick={logout} aria-label='Logout'>Logout</button>
+                <button onClick={userLogout} aria-label='Logout'>Logout</button>
               </li>
 
             </ul>
           </div>
-          // <button onClick={() => setToken(null)}>Logout</button>
         }
 
       </div>
