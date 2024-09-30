@@ -1,11 +1,10 @@
 import React, { useContext, useState } from 'react'
 import { assets } from '../../assets/assets'
 import { useStore } from '../../context/StoreContext'
-import { loginHook } from '../../hooks/userHooks'
 import { validateLoginForm } from '../../helpers/helper'
 
 const LoginPopup: React.FC<LoginPopupProps> = () => {
-  const { setToken, setShowLogin } = useStore()
+  const { setShowLogin, userLoginSignup } = useStore()
   const [currentState, setCurrentState] = useState<string>("Sign Up")
   const [data, setData] = useState<any>({
     name: 'test',
@@ -49,7 +48,7 @@ const LoginPopup: React.FC<LoginPopupProps> = () => {
     else resetErrors()
 
     // Sending Data
-    loginHook(data, stateIsSignUp ? 'register' : 'login', setToken, setShowLogin, setErrors)
+    userLoginSignup(data, stateIsSignUp ? 'register' : 'login', setErrors)
   }
 
 
