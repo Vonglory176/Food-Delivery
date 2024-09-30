@@ -13,7 +13,7 @@ import { useStore } from './context/StoreContext'
 // VIDEO --> https://youtu.be/DBMPXJJfQEA?t=24309 || TS: 6:45:09
 
 const App = () => {
-  const { token, showLogin, cartHasItems } = useStore()
+  const { isLoggedIn, showLogin, cartHasItems } = useStore()
   
 
   return (
@@ -26,9 +26,9 @@ const App = () => {
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/cart' element={<Cart />} />
-          <Route path='/checkout' element={!token ? <Navigate to="/" replace /> : cartHasItems ? <Checkout /> : <Navigate to="/cart" replace />} />
-          <Route path='/verify' element={token ? <Verify /> : <Navigate to="/" replace />} />
-          <Route path='/myorders' element={token ? <MyOrders /> : <Navigate to="/" replace />} />
+          <Route path='/checkout' element={!isLoggedIn ? <Navigate to="/" replace /> : cartHasItems ? <Checkout /> : <Navigate to="/cart" replace />} />
+          <Route path='/verify' element={isLoggedIn ? <Verify /> : <Navigate to="/" replace />} />
+          <Route path='/myorders' element={isLoggedIn ? <MyOrders /> : <Navigate to="/" replace />} />
         </Routes>
       </div>
 
@@ -44,11 +44,9 @@ export default App
 
   // Frontent -----
 
-    Make menu carousel PC friendly
-    Fix Dropdown Nav
+    Make menu carousel PC friendly?
     Potential issue with Disabled "Checkout" button in cart?
-
-    Finish Access/Refresh Token system (Save the latter, backend should be done)
+    Cart items need to sync on login (What about post login?)
     
     // Backend -----
     
