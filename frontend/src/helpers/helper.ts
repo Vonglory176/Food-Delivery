@@ -35,7 +35,7 @@ export const validatePassword = (password, confirmPassword) => {
 // Validate Form ( TEMP SPECIFIC TO LOGIN POPUP !!! )
 export const validateLoginForm = (data, setErrors, stateIsSignUp) => {
     const { name, email, password, terms } = data
-    console.log(name, email, password, terms)
+    // console.log(name, email, password, terms)
 
     const nameValid = Boolean(stateIsSignUp ? name.trim() : true)
     const emailValid = Boolean(email.trim())
@@ -43,8 +43,8 @@ export const validateLoginForm = (data, setErrors, stateIsSignUp) => {
     const termsValid = Boolean(stateIsSignUp ? terms : true)
     const errorCheck = nameValid && emailValid && passwordValid && termsValid
 
-    console.log(errorCheck)
-    console.log(nameValid, emailValid, passwordValid)
+    // console.log(errorCheck)
+    // console.log(nameValid, emailValid, passwordValid)
 
     setErrors({
         name: nameValid ? '' : "Name cannot be blank.",
