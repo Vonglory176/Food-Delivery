@@ -49,10 +49,6 @@ const loginUser = async (req, res, next) => {
     }
 }
 
-// const createToken = (id) => {
-//     return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '30d' })
-// }
-
 // Register User
 const registerUser = async (req, res, next) => {
     console.log("\n IN REGISTER USER --------------------------- \n")
@@ -102,12 +98,7 @@ const registerUser = async (req, res, next) => {
         })
 
         const newUser = await user.save()
-        const token = createAccessToken(newUser)
-
-        // res.status(200).json({
-        //     success: true, 
-        //     token: token
-        // })
+        // const token = createAccessToken(newUser)
 
         sendLoginDetails(res, newUser)
 
@@ -119,6 +110,30 @@ const registerUser = async (req, res, next) => {
         console.log(error)
 
         error.action = "Registering User"
+        next(error)
+    }
+}
+
+
+// Logout User
+const logoutUser = async (req, res, next) => {
+    console.log("\n IN LOGOUT USER --------------------------- \n")
+    
+    try {
+        res.clearCookie('refreshToken', {
+            httpOnly: true, 
+            path: "/", 
+            secure: process.env.USE_HTTPS === "true", 
+            sameSite: process.env.SAME_SITE || 'Lax' // CHANGE FOR PRODUCTION
+        })
+        res.status(200).json({success: true, message: "User logged out successfully"})
+
+    } catch (error) {
+
+        console.log("\n ERROR IN LOGOUT USER --------------------------- \n")
+        console.log(error)
+
+        error.action = "Logging Out"
         next(error)
     }
 }
@@ -142,7 +157,7 @@ const generateAccessToken = (req, res) => {
             if (err) return res.status(403).json({success: false, error: "Refresh token is not valid"})
     
             // If valid, generate and return a new accessToken
-            const accessToken = accessTokenHelper({id: decoded.user.id})
+            const accessToken = createAccessToken({id: decoded.user.id})
             return res.status(200).json({success: true, accessToken})
         })
         
@@ -159,6 +174,7 @@ const generateAccessToken = (req, res) => {
 export {
     loginUser,
     registerUser,
+    logoutUser,
     generateAccessToken
 }
 
