@@ -37,9 +37,10 @@ export const authMiddleware = (req, res, next) => {
         if(!token) throw { status: 401, message: 'User is not authorized' }
 
         jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
+            // if (err) console.log(err)
             if (err) throw { status: 403, message: 'Verification failed' }
 
-            req.body.user_id = decoded.user.id // Attatch the user_id to the request object
+            req.body.userId = decoded.user.id // Attatch the user_id to the request object
 
             next() // If no error, move on to the next function in the Route
         })
