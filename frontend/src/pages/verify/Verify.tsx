@@ -1,13 +1,31 @@
 import { useEffect } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import { verifyPayment } from '../../hooks/orderHooks'
+import { useStore } from '../../context/StoreContext'
 
 const Verify = () => {
 
+    const { verifyOrder } = useStore()
     const [searchParams] = useSearchParams()
     const success = searchParams.get('success')
     const orderId = searchParams.get('orderId')
-    const navigate = useNavigate()
+
+
+    useEffect(() => {
+        verifyOrder(success, orderId)
+    }, [])
+    
+
+    return (
+        <div className='verify'>
+            <div className="spinner"></div>
+        </div>
+    )
+}
+
+export default Verify
+
+
+
 
     // const verifyPayment = async () => {
     //     try {
@@ -24,16 +42,3 @@ const Verify = () => {
     //         console.log(error)
     //     }
     // }
-
-    useEffect(() => {
-        verifyPayment(success, orderId, navigate)
-    }, [])
-
-    return (
-        <div className='verify'>
-            <div className="spinner"></div>
-        </div>
-    )
-}
-
-export default Verify
