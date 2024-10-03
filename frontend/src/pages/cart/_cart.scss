@@ -2,18 +2,22 @@
     margin-top: 100px;    
 
     &-items {
+        position: relative;
+        min-height: 158px;
 
         &-title {
             display: grid;
             grid-template-columns: 1fr 1.5fr 1fr 1fr 1fr 0.5fr;
             align-items: center;
             color: grey;
-            font-size: max(1vw, 12px);
+            font-size: max(1vw, 12px);            
         }
     
         &-item {
+            height: 40px;
             margin: 10px 0px;
             color: black;
+            animation: fadeIn 0.5s;
 
             img {
                 width: 50px;
@@ -32,10 +36,25 @@
             }
         }
 
+        &-wrapper { // Only for spinner/empty
+            position: absolute;
+            bottom: 0%;
+            left: 50%;
+            transform: translate(-50%, -0%);
+
+            // .spinner {
+            //     display: flex;
+            //     // position: absolute;
+            //     // top: 50%;
+            //     // left: 45%;
+            //     // transform: translate(-50%, -50%) // Center the spinner
+            // }
+        }
+
     }
 
     &-empty {
-        margin-top: 15px;
+        margin-bottom: 15px;
         font-size: max(1.5vw, 18px);
     }
 
