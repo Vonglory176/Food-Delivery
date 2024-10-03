@@ -1,23 +1,19 @@
 import express from "express"
-import { createFood, getFood, removeFood } from "../controllers/foodController.js"
-import multer from "multer"
+import { adminCreateFood, adminRemoveFood } from "../controllers/admin/foodController.js"
+import { getFood } from "../controllers/common/foodController.js"
+import upload from '../config/multerConfig.js'
+
 
 const foodRouter = express.Router()
 
-// Image Upload
-const storage = multer.diskStorage({
-    destination: "uploads",
-    filename:(req, file, cb) => {
-        return cb(null, `${Date.now()}-${file.originalname}`)
-    }
-})
-const upload = multer({ storage: storage })
+
+// Admin routes
+foodRouter.post("/add", upload.single("image"), adminCreateFood)
+foodRouter.delete("/remove/:id", adminRemoveFood)
 
 
-// Food Routes (Starts with --> /api/food)
-foodRouter.post("/add", upload.single("image"), createFood)
+// Common routes
 foodRouter.get("/list", getFood)
-foodRouter.delete("/remove/:id", removeFood)
 
 
 

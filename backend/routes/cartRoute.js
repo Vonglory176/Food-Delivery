@@ -1,11 +1,12 @@
 import express from 'express'
-import { addToCart, removeFromCart, syncCart } from '../controllers/cartController.js'
+import { userAddToCart, userRemoveFromCart, userSyncCart } from '../controllers/user/cartController.js'
 import { authMiddleware } from '../middleware/auth.js'
 
 const cartRouter = express.Router()
 
-cartRouter.patch('/add/:itemId', authMiddleware, addToCart)
-cartRouter.patch('/remove/:itemId', authMiddleware, removeFromCart)
-cartRouter.post('/sync', authMiddleware, syncCart)
+// User routes
+cartRouter.patch('/add/:itemId', authMiddleware, userAddToCart)
+cartRouter.patch('/remove/:itemId', authMiddleware, userRemoveFromCart)
+cartRouter.post('/sync', authMiddleware, userSyncCart)
 
 export default cartRouter

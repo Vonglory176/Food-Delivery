@@ -1,12 +1,18 @@
 import express from 'express'
 // import { loginUser, registerUser } from '../controllers/test.js'
-import { loginUser, registerUser, logoutUser, generateAccessToken } from '../controllers/userController.js'
+import { userLogin, userRegister, userLogout } from '../controllers/user/userController.js'
+import { generateAccessToken } from '../controllers/common/authController.js'
 
 const userRouter = express.Router()
 
-userRouter.post('/login', loginUser)
-userRouter.post('/register', registerUser)
-userRouter.post('/logout', logoutUser)
+// User routes
+userRouter.post('/login', userLogin)
+userRouter.post('/register', userRegister)
+userRouter.post('/logout', userLogout)
+
+// Admin routes
+
+// Common routes
 userRouter.get('/generate-access-token', generateAccessToken)
 
 export default userRouter
