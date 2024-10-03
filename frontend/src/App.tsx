@@ -44,21 +44,22 @@ export default App
 
   // Frontent -----
 
+    Sync cart on Checkout / Order Confirmation
+  
     Make menu carousel PC friendly?
     Potential issue with Disabled "Checkout" button in cart?
-    Cart items need to sync on login (What about post login?)
+    Add max quantity to cart items
     
-    // Backend -----
-    
-    Change fetch calls to proper Protocols
+  // Backend -----
 
-    If logged out with cart items, append to server cart after login (If an item exists already, no change)
+  
 
   // Admin -----
 
     Add login/signup system with dummy account
     Disable Add/Remove features for production version
     Add AdminAuthMiddleware w/Token use
+    Fix issue with 'initial value' of (at least) category in createFood form
 
 
 */
