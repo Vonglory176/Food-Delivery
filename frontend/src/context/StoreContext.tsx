@@ -1,11 +1,11 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { updateCartHook } from "../hooks/cartHooks";
+import { syncCartHook, updateCartHook } from "../hooks/cartHooks";
 import { getFoodHook } from "../hooks/foodHooks";
 import { loginSignupHook, logoutHook } from "../hooks/userHooks";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
 import { generateAccessTokenHook } from "../hooks/authHooks";
-// import { food_list } from "../assets/assets";
+// import { foodList } from "../assets/assets";
 
 const StoreContext = createContext<StoreContextType>({
     isLoggedIn: Boolean(sessionStorage.getItem('accessToken')),
@@ -17,7 +17,7 @@ const StoreContext = createContext<StoreContextType>({
     showLogin: false,
     setShowLogin: () => {},
 
-    food_list: [],
+    foodList: [],
     cartItems: {},
     cartHasItems: false,
 
@@ -39,23 +39,31 @@ export const useStore = () => useContext(StoreContext)
 const StoreContextProvider: React.FC<StoreContextProviderProps> = ({ children }) => {
     const location = useLocation()
 
-    const [showLogin, setShowLogin] = useState<boolean>(false)
-    const [cartItems, setCartItems] = useState<any>({})
-    // const [accessToken, setAccessToken] = useState<string | null>(localStorage.getItem('accessToken'))
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(Boolean(sessionStorage.getItem('accessToken')))
-    const [food_list, setFoodList] = useState<any>([])
+    const [showLogin, setShowLogin] = useState<boolean>(false)
+
+    const [cartItems, setCartItems] = useState<any>({})
+    const [cartIsLoaded, setCartIsLoaded] = useState<boolean>(Boolean(!isLoggedIn)) // For cart sync
+
+
+    const [foodList, setFoodList] = useState<any>([])
 
     const cartHasItems = Boolean(Object.keys(cartItems).length > 0)
     const deliveryFee = cartHasItems ? 5 : 0
 
+    useEffect(() => {
+        console.log(cartItems)
+    }, [cartItems])
+
 
 // INITIAL FETCHES ////////////////////////////////////////////////////////////////////////////////////////////////
 
-    // LOGIN / DATA SYNC ---
+    // LOGIN / FOOD SYNC ---
     useEffect(() => {
 
-        const fetchFoodList = async () => { // Fire if food_list is empty
-            if (food_list.length !> 0) await getFoodHook(setFoodList)
+        const fetchFoodList = async () => {
+                console.log("Fetching Food List")
+                await getFoodHook(setFoodList)
         }
 
         const maintainLoginStatus = async () => {
@@ -69,20 +77,16 @@ const StoreContextProvider: React.FC<StoreContextProviderProps> = ({ children })
             }
         }
 
-        fetchFoodList()
+        if (foodList.length === 0) fetchFoodList() // Fire if foodList is empty
         maintainLoginStatus()
 
     }, [location.pathname])
 
-    // useEffect(() => {
-    //     const maintainLoginStatus = async () => {
-    //         const response = await generateAccessToken()
-    //         if (response !== null) userLogout()
-    //     }
-  
-    //     maintainLoginStatus()
-    //     // closeModal()
-    // }, [location.pathname])
+
+    // CART SYNC ---
+    useEffect(() => {
+        if (isLoggedIn) syncCartHook(authCustomFetch, cartItems, setCartItems)
+    }, [isLoggedIn])
 
 
 
@@ -99,6 +103,9 @@ const StoreContextProvider: React.FC<StoreContextProviderProps> = ({ children })
             updateAuthState({accessToken, user})
             setShowLogin(false)
             setIsLoggedIn(true)
+
+            // Sync Cart
+            syncCartHook(authCustomFetch, cartItems, setCartItems)
         }
         else {            
             const type = response?.data?.error?.type || "email"
@@ -116,6 +123,7 @@ const StoreContextProvider: React.FC<StoreContextProviderProps> = ({ children })
     const userLogout = async () => {
         await logoutHook()
         updateAuthState({accessToken: null, user: null})
+        setCartItems({})
     }
 
 
@@ -123,7 +131,8 @@ const StoreContextProvider: React.FC<StoreContextProviderProps> = ({ children })
 
     // TOKEN STATE UPDATE - (Access Token in Session Storage)
     const updateAuthState = ({accessToken, user}) => {
-        // console.log("Updating information!") // , data
+        console.log("Updating Auth State!") // , data
+        // console.log(accessToken)
 
         // If a token is given, save it. Otherwise remove it
         if (accessToken) sessionStorage.setItem('accessToken', accessToken)
@@ -131,7 +140,7 @@ const StoreContextProvider: React.FC<StoreContextProviderProps> = ({ children })
 
         // Update the session state
         setIsLoggedIn(Boolean(accessToken))
-        console.log("Information Updated!")
+        // console.log("Information Updated!")
     }
 
     // TOKEN GENERATION (For getting/refreshing the sessions access token)
@@ -140,20 +149,25 @@ const StoreContextProvider: React.FC<StoreContextProviderProps> = ({ children })
 
         // Making the request
         const response = await generateAccessTokenHook()
+        console.log(response)
 
         // If 403 FORBIDDEN, logout the user
         if (response.status === 403) return false
 
         const newAccessToken = response?.data?.accessToken || null
-        const user = response?.data?.user || null
+        console.log(newAccessToken)
 
-        if (newAccessToken && user) updateAuthState({ accessToken: newAccessToken, user })
+        // const user = response?.data?.user || null
+
+        // if (newAccessToken && user) updateAuthState({ accessToken: newAccessToken, user })
+        if (newAccessToken) updateAuthState({ accessToken: newAccessToken })
 
         return true
     }
         
     // CUSTOM FETCH CALL FOR AUTHORIZATION REQUIREMENTS
     async function authCustomFetch(url, options = {}) {
+        console.log(options)
 
         // Inject the Authorization header with the access token
         const accessToken = sessionStorage.getItem('accessToken')
@@ -164,22 +178,37 @@ const StoreContextProvider: React.FC<StoreContextProviderProps> = ({ children })
             }
         }
 
-        let response = await axios({ url, ...options }) // First request
+        let response
+        try {
 
-        // If unauthorized, try refreshing the token and retrying the request once
-        if (response.status === 403) {
-            await generateAccessToken()
-            const newAccessToken = sessionStorage.getItem('accessToken')
+            response = await axios({ url, ...options }) // First request
+            // console.log(response)       
 
-            if (newAccessToken) { // If a new token was given, re-send the request
-                options.headers.Authorization = `Bearer ${newAccessToken}`
-                response = await axios({ url, ...options })
+        } catch (error) {
+            // console.error(error)
+
+            // If unauthorized, try refreshing the token and retrying the request once
+            if (error.response.status === 403) {
+                console.log("Refreshing Token")
+                await generateAccessToken()
+                const newAccessToken = sessionStorage.getItem('accessToken')
+    
+                if (newAccessToken) { // If a new token was given, re-send the request
+                    console.log(options)
+                    options.headers.Authorization = `Bearer ${newAccessToken}`
+                    response = await axios({ url, ...options })
+                }
+                else { // Otherwise (refresh-token was lost/expired), logout and send user to login/signup
+                    userLogout()
+                    // window.location.replace("/?login")
+                }
             }
-            else { // Otherwise (refresh-token was lost/expired), logout and send user to login/signup
-                userLogout()
-                // window.location.replace("/?login")
+            else {
+                // console.log("ERROR: " + error.response.statusText)
+                console.error(error)
             }
         }
+
 
         // if (!response.ok) {console.error("ERROR WHILE FETCHING: " + response.statusText)}
 
@@ -190,22 +219,23 @@ const StoreContextProvider: React.FC<StoreContextProviderProps> = ({ children })
 // CART ACTIONS ////////////////////////////////////////////////////////////////////////////////////////////////    
 
     // UPDATE ---
-    const updateCart = async (itemId: number | string, action: 'add' | 'remove') => {
+    const updateCart = async (itemId: string, action: 'add' | 'remove') => {
         if (itemId === undefined || itemId === null) return
-        const id = Number(itemId)
+        // const id = Number(itemId)
 
-        setCartItems((prev: any) => {
-            const currentQuantity = prev[id] || 0
+        setCartItems((prev: object) => {
+            // console.log(prev)
+            const currentQuantity = prev[itemId] || 0
             const newQuantity = action === 'add' ? currentQuantity + 1 : currentQuantity - 1
 
             if (newQuantity <= 0) {
-                const { [id]: _, ...rest } = prev
+                const { [itemId]: _, ...rest } = prev
                 return rest
             }
-            return { ...prev, [id]: newQuantity }
+            return { ...prev, [itemId]: newQuantity }
         })
 
-        updateCartHook(itemId, token, action)
+        if (isLoggedIn) updateCartHook(authCustomFetch, itemId, action)
     }        
 
 // CHECKOUT ACTIONS ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -217,7 +247,7 @@ const StoreContextProvider: React.FC<StoreContextProviderProps> = ({ children })
 
             // if (cartItems[item] !> 0) return
 
-            let itemInfo = food_list.find((product: any) => product._id === item)
+            let itemInfo = foodList.find((product: any) => product._id === item)
             subtotal += (itemInfo?.price || 0) * cartItems[item]
         }
         return subtotal
@@ -242,13 +272,15 @@ const StoreContextProvider: React.FC<StoreContextProviderProps> = ({ children })
         userLoginSignup,
         userLogout,
 
-        food_list,
+        foodList,
+
+        cartIsLoaded,
+        setCartIsLoaded,
 
         cartItems,
         cartHasItems,
         updateCart,
-        // addToCart,
-        // removeFromCart,
+        
 
         deliveryFee,
         cartSubtotal,
