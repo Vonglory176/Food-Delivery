@@ -9,7 +9,7 @@ const FoodItem: React.FC<FoodItemProps> = ({id, name, image, description, price}
     <div className='food-item'>
 
       <div className="food-item-img-container">
-        <img className='food-item-image' src={import.meta.env.VITE_FRONTEND_URL + '/images/' + image} alt={name} />
+        <img className='food-item-image' src={import.meta.env.VITE_BACKEND_URL + '/images/' + image} alt={name} />
 
 
         {/* Item counter & Add/Remove from cart buttons */}        
