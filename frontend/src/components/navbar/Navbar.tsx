@@ -46,7 +46,7 @@ const Navbar: React.FC<NavbarProps> = () => {
         {!isLoggedIn ?
 
           // Login Button
-          <button onClick={() => setShowLogin(true)} aria-label='Sign In' >Sign In</button>
+          <button className='navbar-login-button' onClick={() => setShowLogin(true)} aria-label='Sign In' >Sign In</button>
 
           :
 
