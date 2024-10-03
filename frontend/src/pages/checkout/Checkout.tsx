@@ -1,21 +1,20 @@
 import { useEffect, useState } from 'react'
 import { useStore } from '../../context/StoreContext'
 import { useNavigate } from 'react-router-dom'
-import { placeOrderHook } from '../../hooks/orderHooks'
 
 const Checkout = () => {
   const navigate = useNavigate()
-  const { cartSubtotal, deliveryFee, cartTotal, foodList, cartItems, cartHasItems, isLoggedIn } = useStore()
+  const { cartSubtotal, deliveryFee, cartTotal, foodList, cartItems, cartHasItems, isLoggedIn, placeOrder } = useStore()
   const [data, setData] = useState<any>({
-    firstName: '',
-    lastName: '',
-    email: '',
-    street: '',
-    city: '',
-    state: '',
-    zipcode: '',
-    country: '',
-    phone: '',
+    firstName: 'John',
+    lastName: 'Doe',
+    email: 'JohnDoe@gmail.com',
+    street: '1234 Main St',
+    city: 'Anytown',
+    state: 'CA',
+    zipcode: '12345',
+    country: 'USA',
+    phone: '1234567890',
   })
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -29,19 +28,22 @@ const Checkout = () => {
     let orderItems: any[] = []
     foodList.map((item: any) => {
       let itemInfo = item
-      itemInfo["quantity"] = cartItems[item._id]
-      orderItems.push(itemInfo)
+
+      if (cartItems[item._id] > 0) {
+        itemInfo["quantity"] = cartItems[item._id]
+        orderItems.push(itemInfo)
+      }
     })
 
     // Create order data
     let orderData = {
       address: data,
-      items: orderItems,
+      items: orderItems, // orderItems
       amount: cartTotal + deliveryFee
     }
 
     // Place order
-    placeOrderHook(orderData, setData)
+    placeOrder(orderData)
 
     // try {
     //   const response = await axios.post(import.meta.env.VITE_BACKEND_URL + '/api/order/place', orderData, {
@@ -78,7 +80,7 @@ const Checkout = () => {
         </div>
 
         <input required type="text" placeholder='Email Address' name='email' onChange={handleChange} value={data.email} />
-        <input required type="text" placeholder='Street Address' name='street_address' onChange={handleChange} value={data.street} />
+        <input required type="text" placeholder='Street Address' name='street' onChange={handleChange} value={data.street} />
 
         <div className="multi-fields">
           <input required type="text" placeholder='City' name='city' onChange={handleChange} value={data.city} />
