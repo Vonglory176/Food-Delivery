@@ -3,8 +3,9 @@ import { syncCartHook, updateCartHook } from "../hooks/cartHooks";
 import { getFoodHook } from "../hooks/foodHooks";
 import { loginSignupHook, logoutHook } from "../hooks/userHooks";
 import axios from "axios";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { generateAccessTokenHook } from "../hooks/authHooks";
+import { getOrdersHook, placeOrderHook, verifyPaymentHook } from "../hooks/orderHooks";
 // import { foodList } from "../assets/assets";
 
 const StoreContext = createContext<StoreContextType>({
@@ -38,6 +39,7 @@ export const useStore = () => useContext(StoreContext)
 
 const StoreContextProvider: React.FC<StoreContextProviderProps> = ({ children }) => {
     const location = useLocation()
+    const navigate = useNavigate()
 
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(Boolean(sessionStorage.getItem('accessToken')))
     const [showLogin, setShowLogin] = useState<boolean>(false)
@@ -51,9 +53,9 @@ const StoreContextProvider: React.FC<StoreContextProviderProps> = ({ children })
     const cartHasItems = Boolean(Object.keys(cartItems).length > 0)
     const deliveryFee = cartHasItems ? 5 : 0
 
-    useEffect(() => {
-        console.log(cartItems)
-    }, [cartItems])
+    // useEffect(() => {
+    //     console.log(cartItems)
+    // }, [cartItems])
 
 
 // INITIAL FETCHES ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -149,13 +151,13 @@ const StoreContextProvider: React.FC<StoreContextProviderProps> = ({ children })
 
         // Making the request
         const response = await generateAccessTokenHook()
-        console.log(response)
+        // console.log(response)
 
         // If 403 FORBIDDEN, logout the user
         if (response.status === 403) return false
 
         const newAccessToken = response?.data?.accessToken || null
-        console.log(newAccessToken)
+        // console.log(newAccessToken)
 
         // const user = response?.data?.user || null
 
@@ -167,7 +169,7 @@ const StoreContextProvider: React.FC<StoreContextProviderProps> = ({ children })
         
     // CUSTOM FETCH CALL FOR AUTHORIZATION REQUIREMENTS
     async function authCustomFetch(url, options = {}) {
-        console.log(options)
+        // console.log(options)
 
         // Inject the Authorization header with the access token
         const accessToken = sessionStorage.getItem('accessToken')
@@ -205,7 +207,7 @@ const StoreContextProvider: React.FC<StoreContextProviderProps> = ({ children })
             }
             else {
                 // console.log("ERROR: " + error.response.statusText)
-                console.error(error)
+                return error.response
             }
         }
 
@@ -223,6 +225,11 @@ const StoreContextProvider: React.FC<StoreContextProviderProps> = ({ children })
         if (itemId === undefined || itemId === null) return
         // const id = Number(itemId)
 
+        // Quantity limits
+        if (action === 'add' && cartItems[itemId] >= 99) return
+        if (action === 'remove' && cartItems[itemId] <= 0) return
+
+        // Update cart items
         setCartItems((prev: object) => {
             // console.log(prev)
             const currentQuantity = prev[itemId] || 0
@@ -256,8 +263,29 @@ const StoreContextProvider: React.FC<StoreContextProviderProps> = ({ children })
     const cartSubtotal = getCartSubtotal()
     const cartTotal = cartSubtotal + deliveryFee
 
+// ORDER ACTIONS ////////////////////////////////////////////////////////////////////////////////////////////////
 
-// EXPORT ////////////////////////////////////////////////////////////////////////////////////////////////
+    // PLACE ORDER ---
+    const placeOrder = async (orderData: any ) => {
+
+        placeOrderHook(authCustomFetch, orderData)
+
+    }
+
+    // VERIFY ORDER ---
+    const verifyOrder = async (success: boolean, orderId: string) => {
+
+        verifyPaymentHook(authCustomFetch, success, orderId, navigate)        
+    }
+
+    // GET ORDERS ---
+    const getOrders = async (setOrders: any) => {
+
+        getOrdersHook(authCustomFetch, setOrders)
+    }
+
+
+// EXPORT ///////////////////////////////////////////////////////////////////////////////////////////////////////
 
     const contextValue: StoreContextType = {
         // accessToken,
@@ -280,8 +308,10 @@ const StoreContextProvider: React.FC<StoreContextProviderProps> = ({ children })
         cartItems,
         cartHasItems,
         updateCart,
-        
 
+        placeOrder,
+        verifyOrder,
+        getOrders,
         deliveryFee,
         cartSubtotal,
         cartTotal,
@@ -296,64 +326,3 @@ const StoreContextProvider: React.FC<StoreContextProviderProps> = ({ children })
 }
 
 export default StoreContextProvider
-
-
-
-// FOOD LIST ---
-    // const fetchFoodList = async () => {
-    //     try {
-    //         const response = await axios.get(import.meta.env.VITE_BACKEND_URL + '/api/food/list')
-    //         setFoodList(response.data.foodList || [])
-    //     } catch (error) {
-    //         console.log("ERROR: Could not fetch food list")
-    //     }
-    // }
-
-    // LOAD ---
-    // const loadCartData = async (token: string) => {
-    //     try {
-    //         const response = await axios.get(import.meta.env.VITE_BACKEND_URL + '/api/cart/get', {headers: {
-    //             'Authorization': `Bearer ${token}`
-    //             // token
-    //         }})
-    //         setCartItems(response.data.cartData)
-    //     } catch (error) {
-    //         console.error("ERROR: Could not load cart data")
-    //     }
-    // }
-
-    // // ADD ---
-    // const addToCart = async (itemId: number | string) => {
-    //     if (itemId === undefined || itemId === null) return
-
-    //     // Local Cart
-    //     const id = Number(itemId)
-    //     if (!cartItems[id]) {
-    //         setCartItems((prev: any) => ({ ...prev, [id]: 1 }))
-    //     }
-    //     else {
-    //         setCartItems((prev: any) => ({ ...prev, [id]: prev[id] + 1 }))
-    //     }
-
-    //     // Update Server Cart
-    //     updateCartInServer(itemId, token, 'add')
-    // }
-    
-    // // REMOVE ---
-    // const removeFromCart = async (itemId: number | string) => {
-    //     if (itemId === undefined || itemId === null) return
-
-    //     // Local Cart
-    //     const id = Number(itemId)
-    //     if (cartItems[id] === 1) {
-    //         setCartItems((prev: any) => {
-    //             const { [id]: _, ...rest } = prev
-    //             return rest
-    //         })
-    //     } else {
-    //         setCartItems((prev: any) => ({ ...prev, [id]: prev[id] - 1 }))
-    //     }
-
-    //     // Server Cart
-    //     updateCartInServer(itemId, token, 'remove')
-    // }
