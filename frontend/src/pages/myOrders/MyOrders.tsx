@@ -1,40 +1,38 @@
 import { useEffect, useState } from 'react'
 import { useStore } from '../../context/StoreContext'
 import { assets } from '../../assets/assets'
-import { getOrdersHook } from '../../hooks/orderHooks'
 
 const MyOrders = () => {
 
-    const { token } = useStore()
-    const [data, setData] = useState<any>([])
+    const { isLoggedIn, getOrders } = useStore()
+    const [orders, setOrders] = useState<any>(false)
 
-    // const fetchOrders = async () => {
-    //     try {
-    //         const response = await axios.post(import.meta.env.VITE_BACKEND_URL + '/api/order/user-list', {}, {
-    //             headers: {
-    //                 // 'Authorization': `Bearer ${token}`
-    //                 token
-    //             }
-    //         })
-
-    //         setData(response.data.data)
-
-    //     } catch (error) {
-    //         console.log(error)
-    //     }
-    // }
 
     // Fetch orders
     useEffect(() => {
-        if (token) getOrdersHook(token, setData)
+        if (isLoggedIn) getOrders(setOrders)
     }, [])
+
 
     return (
         <div className='my-orders'>
             <h2>My Orders</h2>
 
             <div className="container">
-                {data.map((order, index: number) => (
+                {orders === false ? 
+                
+                // Loading Spinner
+                <div className="spinner-wrapper"><div className="spinner"></div></div>
+                
+                :
+
+                // No orders
+                orders.length === 0 ? <p className='no-orders'>You have no orders</p>
+                
+                :
+                
+                // Orders
+                orders.map((order, index: number) => (
                     <div key={index} className="my-orders-order">
                         <img src={assets.parcel_icon} alt="" />
 
@@ -53,7 +51,8 @@ const MyOrders = () => {
                         <p><span>&#x25cf;</span> <b>{order.status}</b></p>
                         <button>Track Order</button>
                     </div>
-                ))}
+                ))
+                }
             </div>
         </div>
     )
