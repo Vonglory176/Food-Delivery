@@ -42,24 +42,25 @@ export default App
 
 /* TODO:
 
-  // Frontent -----
+  // Frontend -----
 
-    Sync cart on Checkout / Order Confirmation
-  
-    Make menu carousel PC friendly?
-    Potential issue with Disabled "Checkout" button in cart?
-    Add max quantity to cart items
+    Do TypeScript declarations for all components
+    Change favicon + meta tags
+
     
   // Backend -----
 
-  
+    Add rate limitation
+    Extra sanitation checks?
+
 
   // Admin -----
 
     Add login/signup system with dummy account
-    Disable Add/Remove features for production version
     Add AdminAuthMiddleware w/Token use
-    Fix issue with 'initial value' of (at least) category in createFood form
-
+    Include tidbit in admin model to allow/disallow powers
+    
+    Change favicon + meta tags
+    Disable Add/Remove features for production version
 
 */
