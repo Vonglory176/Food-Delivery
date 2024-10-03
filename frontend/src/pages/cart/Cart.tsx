@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom'
 
 const Cart = () => {
 
-  const { cartItems, food_list, removeFromCart, cartSubtotal, cartTotal, deliveryFee, cartHasItems, token, setShowLogin } = useStore()
+  const { isLoggedIn, cartIsLoading, cartItems, foodList, updateCart, cartSubtotal, cartTotal, deliveryFee, cartHasItems, setShowLogin } = useStore()
   const navigate = useNavigate()
 
   return (
@@ -23,31 +23,37 @@ const Cart = () => {
         <br />
         <hr />
 
-        {food_list.map((item, index) => {
+        {cartIsLoading ? <div className="cart-items-wrapper"><div className="spinner"></div></div>
 
-          if (cartItems[item._id] > 0) {  // if(cartItems.includes(item._id)){          
-            return (
-              <div>
+          :
 
-                <div className="cart-items-title cart-items-item" key={index}>
-                  <img src={import.meta.env.VITE_FRONTEND_URL + '/images/' + item.image} alt={item.name} />
-                  <p>{item.name}</p>
-                  <p>{item.price}</p>
-                  <p>{cartItems[item._id]}</p>
-                  <p>{item.price * cartItems[item._id]}</p>
-                  <button className='cross' onClick={() => removeFromCart(Number(item._id))} aria-label='Remove item'>
-                    {/* <img src={assets.cross_icon} alt="remove" /> */}
-                    X
-                  </button>
-                </div>
-                <hr />
+          !cartHasItems ? <div className="cart-items-wrapper"><p className='cart-empty'>Your cart is empty</p></div>
 
-              </div>
-            )
-          }
-        })}
+            :
 
-        {!cartHasItems && <p className='cart-empty'>Your cart is empty</p>}
+            foodList.map((item, index) => {
+
+              if (cartItems[item._id] > 0) {  // if(cartItems.includes(item._id)){          
+                return (
+                  <div key={index}>
+
+                    <div className="cart-items-title cart-items-item">
+                      <img src={import.meta.env.VITE_BACKEND_URL + '/images/' + item.image} alt={item.name} />
+                      <p>{item.name}</p>
+                      <p>${item.price}</p>
+                      <p>{cartItems[item._id]}</p>
+                      <p>${item.price * cartItems[item._id]}</p>
+                      <button className='cross' onClick={() => updateCart(item._id, 'remove')} aria-label='Remove item'>
+                        {/* <img src={assets.cross_icon} alt="remove" /> */}
+                        X
+                      </button>
+                    </div>
+                    <hr />
+
+                  </div>
+                )
+              }
+            })}
 
       </div>
 
@@ -79,7 +85,7 @@ const Cart = () => {
             </div>
           </div>
 
-          <button onClick={() => token ? navigate("/checkout") : setShowLogin(true)} className={cartHasItems ? "" : "disabled"} disabled={cartHasItems ? false : true}>PROCEED TO CHECKOUT</button>
+          <button onClick={() => isLoggedIn ? navigate("/checkout") : setShowLogin(true)} className={cartHasItems ? "" : "disabled"} disabled={cartHasItems ? false : true}>PROCEED TO CHECKOUT</button>
 
         </div>
 
