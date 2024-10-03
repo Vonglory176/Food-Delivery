@@ -5,10 +5,14 @@ import axios from "axios"
 // Place Order
 export const placeOrderHook = async (authCustomFetch, orderData: any) => {
     try {
-        const response = await authCustomFetch(import.meta.env.VITE_BACKEND_URL + '/api/order/place', orderData, {
+        const response = await authCustomFetch(import.meta.env.VITE_BACKEND_URL + '/api/order/place', {
+            method: 'POST',
             headers: {
-                'Method': 'POST',
+                'Content-Type': 'application/json',
                 // 'Authorization': `Bearer ${token}`
+            },
+            data: {
+                orderData
             }
         })
 
@@ -26,11 +30,11 @@ export const placeOrderHook = async (authCustomFetch, orderData: any) => {
 // Get Orders
 export const getOrdersHook = async (authCustomFetch, setData: React.Dispatch<React.SetStateAction<any>>) => {
     try {
-        const response = await authCustomFetch(import.meta.env.VITE_BACKEND_URL + '/api/order/user-list', {}, {
-            headers: {
-                'Method': 'GET',
-                // 'Authorization': `Bearer ${token}`
-            }
+        const response = await authCustomFetch(import.meta.env.VITE_BACKEND_URL + '/api/order/user-list', {
+            method: 'GET',
+            // headers: {
+            //     'Authorization': `Bearer ${token}`
+            // }
         })
 
         setData(response.data.data)
