@@ -53,20 +53,20 @@ const Navbar: React.FC<NavbarProps> = () => {
           // Profile Dropdown
           <div className="navbar-profile">
 
-            <img src={assets.profile_icon} alt="" />
+            <div className="navbar-profile-button">
+              <img src={assets.profile_icon} alt="" />
+            </div>
 
             <ul className="navbar-profile-dropdown">
 
-              <li>
-                <img src={assets.bag_icon} alt="" />
-                <Link to={"/myorders"} aria-label='Orders'>Orders</Link>
+              <li>                
+                <Link to={"/myorders"} aria-label='Orders'><img src={assets.bag_icon} alt="" /> Orders</Link>
               </li>
 
               {/* <hr /> */}
 
-              <li>
-                <img src={assets.logout_icon} alt="" />
-                <button onClick={userLogout} aria-label='Logout'>Logout</button>
+              <li>                
+                <button onClick={userLogout} aria-label='Logout'><img src={assets.logout_icon} alt="" /> Logout</button>
               </li>
 
             </ul>
