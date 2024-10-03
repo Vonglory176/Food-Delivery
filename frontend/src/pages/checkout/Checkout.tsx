@@ -5,7 +5,7 @@ import { placeOrderHook } from '../../hooks/orderHooks'
 
 const Checkout = () => {
   const navigate = useNavigate()
-  const { cartSubtotal, deliveryFee, cartTotal, token, food_list, cartItems, cartHasItems } = useStore()
+  const { cartSubtotal, deliveryFee, cartTotal, foodList, cartItems, cartHasItems, isLoggedIn } = useStore()
   const [data, setData] = useState<any>({
     firstName: '',
     lastName: '',
@@ -27,7 +27,7 @@ const Checkout = () => {
 
     // Get cart items
     let orderItems: any[] = []
-    food_list.map((item: any) => {
+    foodList.map((item: any) => {
       let itemInfo = item
       itemInfo["quantity"] = cartItems[item._id]
       orderItems.push(itemInfo)
@@ -41,7 +41,7 @@ const Checkout = () => {
     }
 
     // Place order
-    placeOrderHook(orderData, token)
+    placeOrderHook(orderData, setData)
 
     // try {
     //   const response = await axios.post(import.meta.env.VITE_BACKEND_URL + '/api/order/place', orderData, {
@@ -63,8 +63,8 @@ const Checkout = () => {
   }
 
   useEffect(() => {
-    if (!token || !cartHasItems) navigate('/cart')
-  }, [token, cartHasItems])
+    if (!isLoggedIn || !cartHasItems) navigate('/cart')
+  }, [isLoggedIn, cartHasItems])
 
   return (
     <form className='checkout' onSubmit={handleSubmit}>
