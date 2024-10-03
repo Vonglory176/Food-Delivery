@@ -1,5 +1,7 @@
 .food-display {
+    position: relative;
     margin-top: 30px;
+    min-height: 496px;
 
     h2 {
         font-size: max(2vw, 24px);
@@ -12,5 +14,12 @@
         margin-top: 30px;
         gap: 30px;
         row-gap: 50px; // Interesting !!!
+    }
+
+    .center {
+        position: absolute;
+        top: 50%;
+        // left: 50%;
+        // transform: translate(-50%, -50%);
     }
 }
