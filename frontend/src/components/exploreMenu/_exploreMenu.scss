@@ -55,14 +55,17 @@
         &-item {
             // width: 100%;
             // max-width: 105px;
+            height: calc(118px + (228 - 118) * ((100vw - 1140px) / (2310 - 1140)));
             min-height: 117px;
-            // max-height: 212px;
+            max-height: 228px;
+
             border: none;
             outline: none;
             background-color: transparent;
             cursor: pointer;
 
             animation: fadeIn 1s;
+
 
             img {
                 will-change: transform;
