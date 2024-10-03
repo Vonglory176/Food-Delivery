@@ -17,7 +17,7 @@ const upload = multer({ storage: storage })
 // Food Routes (Starts with --> /api/food)
 foodRouter.post("/add", upload.single("image"), createFood)
 foodRouter.get("/list", getFood)
-foodRouter.delete("/remove", removeFood)
+foodRouter.delete("/remove/:id", removeFood)
 
 
 
