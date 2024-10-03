@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken'
+import mongoose from 'mongoose'
 
 // export const createAccessToken = (id) => {
 //     return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '30d' })
@@ -48,10 +49,20 @@ const sendLoginDetails = (res, user) => {
     })
 }
 
+const convertToObjectId = (id) => {
+    try {
+        return new mongoose.Types.ObjectId(String(id))
+    } 
+    catch (error) {
+        console.log(error)
+        return null
+    }
+}
 
 
 export { 
     createAccessToken, 
     createRefreshToken,
-    sendLoginDetails
+    sendLoginDetails,
+    convertToObjectId
 }
