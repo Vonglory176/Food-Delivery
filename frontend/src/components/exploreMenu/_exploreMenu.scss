@@ -56,11 +56,13 @@
             // width: 100%;
             // max-width: 105px;
             min-height: 117px;
-            max-height: 212px;
+            // max-height: 212px;
             border: none;
             outline: none;
             background-color: transparent;
             cursor: pointer;
+
+            animation: fadeIn 1s;
 
             img {
                 will-change: transform;
