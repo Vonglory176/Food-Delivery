@@ -9,6 +9,10 @@
     padding-top: 80px;
     margin-top: 100px;
 
+    a:hover {
+        color: tomato;
+    }
+
     &-content {
         width: 100%;
         display: grid;
