@@ -132,8 +132,11 @@
   position: relative;
 }
 .navbar-search-icon a {
-  display: block;
-  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  width: 40px;
 }
 .navbar-search-icon .dot {
   position: absolute;
@@ -141,13 +144,13 @@
   min-height: 10px;
   background-color: tomato;
   border-radius: 5px;
-  top: -8px;
-  right: -8px;
+  top: -3px;
+  right: -3px;
 }
 .navbar-search-icon img {
   pointer-events: none;
 }
-.navbar button {
+.navbar > button {
   background-color: transparent;
   font-size: 16px;
   color: #49557e;
@@ -157,7 +160,7 @@
   cursor: pointer;
   transition: 0.3s;
 }
-.navbar button:hover {
+.navbar > button:hover {
   background-color: #fff4f2;
 }
 .navbar li {
@@ -169,6 +172,17 @@
 }
 .navbar-profile {
   position: relative;
+  cursor: pointer;
+}
+.navbar-profile-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+}
+.navbar-profile-button img {
+  pointer-events: none;
 }
 .navbar-profile-dropdown {
   position: absolute;
@@ -184,6 +198,11 @@
 }
 .navbar-profile-dropdown li:hover {
   color: tomato;
+}
+.navbar-profile-dropdown li a, .navbar-profile-dropdown li button {
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 .navbar-profile-dropdown img {
   width: 20px;
@@ -355,11 +374,11 @@
 }
 .explore-menu-list-item {
   min-height: 117px;
-  max-height: 212px;
   border: none;
   outline: none;
   background-color: transparent;
   cursor: pointer;
+  animation: fadeIn 1s;
 }
 .explore-menu-list-item img {
   will-change: transform;
@@ -377,7 +396,9 @@
 }
 
 .food-display {
+  position: relative;
   margin-top: 30px;
+  min-height: 496px;
 }
 .food-display h2 {
   font-size: max(2vw, 24px);
@@ -390,10 +411,13 @@
   gap: 30px;
   row-gap: 50px;
 }
+.food-display .center {
+  position: absolute;
+  top: 50%;
+}
 
 .food-item {
   width: 100%;
-  margin: auto;
   border-radius: 15px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.0823529412);
   transition: 0.3s;
@@ -502,6 +526,9 @@
   padding-top: 80px;
   margin-top: 100px;
 }
+.footer a:hover {
+  color: tomato;
+}
 .footer-content {
   width: 100%;
   display: grid;
@@ -555,6 +582,10 @@
 .cart {
   margin-top: 100px;
 }
+.cart-items {
+  position: relative;
+  min-height: 158px;
+}
 .cart-items-title {
   display: grid;
   grid-template-columns: 1fr 1.5fr 1fr 1fr 1fr 0.5fr;
@@ -563,8 +594,10 @@
   font-size: max(1vw, 12px);
 }
 .cart-items-item {
+  height: 40px;
   margin: 10px 0px;
   color: black;
+  animation: fadeIn 0.5s;
 }
 .cart-items-item img {
   width: 50px;
@@ -576,8 +609,14 @@
   background-color: transparent;
   cursor: pointer;
 }
+.cart-items-wrapper {
+  position: absolute;
+  bottom: 0%;
+  left: 50%;
+  transform: translate(-50%, 0%);
+}
 .cart-empty {
-  margin-top: 15px;
+  margin-bottom: 15px;
   font-size: max(1.5vw, 18px);
 }
 .cart hr {
@@ -703,15 +742,6 @@
   min-height: 60vh;
   display: grid;
 }
-.verify .spinner {
-  width: 100px;
-  height: 100px;
-  place-self: center;
-  border: 5px solid #bdbdbd;
-  border-top-color: tomato;
-  border-radius: 50%;
-  animation: rotate 1s linear infinite;
-}
 
 @keyframes rotate {
   to {
@@ -796,6 +826,16 @@ a {
   .App {
     width: 95%;
   }
+}
+
+.spinner {
+  width: 100px;
+  height: 100px;
+  place-self: center;
+  border: 5px solid #bdbdbd;
+  border-top-color: tomato;
+  border-radius: 50%;
+  animation: rotate 1s linear infinite;
 }
 
 @keyframes fadeIn {
