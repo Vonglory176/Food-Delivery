@@ -6,7 +6,7 @@ import axios from "axios"
 export const generateAccessTokenHook = async () => {
     try {
         const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/user/generate-access-token`)
-        return response.data
+        return response
 
     } catch (error) {
         console.error(error)
