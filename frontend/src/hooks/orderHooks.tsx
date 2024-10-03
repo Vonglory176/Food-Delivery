@@ -15,6 +15,7 @@ export const placeOrderHook = async (authCustomFetch, orderData: any) => {
                 orderData
             }
         })
+        console.log(response)
 
         // If order is not successful, throw an error
         if (!response.data.success) throw new Error(response.data.message || "ERROR: Could not place order")
@@ -45,9 +46,16 @@ export const getOrdersHook = async (authCustomFetch, setData: React.Dispatch<Rea
 }
 
 // Verify Order
-export const verifyPayment = async (success: boolean, orderId: string, navigate: any) => {
+export const verifyPaymentHook = async (authCustomFetch, success: boolean, orderId: string, navigate: any) => {
     try {
-        const response = await axios.post(import.meta.env.VITE_BACKEND_URL + '/api/order/verify', { success, orderId })
+        const response = await authCustomFetch(import.meta.env.VITE_BACKEND_URL + '/api/order/verify', {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                // 'Authorization': `Bearer ${token}`
+            },
+            data: { success, orderId }
+        })
 
         if (response.data.success) {
             navigate('/myorders')
