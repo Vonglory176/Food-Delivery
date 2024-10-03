@@ -6,12 +6,14 @@ import mongoose from 'mongoose'
 // }
 
 // Site Token Generation
-const createAccessToken = (user) => {
-    return jwt.sign({ user: { id: user.id } }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' })
+const createAccessToken = (user, isAdmin = false) => {
+    const secretKey = isAdmin ? process.env.ADMIN_ACCESS_TOKEN_SECRET : process.env.FRONTEND_ACCESS_TOKEN_SECRET
+    return jwt.sign({ user: { id: user.id } }, secretKey, { expiresIn: '1h' })
 }
 
-const createRefreshToken = (user) => {
-    return jwt.sign({ user: { id: user.id } }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '7d' })
+const createRefreshToken = (user, isAdmin = false) => {
+    const secretKey = isAdmin ? process.env.ADMIN_REFRESH_TOKEN_SECRET : process.env.FRONTEND_REFRESH_TOKEN_SECRET
+    return jwt.sign({ user: { id: user.id } }, secretKey, { expiresIn: '7d' })
 }
 
 // const createVerificationToken = (user) => {
@@ -25,11 +27,11 @@ const createRefreshToken = (user) => {
 
 
 // Send Login Details ( Post login/sign-Up logic)
-const sendLoginDetails = (res, user) => {
+const sendLoginDetails = (res, user, isAdmin = false) => {
 
     // Generate a new set of tokens
-    const accessToken = createAccessToken(user)
-    const refreshToken = createRefreshToken(user)
+    const accessToken = createAccessToken(user, isAdmin)
+    const refreshToken = createRefreshToken(user, isAdmin)
     
     // Send the refreshToken in an HttpOnly cookie
     res.cookie('refreshToken', refreshToken, { 
