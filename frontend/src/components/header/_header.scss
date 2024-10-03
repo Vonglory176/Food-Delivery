@@ -1,7 +1,7 @@
 .header {
     height: 34vw;
     margin: 30px auto;
-    background: url('/header_img.png') no-repeat;
+    background: url('/header_img.webp') no-repeat;
     background-size: cover;
     background-position: center;
     position: relative;
@@ -39,6 +39,7 @@
             cursor: pointer;
         }
     }
+
 
     @media (max-width: 1023px) {
         height: 38vw;
