@@ -2,7 +2,7 @@ import userModel from "../models/userModel.js"
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
 import validator from 'validator'
-import { createAccessToken, createRefreshToken, sendLoginDetails } from "../helpers/helper.js"
+import { createAccessToken, sendLoginDetails } from "../helpers/helper.js"
 
 // Login User
 const loginUser = async (req, res, next) => {
