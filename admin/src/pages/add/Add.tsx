@@ -11,7 +11,7 @@ const Add = () => {
         name: '',
         description: '',
         price: '',
-        category: '',
+        category: 'salad',
     })
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -49,7 +49,7 @@ const Add = () => {
 
         // Reset form
         if (response.data.success) {
-            setData({ name: '', description: '', price: '', category: '' })
+            setData({ name: '', description: '', price: '', category: 'salad' })
             setImage(null)
             toast.success(response.data.message)
         }
