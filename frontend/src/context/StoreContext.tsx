@@ -8,26 +8,29 @@ import { generateAccessTokenHook } from "../hooks/authHooks";
 import { getOrdersHook, placeOrderHook, verifyPaymentHook } from "../hooks/orderHooks";
 // import { foodList } from "../assets/assets";
 
-const StoreContext = createContext<StoreContextType>({
+const StoreContext = createContext<StoreContextType>({ // Specify the type here
     isLoggedIn: Boolean(sessionStorage.getItem('accessToken')),
     setIsLoggedIn: () => {},
-
-    accessToken: null,
-    setAccessToken: () => {},
 
     showLogin: false,
     setShowLogin: () => {},
 
+    userLoginSignup: async () => {},
+    userLogout: async () => {}, // Update to match the expected type
+
     foodList: [],
+
     cartItems: {},
     cartHasItems: false,
+    updateCart: async () => {},
 
     deliveryFee: 0,
     cartSubtotal: 0,
     cartTotal: 0,
 
-    addToCart: () => {},
-    removeFromCart: () => {},
+    placeOrder: async () => {},
+    verifyOrder: async () => {},
+    getOrders: async () => {},
 })
 
 export const useStore = () => useContext(StoreContext)
@@ -45,7 +48,7 @@ const StoreContextProvider: React.FC<StoreContextProviderProps> = ({ children })
     const [showLogin, setShowLogin] = useState<boolean>(false)
 
     const [cartItems, setCartItems] = useState<any>({})
-    const [cartIsLoaded, setCartIsLoaded] = useState<boolean>(Boolean(!isLoggedIn)) // For cart sync
+    // const [cartIsLoaded, setCartIsLoaded] = useState<boolean>(Boolean(!isLoggedIn)) // For cart sync
 
 
     const [foodList, setFoodList] = useState<any>([])
@@ -95,14 +98,14 @@ const StoreContextProvider: React.FC<StoreContextProviderProps> = ({ children })
 // USER ACTIONS ////////////////////////////////////////////////////////////////////////////////////////////////
 
     // LOGIN / SIGNUP
-    const userLoginSignup = async (data: any, action: 'register' | 'login', setErrors) => {
+    const userLoginSignup = async (data: any, action: LoginAction, setErrors: React.Dispatch<React.SetStateAction<any>>) => {
 
         // Getting data via Hook
         const response = await loginSignupHook(data, action)
 
         if (response?.data?.success) {
-            const {accessToken, user} = response.data
-            updateAuthState({accessToken, user})
+            const {accessToken} = response.data
+            updateAuthState({accessToken})
             setShowLogin(false)
             setIsLoggedIn(true)
 
@@ -117,14 +120,14 @@ const StoreContextProvider: React.FC<StoreContextProviderProps> = ({ children })
             // const {type="email", message="Internal Server Error"} = error?.response?.data?.error
             
 
-            setErrors(prev => ({...prev, [type]: message}))
+            setErrors((prevErrors: object) => ({...prevErrors, [type]: message}))
         }
     }
 
     // LOGOUT
     const userLogout = async () => {
         await logoutHook()
-        updateAuthState({accessToken: null, user: null})
+        updateAuthState({accessToken: null})
         setCartItems({})
     }
 
@@ -132,7 +135,7 @@ const StoreContextProvider: React.FC<StoreContextProviderProps> = ({ children })
 // AUTH STATE ////////////////////////////////////////////////////////////////////////////////////////////////    
 
     // TOKEN STATE UPDATE - (Access Token in Session Storage)
-    const updateAuthState = ({accessToken, user}) => {
+    const updateAuthState = ({accessToken}: {accessToken: string | null}) => {
         console.log("Updating Auth State!") // , data
         // console.log(accessToken)
 
@@ -168,7 +171,7 @@ const StoreContextProvider: React.FC<StoreContextProviderProps> = ({ children })
     }
         
     // CUSTOM FETCH CALL FOR AUTHORIZATION REQUIREMENTS
-    async function authCustomFetch(url, options = {}) {
+    async function authCustomFetch(url: string, options: CustomFetchOptions) {
         // console.log(options)
 
         // Inject the Authorization header with the access token
@@ -186,7 +189,7 @@ const StoreContextProvider: React.FC<StoreContextProviderProps> = ({ children })
             response = await axios({ url, ...options }) // First request
             // console.log(response)       
 
-        } catch (error) {
+        } catch (error: any) {
             // console.error(error)
 
             // If unauthorized, try refreshing the token and retrying the request once
@@ -221,8 +224,8 @@ const StoreContextProvider: React.FC<StoreContextProviderProps> = ({ children })
 // CART ACTIONS ////////////////////////////////////////////////////////////////////////////////////////////////    
 
     // UPDATE ---
-    const updateCart = async (itemId: string, action: 'add' | 'remove') => {
-        if (itemId === undefined || itemId === null) return
+    const updateCart = async (itemId: string | number, action: CartAction) => {
+        if (!itemId) return
         // const id = Number(itemId)
 
         // Quantity limits
@@ -230,7 +233,7 @@ const StoreContextProvider: React.FC<StoreContextProviderProps> = ({ children })
         if (action === 'remove' && cartItems[itemId] <= 0) return
 
         // Update cart items
-        setCartItems((prev: object) => {
+        setCartItems((prev: QuantityMap) => {
             // console.log(prev)
             const currentQuantity = prev[itemId] || 0
             const newQuantity = action === 'add' ? currentQuantity + 1 : currentQuantity - 1
@@ -242,7 +245,7 @@ const StoreContextProvider: React.FC<StoreContextProviderProps> = ({ children })
             return { ...prev, [itemId]: newQuantity }
         })
 
-        if (isLoggedIn) updateCartHook(authCustomFetch, itemId, action)
+        if (isLoggedIn) updateCartHook(authCustomFetch, itemId.toString(), action)
     }        
 
 // CHECKOUT ACTIONS ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -266,14 +269,14 @@ const StoreContextProvider: React.FC<StoreContextProviderProps> = ({ children })
 // ORDER ACTIONS ////////////////////////////////////////////////////////////////////////////////////////////////
 
     // PLACE ORDER ---
-    const placeOrder = async (orderData: any ) => {
+    const placeOrder = async (orderData: any) => {
 
         placeOrderHook(authCustomFetch, orderData)
 
     }
 
     // VERIFY ORDER ---
-    const verifyOrder = async (success: boolean, orderId: string) => {
+    const verifyOrder = async (success: boolean, orderId: string = '') => {
 
         verifyPaymentHook(authCustomFetch, success, orderId, navigate)        
     }
@@ -288,8 +291,6 @@ const StoreContextProvider: React.FC<StoreContextProviderProps> = ({ children })
 // EXPORT ///////////////////////////////////////////////////////////////////////////////////////////////////////
 
     const contextValue: StoreContextType = {
-        // accessToken,
-        // setAccessToken,
 
         showLogin,
         setShowLogin,
@@ -302,8 +303,8 @@ const StoreContextProvider: React.FC<StoreContextProviderProps> = ({ children })
 
         foodList,
 
-        cartIsLoaded,
-        setCartIsLoaded,
+        // cartIsLoaded,
+        // setCartIsLoaded,
 
         cartItems,
         cartHasItems,
@@ -312,11 +313,12 @@ const StoreContextProvider: React.FC<StoreContextProviderProps> = ({ children })
         placeOrder,
         verifyOrder,
         getOrders,
+
         deliveryFee,
         cartSubtotal,
         cartTotal,
 
-        authCustomFetch: (url, options) => authCustomFetch(url, options, generateAccessToken),
+        // authCustomFetch: (url, options) => authCustomFetch(url, options, generateAccessToken),
         // updateAuthState
     }
 
