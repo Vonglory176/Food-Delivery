@@ -1,4 +1,3 @@
-import { useContext, useState } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import Navbar from './components/navbar/Navbar'
 import Home from './pages/home/Home'
@@ -44,8 +43,8 @@ export default App
 
   // Frontend -----
 
+    Add spinner to cart while syncing
     Do TypeScript declarations for all components
-    Change favicon + meta tags
 
     
   // Backend -----
