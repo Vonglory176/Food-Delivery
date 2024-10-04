@@ -57,28 +57,53 @@ declare global {
         price: number
     }
 
-    interface LoginPopupProps {
-        setShowLogin: React.Dispatch<React.SetStateAction<boolean>>
-    }
-
-    interface NavbarProps {
-        setShowLogin: React.Dispatch<React.SetStateAction<boolean>>
-    }
-
     // Context //////////////////////////////
 
     interface StoreContextType {
-        food_list: FoodType[]
+        isLoggedIn: boolean
+        setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>
+
+        showLogin: boolean
+        setShowLogin: React.Dispatch<React.SetStateAction<boolean>>
+
+        userLoginSignup: (data: any, action: LoginAction, setErrors: React.Dispatch<React.SetStateAction<any>>) => Promise<void>
+        userLogout: () => {}
+
+        foodList: FoodType[]
+
         cartItems: any
         cartHasItems: boolean
+        updateCart: (itemId: string | number, action: CartAction) => Promise<void>
+
         deliveryFee: number
         cartSubtotal: number
         cartTotal: number
-        addToCart: (itemId: number) => void
-        removeFromCart: (itemId: number) => void
+
+        placeOrder: (orderData: any) => Promise<void>
+        verifyOrder: (success: boolean, orderId: string) => Promise<void>
+        getOrders: (setOrders: any) => Promise<void>
     }
 
     interface StoreContextProviderProps {
         children: React.ReactNode
+    }
+
+    // Actions //////////////////////////////
+
+    type CartAction = 'add' | 'remove'
+    type LoginAction = 'register' | 'login'
+
+    // Other //////////////////////////////
+
+    interface QuantityMap {
+        [key: string]: number // Define an index signature for string keys
+    }
+
+    interface CustomFetchOptions {
+        method: string
+        headers: {
+            [key: string]: string
+        }
+        data?: string
     }
 }
