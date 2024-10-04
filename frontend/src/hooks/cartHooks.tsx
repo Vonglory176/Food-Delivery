@@ -3,7 +3,7 @@
 // CART HOOKS ////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Sync Cart (On login / checkout)
-export const syncCartHook = async (authCustomFetch, cartItems={}, setCartItems: React.Dispatch<React.SetStateAction<any>>) => { // , setCartLoading = () => {}
+export const syncCartHook = async (authCustomFetch: any, cartItems: object = {}, setCartItems: React.Dispatch<React.SetStateAction<any>>) => { // , setCartLoading = () => {}
     // console.log(cartItems)
 
     try {
@@ -28,7 +28,7 @@ export const syncCartHook = async (authCustomFetch, cartItems={}, setCartItems: 
 }
 
 // Update Cart (Server)
-export const updateCartHook = async (authCustomFetch, itemId: string, action: 'add' | 'remove') => {
+export const updateCartHook = async (authCustomFetch: any, itemId: string, action: CartAction) => {
     try {
         const response = await authCustomFetch(import.meta.env.VITE_BACKEND_URL + '/api/cart/' + action + '/' + itemId, {
             method: 'PATCH',

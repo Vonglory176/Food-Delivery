@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { assets } from '../../assets/assets'
 import { Link, useNavigate } from 'react-router-dom'
 import { useStore } from '../../context/StoreContext'
 
-const Navbar: React.FC<NavbarProps> = () => {
+const Navbar = () => {
   const [menu, setMenu] = useState<string>("Home")
   const { cartHasItems, isLoggedIn, userLogout, setShowLogin } = useStore() // getTotalCartAmount
 

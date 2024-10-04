@@ -3,7 +3,7 @@ import axios from "axios"
 // USER HOOKS ////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Login / Sign-Up (Covers both)
-export const loginSignupHook = async (data, action: string) => { // , updateAuthState, setShowLogin
+export const loginSignupHook = async (data: object, action: string) => { // , updateAuthState, setShowLogin
 
     try {
         const response = await axios.post(import.meta.env.VITE_BACKEND_URL + '/api/user/' + action, data)
@@ -28,7 +28,7 @@ export const logoutHook = async () => { // updateAuthState
 
         return response
     }
-    catch (error) {
+    catch (error: any) {
         console.error(error)
         return error.response
     }

@@ -1,4 +1,5 @@
-export const validatePassword = (password, confirmPassword) => {
+export const validatePassword = (password: string, confirmPassword: string | null) => {
+    
     const hasEightCharacters = password.length >= 8
     const hasSpecialCharacter = /[!@#$%^&*(),.?":{}|<>]/.test(password)
     const hasUpperCase = /[A-Z]/.test(password)
@@ -33,7 +34,7 @@ export const validatePassword = (password, confirmPassword) => {
 }
 
 // Validate Form ( TEMP SPECIFIC TO LOGIN POPUP !!! )
-export const validateLoginForm = (data, setErrors, stateIsSignUp) => {
+export const validateLoginForm = (data: {name: string, email: string, password: string, terms: boolean}, setErrors: React.Dispatch<React.SetStateAction<any>>, stateIsSignUp: boolean) => {
     const { name, email, password, terms } = data
     // console.log(name, email, password, terms)
 

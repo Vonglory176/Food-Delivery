@@ -32,13 +32,13 @@ const MyOrders = () => {
                 :
                 
                 // Orders
-                orders.map((order, index: number) => (
+                orders.map((order: { items: any, amount: number, status: string }, index: number) => (
                     <div key={index} className="my-orders-order">
                         <img src={assets.parcel_icon} alt="" />
 
-                        <p>{order.items.map((item, index: number) => {
+                        <p>{order.items.map((item: { name: string, quantity: number }, index: number) => {
 
-                            return  item.name + " x " + item.quantity + (index === order.items.length - 1 ? ", " : "")
+                            return item.name + " x " + item.quantity + (index === order.items.length - 1 ? ", " : "")
 
                             // if (index === order.items.length - 1) {
                             //      return item.name + " x " + item.quantity

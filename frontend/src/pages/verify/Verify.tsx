@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useSearchParams } from 'react-router-dom'
 import { useStore } from '../../context/StoreContext'
 
 const Verify = () => {
@@ -11,7 +11,7 @@ const Verify = () => {
 
 
     useEffect(() => {
-        verifyOrder(success, orderId)
+        verifyOrder(success === 'true', orderId || '')
     }, [])
     
 

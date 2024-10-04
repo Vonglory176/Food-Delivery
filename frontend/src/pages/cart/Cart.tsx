@@ -1,11 +1,9 @@
-import { useContext } from 'react'
-import { StoreContext, useStore } from '../../context/StoreContext'
-// import { assets } from '../../assets/assets'
+import { useStore } from '../../context/StoreContext'
 import { useNavigate } from 'react-router-dom'
 
 const Cart = () => {
 
-  const { isLoggedIn, cartIsLoading, cartItems, foodList, updateCart, cartSubtotal, cartTotal, deliveryFee, cartHasItems, setShowLogin } = useStore()
+  const { isLoggedIn, cartItems, foodList, updateCart, cartSubtotal, cartTotal, deliveryFee, cartHasItems, setShowLogin } = useStore()
   const navigate = useNavigate()
 
   return (
@@ -23,9 +21,10 @@ const Cart = () => {
         <br />
         <hr />
 
-        {cartIsLoading ? <div className="cart-items-wrapper"><div className="spinner"></div></div>
+        {
+        // cartIsLoading ? <div className="cart-items-wrapper"><div className="spinner"></div></div>
 
-          :
+        //   :
 
           !cartHasItems ? <div className="cart-items-wrapper"><p className='cart-empty'>Your cart is empty</p></div>
 

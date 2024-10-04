@@ -1,9 +1,9 @@
-import axios from "axios"
+// import axios from "axios"
 
 // ORDER HOOKS ////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Place Order
-export const placeOrderHook = async (authCustomFetch, orderData: any) => {
+export const placeOrderHook = async (authCustomFetch: any, orderData: object) => {
     try {
         const response = await authCustomFetch(import.meta.env.VITE_BACKEND_URL + '/api/order/place', {
             method: 'POST',
@@ -29,7 +29,7 @@ export const placeOrderHook = async (authCustomFetch, orderData: any) => {
 }
 
 // Get Orders
-export const getOrdersHook = async (authCustomFetch, setData: React.Dispatch<React.SetStateAction<any>>) => {
+export const getOrdersHook = async (authCustomFetch: any, setData: React.Dispatch<React.SetStateAction<any>>) => {
     try {
         const response = await authCustomFetch(import.meta.env.VITE_BACKEND_URL + '/api/order/user-list', {
             method: 'GET',
@@ -46,7 +46,7 @@ export const getOrdersHook = async (authCustomFetch, setData: React.Dispatch<Rea
 }
 
 // Verify Order
-export const verifyPaymentHook = async (authCustomFetch, success: boolean, orderId: string, navigate: any) => {
+export const verifyPaymentHook = async (authCustomFetch: any, success: boolean, orderId: string, navigate: any) => {
     try {
         const response = await authCustomFetch(import.meta.env.VITE_BACKEND_URL + '/api/order/verify', {
             method: 'PATCH',
