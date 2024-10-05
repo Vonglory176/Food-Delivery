@@ -44,22 +44,18 @@ export default App
   // Frontend -----
 
     Add spinner to cart while syncing
-    Do TypeScript declarations for all components
-
+    Min/Max input for text
     
-  // Backend -----
-
+    
+    // Backend -----
+    
     Add rate limitation
     Extra sanitation checks?
-
-
-  // Admin -----
-
-    Add login/signup system with dummy account
-    Add AdminAuthMiddleware w/Token use
-    Include tidbit in admin model to allow/disallow powers
     
-    Change favicon + meta tags
-    Disable Add/Remove features for production version
+    
+    // Admin -----
+    
+    Include tidbit in admin model to allow/disallow powers
+    Min/Max input for text
 
 */
