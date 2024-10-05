@@ -2,25 +2,15 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import { assets } from '../../assets/assets'
+import { useAdmin } from '../../context/adminContext'
 
 const Orders = () => {
-
+  const { getOrders } = useAdmin()
   const [orders, setOrders] = useState<any>([])
 
-  const fetchAllOrders = async () => {
-    const response = await axios.get(import.meta.env.VITE_BACKEND_URL + '/api/order/admin-list')
-    console.log(response.data)
-
-    if (response.data.success) {
-      setOrders(response.data.data)
-    }
-    else {
-      toast.error("Error! Couldn't fetch orders")
-    }
-  }
-
   useEffect(() => {
-    fetchAllOrders()
+    // fetchAllOrders()
+    getOrders(setOrders)
   }, [])
 
 
@@ -29,7 +19,8 @@ const Orders = () => {
     console.log(response.data)
 
     if (response.data.success) {
-      await fetchAllOrders()
+      // await fetchAllOrders()
+      getOrders(setOrders)
     }
     else {
       toast.error("Error! Couldn't fetch orders")
@@ -46,7 +37,7 @@ const Orders = () => {
           const { firstName, lastName, street, city, state, country, zipcode, phone } = order.address
 
           return (
-            <div key={index} className="order-list-item">
+            <div key={index} className="order-item">
               <img src={assets.parcel_icon} alt="" />
 
               <div>
