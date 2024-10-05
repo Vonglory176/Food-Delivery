@@ -1,4 +1,5 @@
 .sidebar {
+    position: relative;
     width: 18%;
     min-height: 100vh;
     border: 1.5px solid #a9a9a9;
@@ -8,6 +9,9 @@
 
     // Container
     &-options {
+        position: sticky;
+        top: 0;
+        
         padding-top: 50px;
         padding-left: 20%;
         display: flex;
