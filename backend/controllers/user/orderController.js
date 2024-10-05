@@ -123,43 +123,10 @@ const userVerifyOrder = async (req, res, next) => {
     }
 }
 
-// User orders (Client Side)
-const userGetOrders = async (req, res, next) => {
-    console.log("\n IN USER ORDER LIST --------------------------- \n")
-
-    const { userId } = req.body
-
-    const requiredFields = ["userId"]
-
-    try {
-        if (!requiredFields.every(field => field in req.body)) {
-            throw { status: 400, clientMessage: 'Missing required fields' }
-        }
-
-        const orders = await orderModel.find({ userId: userId })
-
-        res.status(200).json({
-            success: true,
-            data: orders
-        })
-        
-        console.log("User orders fetched successfully")
-
-    } catch (error) {
-
-        console.log("\n ERROR IN USER ORDER LIST --------------------------- \n")
-        console.log(error)
-
-        error.action = "Fetching user orders"
-        next(error)
-    }
-}
-
 
 export {
     userPlaceOrder,
     userVerifyOrder,
-    userGetOrders,
 }
 
 
