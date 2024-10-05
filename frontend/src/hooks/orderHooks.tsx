@@ -31,7 +31,7 @@ export const placeOrderHook = async (authCustomFetch: any, orderData: object) =>
 // Get Orders
 export const getOrdersHook = async (authCustomFetch: any, setData: React.Dispatch<React.SetStateAction<any>>) => {
     try {
-        const response = await authCustomFetch(import.meta.env.VITE_BACKEND_URL + '/api/order/user-list', {
+        const response = await authCustomFetch(import.meta.env.VITE_BACKEND_URL + '/api/order/list', {
             method: 'GET',
             // headers: {
             //     'Authorization': `Bearer ${token}`
