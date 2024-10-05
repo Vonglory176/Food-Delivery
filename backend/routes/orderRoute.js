@@ -1,18 +1,19 @@
 import express from 'express'
 import { authMiddleware } from '../middleware/auth.js'
-import { userPlaceOrder, userVerifyOrder, userGetOrders } from '../controllers/user/orderController.js'
-import { adminGetOrders, adminUpdateOrderStatus } from '../controllers/admin/orderController.js'
-import { generateAccessToken } from '../controllers/common/authController.js'
+import { userPlaceOrder, userVerifyOrder } from '../controllers/user/orderController.js'
+import { adminUpdateOrderStatus } from '../controllers/admin/orderController.js'
+import { getOrders } from '../controllers/common/orderController.js'
 
 const orderRouter = express.Router()
 
 // User routes
 orderRouter.post('/place', authMiddleware, userPlaceOrder)
 orderRouter.patch('/verify', authMiddleware, userVerifyOrder)
-orderRouter.get('/user-list', authMiddleware, userGetOrders)
 
 // Admin routes
-orderRouter.post('/admin-list', authMiddleware, adminGetOrders)
 orderRouter.post('/admin-update-status', authMiddleware, adminUpdateOrderStatus)
+
+// Common routes
+orderRouter.get('/list', authMiddleware, getOrders)
 
 export default orderRouter
