@@ -1,10 +1,9 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { syncCartHook, updateCartHook } from "../hooks/cartHooks";
 import { getFoodHook } from "../hooks/foodHooks";
-import { loginSignupHook, logoutHook } from "../hooks/userHooks";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
-import { generateAccessTokenHook } from "../hooks/authHooks";
+import { generateAccessTokenHook, loginSignupHook, logoutHook } from "../hooks/authHooks";
 import { getOrdersHook, placeOrderHook, verifyPaymentHook } from "../hooks/orderHooks";
 // import { foodList } from "../assets/assets";
 
@@ -110,7 +109,7 @@ const StoreContextProvider: React.FC<StoreContextProviderProps> = ({ children })
             setIsLoggedIn(true)
 
             // Sync Cart
-            syncCartHook(authCustomFetch, cartItems, setCartItems)
+            // syncCartHook(authCustomFetch, cartItems, setCartItems)
         }
         else {            
             const type = response?.data?.error?.type || "email"
