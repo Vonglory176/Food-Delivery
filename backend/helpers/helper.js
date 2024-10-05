@@ -46,7 +46,7 @@ const sendLoginDetails = (res, user, isAdmin = false) => {
     // Send the accessToken in a successful response
     res.status(200).json({ 
         success: true,
-        user: user.username, 
+        user: user.name, 
         accessToken
     })
 }
