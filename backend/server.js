@@ -5,7 +5,7 @@ import { connectDB } from "./config/dbConfig.js"
 import cookieParser from "cookie-parser"
 
 import foodRouter from "./routes/foodRoute.js"
-import userRouter from "./routes/userRoute.js"
+import authRouter from "./routes/authRoute.js"
 import cartRouter from "./routes/cartRoute.js"
 import orderRouter from "./routes/orderRoute.js"
 import { notFoundHandler, errorHandler } from "./middleware/errorMiddleware.js"
@@ -24,7 +24,7 @@ app.use(express.json({ limit: '50mb' }))
 app.use(cors({
     origin: [process.env.FRONTEND_URL, process.env.ADMIN_URL],
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'], // Ensure all methods needed are allowed
-    allowedHeaders: ['Content-Type', 'Authorization'], // Ensure headers your frontend sends are allowed
+    allowedHeaders: ['Content-Type', 'Authorization', 'x-request-source'], // Ensure headers your frontend sends are allowed
     exposedHeaders: ['Access-Control-Allow-Origin', 'Access-Control-Allow-Credentials'], // Expose headers
     credentials: true // Allows cookies
 }))
@@ -39,8 +39,8 @@ connectDB()
 
 // API Endpoints
 app.use("/images", express.static("uploads")) // path.join(__dirname, "uploads")
+app.use("/api/auth", authRouter)
 app.use("/api/food", foodRouter)
-app.use("/api/user", userRouter)
 app.use("/api/cart", cartRouter)
 app.use("/api/order", orderRouter)
 
