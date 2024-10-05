@@ -59,7 +59,7 @@ const LoginPopup = () => {
         {/* Title */}
         <div className="login-popup-title">
           <h2>{currentState}</h2>
-          <button onClick={() => setShowLogin(false)}>
+          <button type='button' onClick={() => setShowLogin(false)}>
             <img src={assets.cross_icon} alt="close" />
           </button>
         </div>
