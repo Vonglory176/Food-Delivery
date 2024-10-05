@@ -1,5 +1,5 @@
 // import React from 'react'
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import Navbar from './components/navbar/Navbar'
 import Sidebar from './components/sidebar/Sidebar'
 import Add from './pages/add/Add'
@@ -7,26 +7,46 @@ import List from './pages/list/List'
 import Orders from './pages/orders/Orders'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import LoginPopup from './components/loginPopup/LoginPopup'
+import { useAdmin } from './context/adminContext'
 
 const App = () => {
+  const { isLoggedIn } = useAdmin()
+
   return (
+
     <div className='App'>
 
-      <Navbar />
-      <ToastContainer />
+      { !isLoggedIn ? 
+      
+      // Login Screen
+      <LoginPopup isRegister={false} /> 
+      
+      :
 
-      <hr />
+      // Admin Dashboard
+      <>
+        <Navbar />
+        <ToastContainer />
 
-      <div className="app-content">
-        <Sidebar />
+        <hr />
 
-        <Routes>
-          {/* <Route path="/" element={<List />} /> */}
-          <Route path="/add" element={<Add />} />
-          <Route path="/list" element={<List />} />
-          <Route path="/orders" element={<Orders />} />
-        </Routes>
-      </div>
+        <div className="app-content">
+          <Sidebar />
+
+          <Routes>
+            {/* Default */}
+            <Route path="/" element={<Navigate to="/add" replace />} />
+
+            {/* Main pages */}
+            <Route path="/add" element={<Add />} />
+            <Route path="/list" element={<List />} />
+            <Route path="/orders" element={<Orders />} />
+          </Routes>
+
+        </div>
+      </>
+      }
 
 
     </div>
