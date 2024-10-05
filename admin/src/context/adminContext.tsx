@@ -1,9 +1,8 @@
 import { createContext, useContext, useEffect, useState } from "react";
 // import { getFoodHook } from "../hooks/foodHooks";
-import { loginSignupHook, logoutHook } from "../hooks/adminHooks";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
-import { generateAccessTokenHook } from "../hooks/authHooks";
+import { generateAccessTokenHook, loginSignupHook, logoutHook } from "../hooks/authHooks";
 import { getOrdersHook } from "../hooks/orderHooks";
 // import { generateAccessTokenHook } from "../hooks/authHooks";
 
