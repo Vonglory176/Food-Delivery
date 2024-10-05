@@ -1,7 +1,7 @@
 // Components
 @import './components/sidebar/_sidebar.scss';
 @import './components/navbar/_navbar.scss';
-
+@import './components/loginPopup/_loginPopup.scss';
 // Pages
 @import './pages/add/_add.scss';
 @import './pages/list/_list.scss';
@@ -16,7 +16,7 @@
 }
 
 body {
-    min-height: 100vh;
+    min-height: 100svh;
     background-color: #fcfcfc;
 }
 
