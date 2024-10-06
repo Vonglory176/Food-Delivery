@@ -11,7 +11,7 @@ export const getFoodHook = async (setFoodItems: React.Dispatch<React.SetStateAct
         setFoodItems(response?.data?.foodList || [])
         
     } catch (error) {
-        setFoodItems({})
+        setFoodItems([])
         // console.log(error)
         console.error("ERROR: Could not get food items")
     }
