@@ -1,23 +1,38 @@
 // import axios from "axios"
 
-import { toast } from "react-toastify"
-
 // ORDER HOOKS ////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Get Orders
-export const getOrdersHook = async (authCustomFetch: any, setData: React.Dispatch<React.SetStateAction<any>>) => {
+export const getOrdersHook = async (authCustomFetch: any) => {
     try {
         const response = await authCustomFetch(import.meta.env.VITE_BACKEND_URL + '/api/order/list', {
             method: 'GET',
-            // headers: {
-            //     'x-request-source': 'admin'
-            // }
         })
 
-        setData(response.data.data)
+        return response
 
     } catch (error) {
         console.log(error)
-        toast.error("Error! Couldn't fetch orders")
+        return error.response
     }
 }
+
+// Update Order Status
+export const updateOrderStatusHook = async (authCustomFetch: any, orderId: string, status: string) => {
+    try {
+        const response = await authCustomFetch(import.meta.env.VITE_BACKEND_URL + '/api/order/admin-update-status', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            data: { orderId, status }
+        })
+        return response
+
+    } catch (error) {
+        console.log(error)
+        return error.response
+    }
+}
+
+
