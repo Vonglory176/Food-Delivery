@@ -1,6 +1,7 @@
 import React from 'react'
 import { useStore } from '../../context/StoreContext'
 import FoodItem from '../foodItem/FoodItem'
+import Spinner from '../spinner/Spinner'
 
 const FoodDisplay: React.FC<FoodDisplayProps> = ({ category }) => {
     const { foodList } = useStore()
@@ -12,7 +13,8 @@ const FoodDisplay: React.FC<FoodDisplayProps> = ({ category }) => {
                 {foodList.length === 0 ? 
                 
                     // If no food items
-                    <div className="spinner center"></div> 
+                    // <div className="spinner center"></div> 
+                    <Spinner />
 
                     :
 
