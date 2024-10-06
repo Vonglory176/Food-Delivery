@@ -1,13 +1,28 @@
+.orders {
+    position: relative;
+}
+
 .order-item {
     display: grid;
     grid-template-columns: 0.5fr 2fr 1fr 1fr 1fr;
     align-items: start;
-    gap: 30px;
+    gap: 15px; // 30px;
     border: 1px solid tomato;
     padding: 20px;
-    margin: 30px 0px;
     font-size: 14px;
-    color: #505050;
+    color: #505050;    
+    margin: 30px 0px;
+    
+    background-color: #fff4f2;
+    &.delivered {
+        background-color: #e4ffe8; // #009933;
+        // color: white;
+        border-color: #009933;
+    }
+
+    &:first-of-type {
+        margin-top: 10px;
+    }
 
     &-food, &-name {
         font-weight: 600;
@@ -22,8 +37,9 @@
     }
 
     select {
-        background-color: #ffe8e4;
+        // background-color: #ffe8e4;
         border: 1px solid tomato;
+        border-color: inherit;
         width: max(10vw, 120px);
         padding: 10px;
         outline: none;
@@ -41,6 +57,21 @@
 
         img {
             width: 40px;
+        }
+    }
+
+    @media (max-width: 430px) {
+        border-top-width: 0;
+        border-left: none;
+        border-right: none;
+
+        border-bottom-width: 5px; // #cacaca;
+        padding-left: 10px;
+        padding-right: 0;
+        margin-top: 0px;
+        margin-bottom: 0;
+        &:first-of-type {
+            border-top-width: 5px; // #cacaca;
         }
     }
 }
