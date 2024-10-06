@@ -3,18 +3,20 @@ import { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import { generateAccessTokenHook, loginSignupHook, logoutHook } from "../hooks/authHooks";
-import { getOrdersHook } from "../hooks/orderHooks";
+import { getOrdersHook, updateOrderStatusHook } from "../hooks/orderHooks";
+import { addFoodHook, getFoodHook, removeFoodHook } from "../hooks/foodHooks";
+import { toast } from "react-toastify";
 // import { generateAccessTokenHook } from "../hooks/authHooks";
 
 const AdminContext = createContext<AdminContextType>({ // Specify the type here
     isLoggedIn: Boolean(sessionStorage.getItem('accessToken')),
-    setIsLoggedIn: () => {},
+    setIsLoggedIn: () => { },
 
     // showLogin: false,
     // setShowLogin: () => {},
 
-    userLoginSignup: async () => {},
-    userLogout: async () => {}, // Update to match the expected type
+    userLoginSignup: async () => { },
+    userLogout: async () => { }, // Update to match the expected type
 
     foodList: [],
 
@@ -28,7 +30,7 @@ const AdminContext = createContext<AdminContextType>({ // Specify the type here
 
     // placeOrder: async () => {},
     // verifyOrder: async () => {},
-    getOrders: async () => {},
+    getOrders: async () => { },
 })
 
 export const useAdmin = () => useContext(AdminContext)
@@ -42,6 +44,7 @@ const AdminContextProvider: React.FC<AdminContextProviderProps> = ({ children })
     const location = useLocation()
     const navigate = useNavigate()
 
+    const [isLoading, setIsLoading] = useState<boolean>(true)
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(Boolean(sessionStorage.getItem('accessToken')))
     const [showLogin, setShowLogin] = useState<boolean>(false)
 
@@ -52,7 +55,7 @@ const AdminContextProvider: React.FC<AdminContextProviderProps> = ({ children })
     // }, [cartItems])
 
 
-// INITIAL FETCHES ////////////////////////////////////////////////////////////////////////////////////////////////
+    // INITIAL FETCHES ////////////////////////////////////////////////////////////////////////////////////////////////
 
     // LOGIN / FOOD SYNC ---
     useEffect(() => {
@@ -63,7 +66,7 @@ const AdminContextProvider: React.FC<AdminContextProviderProps> = ({ children })
         // }
 
         const maintainLoginStatus = async () => {
-            
+
             // Is AccessToken in Session Storage?
             if (sessionStorage.getItem('accessToken')) {
                 const success = await generateAccessToken()
@@ -78,15 +81,55 @@ const AdminContextProvider: React.FC<AdminContextProviderProps> = ({ children })
 
     }, [location.pathname])
 
+    // FOOD ACTIONS ////////////////////////////////////////////////////////////////////////////////////////////////
 
-    // CART SYNC ---
-    // useEffect(() => {
-    //     if (isLoggedIn) syncCartHook(authCustomFetch, cartItems, setCartItems)
-    // }, [isLoggedIn])
+    // GET FOOD
+    const getFood = async () => {
+        setIsLoading(true)
+
+        const response = await getFoodHook()
+
+        if (response.data.success) {
+            setFoodList(response.data.foodList)
+        }
+        else {
+            // setFoodList([])
+            toast.error("Error! Couldn't fetch food-list")
+        }
+
+        setIsLoading(false)
+    }
+
+    // ADD FOOD
+    const addFood = async (formData: FormData, resetForm: () => void) => {
+
+        const response = await addFoodHook(authCustomFetch, formData)
+        const { success, message } = response.data
+
+        // Reset form + Popup + Update Food List
+        if (success) {
+            resetForm()
+            toast.success(message)
+            getFood()
+        }
+        else toast.error(message)
+    }
+
+    // REMOVE FOOD
+    const removeFood = async (foodId: string) => {
+        const response = await removeFoodHook(authCustomFetch, foodId)
+        const { success, message } = response.data
+
+        // Popup + Update Food List
+        if (success) {
+            toast.success(message)
+            getFood()
+        }
+        else toast.error(message)
+    }
 
 
-
-// USER ACTIONS ////////////////////////////////////////////////////////////////////////////////////////////////
+    // USER ACTIONS ////////////////////////////////////////////////////////////////////////////////////////////////
 
     // LOGIN / SIGNUP
     const userLoginSignup = async (data: any, action: LoginAction, setErrors: React.Dispatch<React.SetStateAction<any>>) => {
@@ -96,35 +139,35 @@ const AdminContextProvider: React.FC<AdminContextProviderProps> = ({ children })
         const response = await loginSignupHook(data, action)
 
         if (response?.data?.success) {
-            const {accessToken} = response.data
-            updateAuthState({accessToken})
+            const { accessToken } = response.data
+            updateAuthState({ accessToken })
             setShowLogin(false)
             setIsLoggedIn(true)
         }
-        else {            
+        else {
             const type = response?.data?.error?.type || "email"
             const message = response?.data?.error?.message || "Internal Server Error"
             // console.log(type, message)
 
             // const {type="email", message="Internal Server Error"} = error?.response?.data?.error
-            
 
-            setErrors((prevErrors: object) => ({...prevErrors, [type]: message}))
+
+            setErrors((prevErrors: object) => ({ ...prevErrors, [type]: message }))
         }
     }
 
     // LOGOUT
     const userLogout = async () => {
         await logoutHook()
-        updateAuthState({accessToken: null})
+        updateAuthState({ accessToken: null })
         navigate("/")
     }
 
 
-// AUTH STATE ////////////////////////////////////////////////////////////////////////////////////////////////    
+    // AUTH STATE ////////////////////////////////////////////////////////////////////////////////////////////////    
 
     // TOKEN STATE UPDATE - (Access Token in Session Storage)
-    const updateAuthState = ({accessToken}: {accessToken: string | null}) => {
+    const updateAuthState = ({ accessToken }: { accessToken: string | null }) => {
         console.log("Updating Auth State!") // , data
         // console.log(accessToken)
 
@@ -158,78 +201,88 @@ const AdminContextProvider: React.FC<AdminContextProviderProps> = ({ children })
 
         return true
     }
-        
+
     // CUSTOM FETCH CALL FOR AUTHORIZATION REQUIREMENTS
+    // This function is used to make a request where, if failed due to expired/missing access token,
+    // a second request is made to refresh the token before then retrying the original request again
     async function authCustomFetch(url: string, options: CustomFetchOptions) {
-        // console.log(options)
+        console.log(options)
 
         // Inject the Authorization header with the access token
         const accessToken = sessionStorage.getItem('accessToken')
         if (accessToken) {
             options.headers = {
                 ...options.headers,
-                Authorization: `Bearer ${accessToken}`,
-                'x-request-source': 'admin'
+                Authorization: `Bearer ${accessToken}`
             }
         }
 
         let response
         try {
 
-            response = await axios({ url, ...options }) // First request
-            // console.log(response)       
+            // PRIMARY REQUEST ---
+            response = await axios({ url, ...options })
 
         } catch (error: any) {
-            // console.error(error)
 
-            // If unauthorized, try refreshing the token and retrying the request once
+            // TOKEN REFRESH REQUEST --- (If unauthorized, try refreshing the token and retrying the request once)
             if (error.response.status === 403) {
-                console.log("Refreshing Token")
                 await generateAccessToken()
                 const newAccessToken = sessionStorage.getItem('accessToken')
-    
-                if (newAccessToken) { // If a new token was given, re-send the request
-                    console.log(options)
+
+                // RE-TRY REQUEST --- (If a new token was given, re-send the request)
+                if (newAccessToken) {
                     options.headers.Authorization = `Bearer ${newAccessToken}`
                     response = await axios({ url, ...options })
                 }
-                else { // Otherwise (refresh-token was lost/expired), logout and send user to login/signup
+                else {
+                    // RE-TRY FAILED --- (Refresh-token was lost/expired, logout user)
                     userLogout()
-                    // window.location.replace("/?login")
                 }
             }
-            else {
-                // console.log("ERROR: " + error.response.statusText)
-                return error.response
-            }
+            // Non-403 Error
+            else return error.response
         }
 
-
-        // if (!response.ok) {console.error("ERROR WHILE FETCHING: " + response.statusText)}
-
-        // console.log(response)
         return response
     }
 
-// ORDER ACTIONS ////////////////////////////////////////////////////////////////////////////////////////////////
+    // ORDER ACTIONS ////////////////////////////////////////////////////////////////////////////////////////////////
 
-    // UPDATE ORDER ---
-    // const updateOrder = async (orderId: string, orderData: any) => {
-    //     const response = await updateOrderHook(orderId, orderData)
-    // }
-
-    // GET ORDERS ---`
+    // GET ORDERS ---
     const getOrders = async (setOrders: React.Dispatch<React.SetStateAction<any>>) => {
-        const response = await getOrdersHook(authCustomFetch, setOrders)
+        setIsLoading(true)
+
+        const response = await getOrdersHook(authCustomFetch)
+        const { success, message, orderList } = response.data
+
+        // Popup + Update Food List
+        if (success) setOrders(orderList)
+        else toast.error(message)
+
+        setIsLoading(false)
     }
 
+    // UPDATE ORDER ---
+    const updateOrderStatus = async (e: React.ChangeEvent<HTMLSelectElement>, orderId: string, setOrders: React.Dispatch<React.SetStateAction<any>>) => {
+        const response = await updateOrderStatusHook(authCustomFetch, orderId, e.target.value)
+        const { success, message } = response.data
 
-// EXPORT ///////////////////////////////////////////////////////////////////////////////////////////////////////
+        if (success) {
+            getOrders(setOrders)
+        }
+        else toast.error(message)
+    }
+
+    // EXPORT ///////////////////////////////////////////////////////////////////////////////////////////////////////
 
     const contextValue: AdminContextType = {
 
         showLogin,
         setShowLogin,
+
+        isLoading,
+        setIsLoading,
 
         isLoggedIn,
         setIsLoggedIn,
@@ -238,8 +291,12 @@ const AdminContextProvider: React.FC<AdminContextProviderProps> = ({ children })
         userLogout,
 
         foodList,
+        getFood,
+        addFood,
+        removeFood,
 
         getOrders,
+        updateOrderStatus
 
         // authCustomFetch: (url, options) => authCustomFetch(url, options, generateAccessToken),
         // updateAuthState
@@ -249,5 +306,8 @@ const AdminContextProvider: React.FC<AdminContextProviderProps> = ({ children })
         {children}
     </AdminContext.Provider>
 }
+
+
+
 
 export default AdminContextProvider
