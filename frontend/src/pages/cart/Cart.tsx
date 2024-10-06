@@ -1,9 +1,10 @@
+import Spinner from '../../components/spinner/Spinner'
 import { useStore } from '../../context/StoreContext'
 import { useNavigate } from 'react-router-dom'
 
 const Cart = () => {
 
-  const { isLoggedIn, cartItems, foodList, updateCart, cartSubtotal, cartTotal, deliveryFee, cartHasItems, setShowLogin } = useStore()
+  const { isLoggedIn, cartItems, foodList, updateCart, cartSubtotal, cartTotal, deliveryFee, cartHasItems, setShowLogin, cartIsLoaded } = useStore()
   const navigate = useNavigate()
 
   return (
@@ -22,37 +23,37 @@ const Cart = () => {
         <hr />
 
         {
-        // cartIsLoading ? <div className="cart-items-wrapper"><div className="spinner"></div></div>
-
-        //   :
-
-          !cartHasItems ? <div className="cart-items-wrapper"><p className='cart-empty'>Your cart is empty</p></div>
+          !cartIsLoaded ? <Spinner />
 
             :
 
-            foodList.map((item, index) => {
+            !cartHasItems ? <div className="cart-items-wrapper"><p className='cart-empty'>Your cart is empty</p></div>
 
-              if (cartItems[item._id] > 0) {  // if(cartItems.includes(item._id)){          
-                return (
-                  <div key={index}>
+              :
 
-                    <div className="cart-items-title cart-items-item">
-                      <img src={import.meta.env.VITE_BACKEND_URL + '/images/' + item.image} alt={item.name} />
-                      <p>{item.name}</p>
-                      <p>${item.price}</p>
-                      <p>{cartItems[item._id]}</p>
-                      <p>${item.price * cartItems[item._id]}</p>
-                      <button className='cross' onClick={() => updateCart(item._id, 'remove')} aria-label='Remove item'>
-                        {/* <img src={assets.cross_icon} alt="remove" /> */}
-                        X
-                      </button>
+              foodList.map((item, index) => {
+
+                if (cartItems[item._id] > 0) {  // if(cartItems.includes(item._id)){          
+                  return (
+                    <div key={index}>
+
+                      <div className="cart-items-title cart-items-item">
+                        <img src={import.meta.env.VITE_BACKEND_URL + '/images/' + item.image} alt={item.name} />
+                        <p>{item.name}</p>
+                        <p>${item.price}</p>
+                        <p>{cartItems[item._id]}</p>
+                        <p>${item.price * cartItems[item._id]}</p>
+                        <button className='cross' onClick={() => updateCart(item._id, 'remove')} aria-label='Remove item'>
+                          {/* <img src={assets.cross_icon} alt="remove" /> */}
+                          X
+                        </button>
+                      </div>
+                      <hr />
+
                     </div>
-                    <hr />
-
-                  </div>
-                )
-              }
-            })}
+                  )
+                }
+              })}
 
       </div>
 
@@ -95,7 +96,7 @@ const Cart = () => {
             <p>If you have a promo code, Enter it here</p>
 
             <div className="cart-promocode-input">
-              <input type="text" placeholder='Promo Code' />
+              <input type="text" placeholder='Promo Code' maxLength={30} />
               <button>Submit</button>
             </div>
 
