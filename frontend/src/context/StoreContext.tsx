@@ -47,7 +47,7 @@ const StoreContextProvider: React.FC<StoreContextProviderProps> = ({ children })
     const [showLogin, setShowLogin] = useState<boolean>(false)
 
     const [cartItems, setCartItems] = useState<any>({})
-    // const [cartIsLoaded, setCartIsLoaded] = useState<boolean>(Boolean(!isLoggedIn)) // For cart sync
+    const [cartIsLoaded, setCartIsLoaded] = useState<boolean>(Boolean(!isLoggedIn)) // For cart sync
 
 
     const [foodList, setFoodList] = useState<any>([])
@@ -89,7 +89,15 @@ const StoreContextProvider: React.FC<StoreContextProviderProps> = ({ children })
 
     // CART SYNC ---
     useEffect(() => {
-        if (isLoggedIn) syncCartHook(authCustomFetch, cartItems, setCartItems)
+        const syncCart = async () => {
+            if (isLoggedIn) {
+                setCartIsLoaded(false)
+                await syncCartHook(authCustomFetch, cartItems, setCartItems)
+            }
+            setCartIsLoaded(true)
+        }
+
+        syncCart()
     }, [isLoggedIn])
 
 
@@ -302,7 +310,7 @@ const StoreContextProvider: React.FC<StoreContextProviderProps> = ({ children })
 
         foodList,
 
-        // cartIsLoaded,
+        cartIsLoaded,
         // setCartIsLoaded,
 
         cartItems,
