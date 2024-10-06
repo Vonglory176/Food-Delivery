@@ -48,8 +48,12 @@
             right: -3px; // -8px;
         }
 
-        img {
-            pointer-events: none;
+        svg {
+            color: #49557e;
+            transition: 0.3s;
+            &:hover {
+                color: tomato;
+            }
         }
     }
 
@@ -64,6 +68,7 @@
         transition: 0.3s;
 
         &:hover {
+            color: tomato;
             background-color: #fff4f2;
         }
     }
@@ -88,8 +93,13 @@
             width: 40px;
             height: 40px;
             cursor: pointer;
-            img { 
-                pointer-events: none; 
+
+            svg {
+                color: #49557e;
+                transition: 0.3s;
+                &:hover {
+                    color: tomato;
+                }
             }
         }
 
@@ -104,6 +114,7 @@
                 display: flex;
                 align-items: center;
                 gap: 10px;
+                color: #808080;
                 // cursor: pointer;
 
                 &:hover {
@@ -119,10 +130,10 @@
                 }
             }
 
-            img {
-                width: 20px;
-                pointer-events: none;
-            }
+            // img {
+            //     width: 20px;
+            //     pointer-events: none;
+            // }
         }
 
         &:hover &-dropdown {
@@ -137,11 +148,12 @@
             list-style: none;
 
             button {
-                color: black;
+                color: #808080; // black;
                 background-color: transparent;
                 border: none;
                 padding: 0;
                 transition: 0s;
+                transition: 0.3s;
 
                 &:hover {
                     color: tomato;
@@ -186,9 +198,9 @@
         &-right {
             gap: 10px; // 20px;
 
-            img {
-                width: 20px;
-            }
+            // svg {
+            //     width: 25px;
+            // }
 
             button {
                 padding: 7px 20px;
