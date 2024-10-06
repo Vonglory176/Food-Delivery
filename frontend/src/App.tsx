@@ -41,21 +41,25 @@ export default App
 
 /* TODO:
 
-  // Frontend -----
+  // General -----
 
-    Add spinner to cart while syncing
-    Min/Max input for text
+    Check Aria
+    Check TS Declarations
+    Add dates to order pages
+    Get 'DEMO' logic working
+    
+    // Frontend -----
+    Post-Fetch logic to StoreContext
     
     
     // Backend -----
     
     Add rate limitation
     Extra sanitation checks?
+    Enforce max length for text inputs
     
     
     // Admin -----
-    
-    Include tidbit in admin model to allow/disallow powers
-    Min/Max input for text
-
+    Automatic Order updates
+    Add/Edit Item Modal
 */
