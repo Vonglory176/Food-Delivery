@@ -1,3 +1,5 @@
+import orderModel from "../../models/orderModel.js"
+
 // UPDATE ORDER STATUS (Admin)
 const adminUpdateOrderStatus = async (req, res, next) => {
     console.log("\n IN ADMIN UPDATE ORDER STATUS --------------------------- \n")
@@ -8,8 +10,9 @@ const adminUpdateOrderStatus = async (req, res, next) => {
         // if (!requiredFields.every(field => field in req.body)) {
         //     throw { status: 400, clientMessage: 'Missing required fields' }
         // }
-
+        // console.log(req.body)
         const response = await orderModel.findByIdAndUpdate(orderId, { status: status })
+        if (!response) throw { status: 404, clientMessage: 'Order not found' }
 
         const successMessage = "Order status updated successfully"
         res.status(200).json({
