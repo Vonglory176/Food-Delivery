@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { validateLoginForm } from '../../helpers/helper'
 import { useAdmin } from '../../context/adminContext'
-import { assets } from '../../assets/assets'
 
 const LoginPopup = ({ isRegister }: { isRegister: boolean }) => {
   const { setShowLogin, userLoginSignup } = useAdmin()
@@ -57,9 +56,10 @@ const LoginPopup = ({ isRegister }: { isRegister: boolean }) => {
         {/* Title */}
         <div className="login-popup-title">
           <h2>{isRegister ? "Create Account" : "Login"}</h2>
-          <button type='button' onClick={() => setShowLogin(false)}>
-            <img src={assets.cross_icon} alt="close" />
-          </button>
+          {/* <button type='button' onClick={() => setShowLogin(false)}> */}
+            {/* <img src={assets.cross_icon} alt="close" /> */}
+            {/* <FaTimes className="close-icon" size={16} /> */}
+          {/* </button> */}
         </div>
 
         {/* Inputs */}
@@ -68,20 +68,20 @@ const LoginPopup = ({ isRegister }: { isRegister: boolean }) => {
           {/* Name */}
           {isRegister &&
             <div className="login-popup-inputs-wrapper">
-              <input onChange={handleChange} className={errors.name ? 'error' : ''} value={formData.name} type="text" name='name' placeholder='Your name' />
+              <input onChange={handleChange} className={errors.name ? 'error' : ''} maxLength={50} value={formData.name} type="text" name='name' placeholder='Your name' />
               {errors.name && <p className='error-text'>{errors.name}</p>}
             </div>
           }
 
           {/* Email */}
           <div className="login-popup-inputs-wrapper">
-            <input onChange={handleChange} className={errors.email ? 'error' : ''} value={formData.email} type="email" name='email' placeholder='Your email' />
+            <input onChange={handleChange} className={errors.email ? 'error' : ''} maxLength={50} value={formData.email} type="email" name='email' placeholder='Your email' />
             {errors.email && <p className='error-text'>{errors.email}</p>}
           </div>
 
           {/* Password */}
           <div className="login-popup-inputs-wrapper">
-            <input onChange={handleChange} className={errors.password ? 'error' : ''} value={formData.password} type="password" name='password' placeholder='Your password' />
+            <input onChange={handleChange} className={errors.password ? 'error' : ''} maxLength={50} value={formData.password} type="password" name='password' placeholder='Your password' />
             {errors.password && <p className='error-text'>{errors.password}</p>}
           </div>
 
