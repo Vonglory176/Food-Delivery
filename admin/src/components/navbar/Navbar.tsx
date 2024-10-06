@@ -10,8 +10,10 @@ const Navbar = () => {
 
     <div className='navbar'>
 
-      <Link to='/'><img className='logo' src={assets.logo} alt="logo" /></Link>
-      
+      {/* <Link to='/'> */}
+      <img className='logo' src={assets.logo} alt="logo" />
+      {/* </Link> */}
+
       {/* <img className="profile" src={assets.profile_image} alt="profile" /> */}
       <button className='logout-btn' onClick={userLogout} aria-label='logout'>
         {/* <img src={assets.logout_icon} alt="" />  */}
