@@ -11,7 +11,7 @@ const getOrders = async (req, res, next) => {
 
         res.status(200).json({
             success: true,
-            data: orders
+            orderList: orders
         })
         
         console.log("Orders fetched successfully")
