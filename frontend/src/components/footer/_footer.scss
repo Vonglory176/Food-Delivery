@@ -43,14 +43,11 @@
         display: flex;
         gap: 15px;
 
-        a, img {
+        a {
+            transition: all 0.3s ease;
             display: block;
             width: 40px;
             height: 40px;
-        }
-
-        img {
-            pointer-events: none;
         }
     }
 

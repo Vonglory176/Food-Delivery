@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { assets } from '../../assets/assets'
+import { FaFacebook, FaLinkedin, FaTwitter } from 'react-icons/fa'
 
 const Footer = () => {
   return (
@@ -10,14 +11,14 @@ const Footer = () => {
             <Link to={"/"}><img src={assets.logo} alt="logo" /></Link>
             <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Doloribus dignissimos maxime, corporis non officiis obcaecati exercitationem at cumque labore quasi repudiandae quod quos perspiciatis nostrum illum quisquam enim. Eius, impedit.</p>
             <ul className="footer-social-icons">
-              <li>
-                <a href="https://www.facebook.com" target='_blank' aria-label='Facebook'><img src={assets.facebook_icon} alt="facebook" /></a>
+            <li>
+                <a href="https://www.facebook.com" target='_blank' aria-label='Facebook'><FaFacebook size={32} /></a>
               </li>
               <li>
-                <a href="https://www.twitter.com" target='_blank' aria-label='Twitter'><img src={assets.twitter_icon} alt="twitter" /></a>
+                <a href="https://www.twitter.com" target='_blank' aria-label='Twitter'><FaTwitter size={32} /></a>
               </li>
               <li>
-                <a href="https://www.linkedin.com" target='_blank' aria-label='LinkedIn'><img src={assets.linkedin_icon} alt="linkedin" /></a>
+                <a href="https://www.linkedin.com" target='_blank' aria-label='LinkedIn'><FaLinkedin size={32} /></a>
               </li>
             </ul>
         </div>
