@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useStore } from '../../context/StoreContext'
 import { assets } from '../../assets/assets'
+import Spinner from '../../components/spinner/Spinner'
 
 const MyOrders = () => {
 
@@ -22,7 +23,8 @@ const MyOrders = () => {
                 {orders === false ? 
                 
                 // Loading Spinner
-                <div className="spinner-wrapper"><div className="spinner"></div></div>
+                // <div className="spinner-wrapper"><div className="spinner"></div></div>
+                <Spinner />
                 
                 :
 

@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { useStore } from '../../context/StoreContext'
+import Spinner from '../../components/spinner/Spinner'
 
 const Verify = () => {
 
@@ -17,7 +18,7 @@ const Verify = () => {
 
     return (
         <div className='verify'>
-            <div className="spinner"></div>
+            <Spinner />
         </div>
     )
 }
