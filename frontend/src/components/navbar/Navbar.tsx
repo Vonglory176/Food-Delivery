@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { assets } from '../../assets/assets'
 import { Link, useNavigate } from 'react-router-dom'
 import { useStore } from '../../context/StoreContext'
+import { FaShoppingBag, FaShoppingCart, FaSignOutAlt, FaUser } from 'react-icons/fa'
 
 const Navbar = () => {
   const [menu, setMenu] = useState<string>("Home")
@@ -38,7 +39,8 @@ const Navbar = () => {
         {/* <img src={assets.search_icon} alt="search" /> */}
 
         <div className="navbar-search-icon">
-          <Link to={"/cart"}><img src={assets.basket_icon} alt="basket" /></Link>
+          <Link to={"/cart"}><FaShoppingCart size={32} /></Link>
+          {/* <Link to={"/cart"}><img src={assets.basket_icon} alt="basket" /></Link> */}
           <div className={cartHasItems ? "dot" : ""}></div>
           {/* <div className={getTotalCartAmount() === 0 ? "" : "dot"}></div> */}
         </div>
@@ -54,19 +56,22 @@ const Navbar = () => {
           <div className="navbar-profile">
 
             <div className="navbar-profile-button">
-              <img src={assets.profile_icon} alt="" />
+              <FaUser size={32} />
+              {/* <img src={assets.profile_icon} alt="" /> */}
             </div>
 
             <ul className="navbar-profile-dropdown">
 
               <li>                
-                <Link to={"/myorders"} aria-label='Orders'><img src={assets.bag_icon} alt="" /> Orders</Link>
+                <Link to={"/myorders"} aria-label='Orders'><FaShoppingBag /> Orders</Link>
+                {/* <Link to={"/myorders"} aria-label='Orders'><img src={assets.bag_icon} alt="" /> Orders</Link> */}
               </li>
 
               {/* <hr /> */}
 
               <li>                
-                <button onClick={userLogout} aria-label='Logout'><img src={assets.logout_icon} alt="" /> Logout</button>
+                <button onClick={userLogout} aria-label='Logout'><FaSignOutAlt /> Logout</button>
+                {/* <button onClick={userLogout} aria-label='Logout'><img src={assets.logout_icon} alt="" /> Logout</button> */}
               </li>
 
             </ul>
