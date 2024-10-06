@@ -9,7 +9,7 @@ const foodRouter = express.Router()
 
 // Admin routes
 foodRouter.post("/add", authMiddleware, upload.single("image"), adminCreateFood)
-foodRouter.delete("/remove/:id", authMiddleware, adminRemoveFood)
+foodRouter.delete("/remove/:itemId", authMiddleware, adminRemoveFood)
 
 
 // Common routes
