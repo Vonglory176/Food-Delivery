@@ -38,7 +38,7 @@ export const getOrdersHook = async (authCustomFetch: any, setData: React.Dispatc
             // }
         })
 
-        setData(response.data.data)
+        setData(response.data.orderList)
 
     } catch (error) {
         console.log(error)
