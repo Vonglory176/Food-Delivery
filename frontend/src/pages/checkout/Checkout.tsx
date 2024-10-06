@@ -75,24 +75,24 @@ const Checkout = () => {
         <p className="title">Delivery Address</p>
 
         <div className="multi-fields">
-          <input required type="text" placeholder='First Name' name='firstName' onChange={handleChange} value={data.firstName} />
-          <input required type="text" placeholder='Last Name' name='lastName' onChange={handleChange} value={data.lastName} />
+          <input required type="text" placeholder='First Name' name='firstName' maxLength={50} onChange={handleChange} value={data.firstName} />
+          <input required type="text" placeholder='Last Name' name='lastName' maxLength={50} onChange={handleChange} value={data.lastName} />
         </div>
 
-        <input required type="text" placeholder='Email Address' name='email' onChange={handleChange} value={data.email} />
-        <input required type="text" placeholder='Street Address' name='street' onChange={handleChange} value={data.street} />
+        <input required type="text" placeholder='Email Address' name='email' maxLength={50} onChange={handleChange} value={data.email} />
+        <input required type="text" placeholder='Street Address' name='street' maxLength={50} onChange={handleChange} value={data.street} />
 
         <div className="multi-fields">
-          <input required type="text" placeholder='City' name='city' onChange={handleChange} value={data.city} />
-          <input required type="text" placeholder='State' name='state' onChange={handleChange} value={data.state} />
+          <input required type="text" placeholder='City' name='city' maxLength={50} onChange={handleChange} value={data.city} />
+          <input required type="text" placeholder='State' name='state' maxLength={50} onChange={handleChange} value={data.state} />
         </div>
 
         <div className="multi-fields">
-          <input required type="text" placeholder='Zip Code' name='zipcode' onChange={handleChange} value={data.zipcode} />
-          <input required type="text" placeholder='Country' name='country' onChange={handleChange} value={data.country} />
+          <input required type="text" placeholder='Zip Code' name='zipcode' maxLength={10} onChange={handleChange} value={data.zipcode} />
+          <input required type="text" placeholder='Country' name='country' maxLength={50} onChange={handleChange} value={data.country} />
         </div>
 
-        <input required type="text" placeholder='Phone Number' name='phone' onChange={handleChange} value={data.phone} />
+        <input required type="text" placeholder='Phone Number' name='phone' maxLength={20} onChange={handleChange} value={data.phone} />
       </div>
 
       <div className="checkout-right">
