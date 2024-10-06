@@ -5,11 +5,7 @@ import axios from "axios"
 // Generate Access Token
 export const generateAccessTokenHook = async () => {
     try {
-        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/auth/generate-access-token`, {
-            headers: {
-                'x-request-source': 'admin'
-            }
-        })
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/auth/generate-access-token`)
         return response
 
     } catch (error: any) {
@@ -23,11 +19,7 @@ export const generateAccessTokenHook = async () => {
 export const loginSignupHook = async (data: object, action: string) => { // , updateAuthState, setShowLogin
 
     try {
-        const response = await axios.post(import.meta.env.VITE_BACKEND_URL + '/api/auth/' + (action === "login" ? '' : 'admin-') + action, data, {
-            headers: {
-                'x-request-source': 'admin'
-            }
-        })
+        const response = await axios.post(import.meta.env.VITE_BACKEND_URL + '/api/auth/' + (action === "login" ? '' : 'admin-') + action, data)
         console.log(response)
 
         return response
@@ -41,11 +33,7 @@ export const loginSignupHook = async (data: object, action: string) => { // , up
 // Logout
 export const logoutHook = async () => { // updateAuthState
     try {
-        const response = await axios.post(import.meta.env.VITE_BACKEND_URL + '/api/auth/logout', {
-            headers: {
-                'x-request-source': 'admin'
-            }
-        })
+        const response = await axios.post(import.meta.env.VITE_BACKEND_URL + '/api/auth/logout')
         console.log(response)
 
         // Optionally check response status
