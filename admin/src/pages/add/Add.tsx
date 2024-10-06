@@ -1,11 +1,13 @@
 // import React from 'react'
 import { useState } from 'react'
 import { assets } from '../../assets/assets'
-import axios from 'axios'
+// import axios from 'axios'
 import { toast } from 'react-toastify'
+import { useAdmin } from '../../context/adminContext'
 
 const Add = () => {
 
+    const { addFood } = useAdmin()
     const [image, setImage] = useState<string | null>(null)
     const [data, setData] = useState<any>({
         name: '',
@@ -22,13 +24,16 @@ const Add = () => {
         else setData({ ...data, [e.target.name]: e.target.value })
     }
 
+    const resetForm = () => {
+        setData({ name: '', description: '', price: '', category: 'salad' })
+        setImage(null)
+    }
+
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
+        // console.log(data)
 
-        if (!image) return toast.error('Please upload an image'
-
-        )
-        console.log(data)
+        if (!image) return toast.error('Please upload an image')
 
         // Create FormData
         const formData = new FormData() // "FormData is specifically designed to handle file uploads" - (Among other things)
@@ -39,49 +44,33 @@ const Add = () => {
         formData.append('image', image || "")
 
         // Send to backend
-        const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/food/add`, formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            }
-        })
-
-        console.log(response.data)
-
-        // Reset form
-        if (response.data.success) {
-            setData({ name: '', description: '', price: '', category: 'salad' })
-            setImage(null)
-            toast.success(response.data.message)
-        }
-        else {
-            toast.error(response.data.message)
-        }
+        await addFood(formData, resetForm)        
     }
 
     return (
-        <div className='add'>
+        <div className='add page'>
             <form className='flex-col' action="" onSubmit={handleSubmit}>
                 <div className="add-img-upload flex-col">
                     <p>Upload Image</p>
-                    <label htmlFor="image">
+                    <button type="button" onClick={() => document.getElementById('image')?.click()}>
                         <img src={image ? URL.createObjectURL(image) : assets.upload_area} alt="" />
-                    </label>
+                    </button>
                     <input onChange={handleChange} type="file" name='image' id="image" hidden required />
                 </div>
 
                 <div className="add-product-name flex-col">
-                    <p>Product Name</p>
+                    <p>Name</p>
                     <input onChange={handleChange} type="text" name='name' value={data.name} placeholder='Enter Product Name' required />
                 </div>
 
                 <div className="add-product-description flex-col">
-                    <p>Product Description</p>
-                    <textarea onChange={handleChange} name="description" rows={6} value={data.description} placeholder='Enter Product Description' required></textarea>
+                    <p>Description</p>
+                    <textarea onChange={handleChange} maxLength={200} name="description" rows={6} value={data.description} placeholder='Enter Product Description' required></textarea>
                 </div>
 
                 <div className="add-category-price">
                     <div className="add-category flex-col">
-                        <p>Product category</p>
+                        <p>Category</p>
                         <select onChange={handleChange} name="category" value={data.category} required>
                             <option value="Salad">Salad</option>
                             <option value="Rolls">Rolls</option>
@@ -95,12 +84,12 @@ const Add = () => {
                     </div>
 
                     <div className="add-price flex-col">
-                        <p>Product Price</p>
+                        <p>Price</p>
                         <input onChange={handleChange} type="number" name='price' value={data.price} placeholder='Enter Product Price' required />
                     </div>
                 </div>
 
-                <button type='submit' className='add-btn'>CREATE</button>
+                <button type='submit' className='add-btn'>Create Food</button>
 
             </form>
         </div>
