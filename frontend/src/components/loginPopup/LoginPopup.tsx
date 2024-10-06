@@ -70,20 +70,20 @@ const LoginPopup = () => {
           {/* Name */}
           {stateIsSignUp &&
             <div className="login-popup-inputs-wrapper">
-              <input onChange={handleChange} className={errors.name ? 'error' : ''} value={data.name} type="text" name='name' placeholder='Your name' />
+              <input onChange={handleChange} className={errors.name ? 'error' : ''} maxLength={50} value={data.name} type="text" name='name' placeholder='Your name' />
               {errors.name && <p className='error-text'>{errors.name}</p>}
             </div>
           }
 
           {/* Email */}
           <div className="login-popup-inputs-wrapper">
-            <input onChange={handleChange} className={errors.email ? 'error' : ''} value={data.email} type="email" name='email' placeholder='Your email' />
+            <input onChange={handleChange} className={errors.email ? 'error' : ''} maxLength={50} value={data.email} type="email" name='email' placeholder='Your email' />
             {errors.email && <p className='error-text'>{errors.email}</p>}
           </div>
 
           {/* Password */}
           <div className="login-popup-inputs-wrapper">
-            <input onChange={handleChange} className={errors.password ? 'error' : ''} value={data.password} type="password" name='password' placeholder='Your password' />
+            <input onChange={handleChange} className={errors.password ? 'error' : ''} maxLength={50} value={data.password} type="password" name='password' placeholder='Your password' />
             {errors.password && <p className='error-text'>{errors.password}</p>}
           </div>
 
