@@ -9,28 +9,28 @@ import { toast } from "react-toastify";
 // import { generateAccessTokenHook } from "../hooks/authHooks";
 
 const AdminContext = createContext<AdminContextType>({ // Specify the type here
+
+    showLogin: false,
+    setShowLogin: () => { },
+
     isLoggedIn: Boolean(sessionStorage.getItem('accessToken')),
     setIsLoggedIn: () => { },
 
-    // showLogin: false,
-    // setShowLogin: () => {},
+    isLoading: true,
+    setIsLoading: () => { },
+
+    isDemoMode: Boolean(sessionStorage.getItem('demoMode')),
 
     userLoginSignup: async () => { },
     userLogout: async () => { }, // Update to match the expected type
 
     foodList: [],
+    getFood: async () => { },
+    addFood: async () => { },
+    removeFood: async () => { },
 
-    // cartItems: {},
-    // cartHasItems: false,
-    // updateCart: async () => {},
-
-    // deliveryFee: 0,
-    // cartSubtotal: 0,
-    // cartTotal: 0,
-
-    // placeOrder: async () => {},
-    // verifyOrder: async () => {},
     getOrders: async () => { },
+    updateOrderStatus: async () => { },
 })
 
 export const useAdmin = () => useContext(AdminContext)
@@ -46,6 +46,7 @@ const AdminContextProvider: React.FC<AdminContextProviderProps> = ({ children })
 
     const [isLoading, setIsLoading] = useState<boolean>(true)
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(Boolean(sessionStorage.getItem('accessToken')))
+    const [isDemoMode, setIsDemoMode] = useState<boolean>(Boolean(sessionStorage.getItem('demoMode')))
     const [showLogin, setShowLogin] = useState<boolean>(false)
 
     const [foodList, setFoodList] = useState<any>([])
@@ -53,6 +54,8 @@ const AdminContextProvider: React.FC<AdminContextProviderProps> = ({ children })
     // useEffect(() => {
     //     console.log(cartItems)
     // }, [cartItems])
+
+    const demoModeToastError = () => toast.info("This feature is disabled while in Demo-Mode")
 
 
     // INITIAL FETCHES ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -103,6 +106,8 @@ const AdminContextProvider: React.FC<AdminContextProviderProps> = ({ children })
     // ADD FOOD
     const addFood = async (formData: FormData, resetForm: () => void) => {
 
+        if (isDemoMode) return demoModeToastError()
+
         const response = await addFoodHook(authCustomFetch, formData)
         const { success, message } = response.data
 
@@ -117,6 +122,9 @@ const AdminContextProvider: React.FC<AdminContextProviderProps> = ({ children })
 
     // REMOVE FOOD
     const removeFood = async (foodId: string) => {
+
+        if (isDemoMode) return demoModeToastError()
+
         const response = await removeFoodHook(authCustomFetch, foodId)
         const { success, message } = response.data
 
@@ -139,10 +147,16 @@ const AdminContextProvider: React.FC<AdminContextProviderProps> = ({ children })
         const response = await loginSignupHook(data, action)
 
         if (response?.data?.success) {
-            const { accessToken } = response.data
+            const { accessToken, demoMode } = response.data
             updateAuthState({ accessToken })
             setShowLogin(false)
             setIsLoggedIn(true)
+
+            // Setting demo-mode (NEVER UPDATES BEYOND FIRST LOGIN)
+            if (demoMode) {
+                setIsDemoMode(true)
+                sessionStorage.setItem('demoMode', 'true')
+            }
         }
         else {
             const type = response?.data?.error?.type || "email"
@@ -160,6 +174,10 @@ const AdminContextProvider: React.FC<AdminContextProviderProps> = ({ children })
     const userLogout = async () => {
         await logoutHook()
         updateAuthState({ accessToken: null })
+
+        setIsDemoMode(false)
+        sessionStorage.removeItem('demoMode')
+
         navigate("/")
     }
 
@@ -186,10 +204,11 @@ const AdminContextProvider: React.FC<AdminContextProviderProps> = ({ children })
 
         // Making the request
         const response = await generateAccessTokenHook()
-        // console.log(response)
+        console.log(response)
 
         // If 403 FORBIDDEN, logout the user
-        if (response.status === 403) return false
+        if (!response.data.success) return false
+        // if (response.status === 403) return false
 
         const newAccessToken = response?.data?.accessToken || null
         // console.log(newAccessToken)
@@ -206,6 +225,7 @@ const AdminContextProvider: React.FC<AdminContextProviderProps> = ({ children })
     // This function is used to make a request where, if failed due to expired/missing access token,
     // a second request is made to refresh the token before then retrying the original request again
     async function authCustomFetch(url: string, options: CustomFetchOptions) {
+
         console.log(options)
 
         // Inject the Authorization header with the access token
@@ -222,18 +242,22 @@ const AdminContextProvider: React.FC<AdminContextProviderProps> = ({ children })
 
             // PRIMARY REQUEST ---
             response = await axios({ url, ...options })
+            console.log(response)
 
         } catch (error: any) {
 
             // TOKEN REFRESH REQUEST --- (If unauthorized, try refreshing the token and retrying the request once)
             if (error.response.status === 403) {
-                await generateAccessToken()
+
+                const success = await generateAccessToken()
                 const newAccessToken = sessionStorage.getItem('accessToken')
+                console.log(success)
 
                 // RE-TRY REQUEST --- (If a new token was given, re-send the request)
-                if (newAccessToken) {
+                if (success && newAccessToken) {
                     options.headers.Authorization = `Bearer ${newAccessToken}`
                     response = await axios({ url, ...options })
+                    console.log(response)
                 }
                 else {
                     // RE-TRY FAILED --- (Refresh-token was lost/expired, logout user)
@@ -251,7 +275,7 @@ const AdminContextProvider: React.FC<AdminContextProviderProps> = ({ children })
 
     // GET ORDERS ---
     const getOrders = async (setOrders: React.Dispatch<React.SetStateAction<any>>) => {
-        setIsLoading(true)
+        // setIsLoading(true)
 
         const response = await getOrdersHook(authCustomFetch)
         const { success, message, orderList } = response.data
@@ -286,6 +310,8 @@ const AdminContextProvider: React.FC<AdminContextProviderProps> = ({ children })
 
         isLoggedIn,
         setIsLoggedIn,
+
+        isDemoMode,
 
         userLoginSignup,
         userLogout,
