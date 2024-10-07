@@ -5,16 +5,7 @@
 const notFoundHandler = (req, res, next) => {
     console.log("\n IN NOT FOUND HANDLER --------------------------- \n")
 
-    // const error = new Error(`API Not Found - ${req.originalUrl}`)
-    // error.status = 404
-
-    // res.status(404)
-
     next({ status: 404, clientMessage: `API Not Found - ${req.originalUrl}` })
-    // next(error, "API Not Found")
-
-
-    // const error = new Error(`API Not Found - ${req.originalUrl}`)
 }
 
 
@@ -25,12 +16,13 @@ const errorHandler = (error, req, res, next) => { // DO NOT REMOVE 'next'
     const {serverError="", clientMessage="Internal Server Error!", action=""} = error
     
     if (error) {
+        // console.log(error)
         const formattedAction = action ? " - " + action : ""
         const finalClientMessage = "ERROR" + formattedAction + ": " + clientMessage
 
         // For debugging purposes
         // console.log(error)
-        console.log(error.status)
+        // console.log(error.status)
         // console.log(clientMessage)
 
         // Generic response
