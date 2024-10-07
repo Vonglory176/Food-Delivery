@@ -19,6 +19,8 @@ const StoreContext = createContext<StoreContextType>({ // Specify the type here
 
     foodList: [],
 
+    cartIsLoaded: false,
+
     cartItems: {},
     cartHasItems: false,
     updateCart: async () => {},
@@ -164,7 +166,8 @@ const StoreContextProvider: React.FC<StoreContextProviderProps> = ({ children })
         // console.log(response)
 
         // If 403 FORBIDDEN, logout the user
-        if (response.status === 403) return false
+        
+        // if (response.status === 403) return false
 
         const newAccessToken = response?.data?.accessToken || null
         // console.log(newAccessToken)
@@ -197,15 +200,16 @@ const StoreContextProvider: React.FC<StoreContextProviderProps> = ({ children })
             // console.log(response)       
 
         } catch (error: any) {
-            // console.error(error)
+            console.error(error)
 
             // If unauthorized, try refreshing the token and retrying the request once
             if (error.response.status === 403) {
                 console.log("Refreshing Token")
-                await generateAccessToken()
+
+                const success = await generateAccessToken()
                 const newAccessToken = sessionStorage.getItem('accessToken')
     
-                if (newAccessToken) { // If a new token was given, re-send the request
+                if (success && newAccessToken) { // If a new token was given, re-send the request
                     console.log(options)
                     options.headers.Authorization = `Bearer ${newAccessToken}`
                     response = await axios({ url, ...options })
