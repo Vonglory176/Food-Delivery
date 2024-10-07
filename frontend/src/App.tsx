@@ -43,23 +43,20 @@ export default App
 
   // General -----
 
-    Check Aria
     Check TS Declarations
-    Add dates to order pages
-    Get 'DEMO' logic working
     
     // Frontend -----
-    Post-Fetch logic to StoreContext
+    Post-Fetch logic to StoreContext?
     
-    
+
     // Backend -----
     
-    Add rate limitation
-    Extra sanitation checks?
-    Enforce max length for text inputs
+    Add rate limiting?
     
     
     // Admin -----
     Automatic Order updates
     Add/Edit Item Modal
+
+    Error: Submitting food w/out image
 */
