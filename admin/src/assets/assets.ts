@@ -7,7 +7,7 @@ import parcel_icon from './parcel_icon.webp'
 import cross_icon from './cross_icon.webp'
 import logout_icon from './logout_icon.webp'
 
-export const assets ={
+export const assets: AssetsType = {
     logo,
     add_icon,
     order_icon,
