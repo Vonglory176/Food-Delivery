@@ -20,15 +20,18 @@
 body {
     min-height: 100svh;
     background-color: #fcfcfc;
+    overflow-y: scroll;
 }
 
 .page {
     // width: 70%;
     width: 100%;
-    margin: 0 max(5vw, 25px);
-    margin-top: 50px;
+    margin: 50px max(5vw, 25px);
+    // margin-top: 50px;
     color: #6d6d6d;
     font-size: 16px;
+    max-width: 1000px;
+    // padding-bottom: 50px;
 }
 
 a {
@@ -66,6 +69,6 @@ hr {
 
 @media (max-width: 768px) {
     .page {
-        margin: 50px 16px 0 16px;
+        margin: 50px 16px;
     }
 }
