@@ -59,7 +59,7 @@ const LoginPopup = () => {
         {/* Title */}
         <div className="login-popup-title">
           <h2>{currentState}</h2>
-          <button type='button' onClick={() => setShowLogin(false)}>
+          <button type='button' onClick={() => setShowLogin(false)} aria-label='Close'>
             <img src={assets.cross_icon} alt="close" />
           </button>
         </div>
@@ -91,7 +91,7 @@ const LoginPopup = () => {
 
         {/* Submit Button */}
 
-        <button type='submit'>{currentState === "Sign Up" ? "Create Account" : "Login"}</button>
+        <button type='submit' aria-label={currentState === "Sign Up" ? "Create Account" : "Login"}>{currentState === "Sign Up" ? "Create Account" : "Login"}</button>
 
         {/* Terms & Conditions / Privacy Policy */}
         {stateIsSignUp && <div className="login-popup-condition">

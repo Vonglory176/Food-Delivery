@@ -94,7 +94,7 @@ const LoginPopup = ({ isRegister }: { isRegister: boolean }) => {
         </div>}
 
         {/* Submit Button */}
-        <button type='submit'>{isRegister ? "Create Account" : "Login"}</button>
+        <button type='submit' aria-label={isRegister ? "Create Account" : "Login"}>{isRegister ? "Create Account" : "Login"}</button>
 
       </form>
     </div>

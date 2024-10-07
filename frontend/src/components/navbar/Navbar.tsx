@@ -39,7 +39,7 @@ const Navbar = () => {
         {/* <img src={assets.search_icon} alt="search" /> */}
 
         <div className="navbar-search-icon">
-          <Link to={"/cart"}><FaShoppingCart size={32} /></Link>
+          <Link to={"/cart"} aria-label='Shopping Cart' title='Shopping Cart'><FaShoppingCart size={32} /></Link>
           {/* <Link to={"/cart"}><img src={assets.basket_icon} alt="basket" /></Link> */}
           <div className={cartHasItems ? "dot" : ""}></div>
           {/* <div className={getTotalCartAmount() === 0 ? "" : "dot"}></div> */}

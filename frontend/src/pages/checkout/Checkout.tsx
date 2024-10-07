@@ -120,7 +120,7 @@ const Checkout = () => {
             </div>
           </div>
 
-          <button type='submit'>PROCEED TO PAYMENT</button>
+          <button type='submit' aria-label='Proceed to payment'>PROCEED TO PAYMENT</button>
 
         </div>
       </div>

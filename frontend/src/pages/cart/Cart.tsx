@@ -85,7 +85,7 @@ const Cart = () => {
             </div>
           </div>
 
-          <button onClick={() => isLoggedIn ? navigate("/checkout") : setShowLogin(true)} className={cartHasItems ? "" : "disabled"} disabled={cartHasItems ? false : true}>PROCEED TO CHECKOUT</button>
+          <button onClick={() => isLoggedIn ? navigate("/checkout") : setShowLogin(true)} className={cartHasItems ? "" : "disabled"} disabled={cartHasItems ? false : true} aria-label='Proceed to checkout'>PROCEED TO CHECKOUT</button>
 
         </div>
 
@@ -97,7 +97,7 @@ const Cart = () => {
 
             <div className="cart-promocode-input">
               <input type="text" placeholder='Promo Code' maxLength={30} />
-              <button>Submit</button>
+              <button aria-label='Submit promo code'>Submit</button>
             </div>
 
           </div>

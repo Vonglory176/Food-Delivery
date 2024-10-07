@@ -26,10 +26,10 @@ const Footer = () => {
         <div className="footer-content-center">
             <h2>COMPANY</h2>
             <ul>
-                <li><Link to={"/"}>Home</Link></li>
-                <li><Link to={"/"}>About Us</Link></li>
-                <li><Link to={"/"}>Delivery</Link></li>
-                <li><Link to={"/"}>Privacy Policy</Link></li>
+                <li><Link to={"/"} aria-label='Home'>Home</Link></li>
+                <li><Link to={"/"} aria-label='About Us'>About Us</Link></li>
+                <li><Link to={"/"} aria-label='Delivery'>Delivery</Link></li>
+                <li><Link to={"/"} aria-label='Privacy Policy'>Privacy Policy</Link></li>
             </ul>
         </div>
 
