@@ -7,7 +7,7 @@ const getOrders = async (req, res, next) => {
     const { userId, isAdmin } = req.body
 
     try {
-        const orders = await orderModel.find({  }) // userId: userId
+        const orders = await orderModel.find({  }).sort({ date: -1 }) // userId: userId
 
         res.status(200).json({
             success: true,
