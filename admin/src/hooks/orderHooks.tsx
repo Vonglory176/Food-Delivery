@@ -11,7 +11,7 @@ export const getOrdersHook = async (authCustomFetch: any) => {
 
         return response
 
-    } catch (error) {
+    } catch (error: any) {
         console.log(error)
         return error.response
     }
@@ -29,7 +29,7 @@ export const updateOrderStatusHook = async (authCustomFetch: any, orderId: strin
         })
         return response
 
-    } catch (error) {
+    } catch (error: any) {
         console.log(error)
         return error.response
     }
