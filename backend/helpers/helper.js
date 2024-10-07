@@ -42,13 +42,19 @@ const sendLoginDetails = (res, user, isAdmin = false) => {
         maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
         // signed: true
     }) 
+
+    // Build the response object
+    const response = { 
+        success: true,
+        username: user.username,
+        accessToken
+    }
+
+    // For saving demo status
+    if (isAdmin && user.demo) response.demoMode = true
     
     // Send the accessToken in a successful response
-    res.status(200).json({ 
-        success: true,
-        user: user.name, 
-        accessToken
-    })
+    res.status(200).json(response)
 }
 
 const convertToObjectId = (id) => {
