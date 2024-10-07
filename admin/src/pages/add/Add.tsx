@@ -49,10 +49,14 @@ const Add = () => {
 
     return (
         <div className='add page'>
+            <h3>Add Food</h3>
+
+            <hr />
+
             <form className='flex-col' action="" onSubmit={handleSubmit}>
                 <div className="add-img-upload flex-col">
                     <p>Upload Image</p>
-                    <button type="button" onClick={() => document.getElementById('image')?.click()}>
+                    <button type="button" onClick={() => document.getElementById('image')?.click()} aria-label='Upload Image'>
                         <img src={image ? URL.createObjectURL(image) : assets.upload_area} alt="" />
                     </button>
                     <input onChange={handleChange} type="file" name='image' id="image" hidden required />
@@ -89,7 +93,7 @@ const Add = () => {
                     </div>
                 </div>
 
-                <button type='submit' className='add-btn'>Create Food</button>
+                <button type='submit' className='add-btn' aria-label='Create Food'>Create Food</button>
 
             </form>
         </div>
