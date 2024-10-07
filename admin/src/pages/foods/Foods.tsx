@@ -1,7 +1,8 @@
 import { useEffect } from 'react'
 import { useAdmin } from '../../context/adminContext'
 import Spinner from '../../components/spinner/Spinner'
-import { FaTrash } from 'react-icons/fa'
+import { FaEdit, FaTrash } from 'react-icons/fa'
+import { toast } from 'react-toastify'
 
 const Foods = () => {
   const { getFood, removeFood, foodList, isLoading } = useAdmin()
@@ -58,6 +59,7 @@ const Foods = () => {
                 </div>                
                 <div className="item-actions">
                   <b>Actions:</b>
+                  <button onClick={() => toast.info('This feature is disabled while in Demo-Mode')} className='cursor' aria-label='Edit' title='Edit'><FaEdit size={20} /></button>
                   <button onClick={() => removeFood(item._id)} className='cursor' aria-label='Remove' title='Remove'><FaTrash size={20} /></button>
                 </div>
               </div>
