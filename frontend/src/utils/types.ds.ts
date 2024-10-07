@@ -71,6 +71,8 @@ declare global {
 
         foodList: FoodType[]
 
+        cartIsLoaded: boolean
+
         cartItems: any
         cartHasItems: boolean
         updateCart: (itemId: string | number, action: CartAction) => Promise<void>
