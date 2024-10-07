@@ -200,7 +200,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  color: #808080;
+  color: #49557e;
 }
 .navbar-profile-dropdown li:hover {
   color: tomato;
@@ -224,7 +224,7 @@
   list-style: none;
 }
 .navbar-profile:hover .navbar-profile-dropdown button {
-  color: #808080;
+  color: #49557e;
   background-color: transparent;
   border: none;
   padding: 0;
@@ -800,10 +800,10 @@
   margin-bottom: 15px;
 }
 .my-orders-order {
-  display: grid;
-  grid-template-columns: 0.5fr 2fr 1fr 1fr 1fr 2fr;
-  align-items: center;
-  gap: 30px;
+  display: flex;
+  flex-direction: column;
+  background-color: #fff4f2;
+  gap: 20px;
   font-size: 14px;
   padding: 10px 20px;
   color: #454545;
@@ -812,12 +812,26 @@
   animation: fadeIn 0.5s;
   min-height: 72px;
 }
+.my-orders-order-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.my-orders-order-content {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  align-items: center;
+  gap: 15px;
+}
 .my-orders-order img {
   place-self: center;
   width: 50px;
 }
-.my-orders-order p span {
-  color: tomato;
+.my-orders-order p {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
 }
 .my-orders-order p b {
   font-weight: 500;
@@ -827,9 +841,29 @@
   border: none;
   padding: 12px 0px;
   border-radius: 4px;
-  background-color: #ffe1e1;
+  background-color: white;
+  border: 1px solid tomato;
   cursor: pointer;
   color: #454545;
+  transition: 0.3s;
+  max-width: 150px;
+  width: 100%;
+  margin-left: auto;
+}
+.my-orders-order button:hover {
+  background-color: #e0e0e0;
+}
+.my-orders-order.delivered {
+  background-color: #e4ffe8;
+}
+.my-orders-order.delivered, .my-orders-order.delivered button {
+  border-color: #009933;
+}
+.my-orders-order.delivering {
+  background-color: #fff3cd;
+}
+.my-orders-order.delivering, .my-orders-order.delivering button {
+  border-color: #ffc107;
 }
 @media (max-width: 900px) {
   .my-orders-order {
@@ -839,6 +873,16 @@
   }
   .my-orders-order button {
     font-size: 10px;
+  }
+}
+@media (max-width: 600px) {
+  .my-orders-order-content {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+  .my-orders-order-content button {
+    max-width: 100%;
+    grid-column: 3;
+    margin: 0;
   }
 }
 
