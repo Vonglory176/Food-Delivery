@@ -104,7 +104,9 @@
             grid-column: 4; // Span 1 column each on the next row
         }
         .item-actions {
+            position: relative;
             flex-direction: row;
+            justify-content: end;
             grid-column: 1 / span 4; // Span 1 column each on the next row
             order: 2;
             // padding-top: 15px;
@@ -112,9 +114,16 @@
             border-top: 1px solid #cacaca;
             // justify-content: end;
 
-            button {
-                margin-left: auto;
+            b {
+                position: absolute;
+                top: 50%;
+                left: 0;
+                transform: translateY(-50%);
             }
+
+            // button {
+            //     margin-left: auto;
+            // }
         }
     }
 
