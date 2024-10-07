@@ -3,33 +3,77 @@
 }
 
 .order-item {
-    display: grid;
-    grid-template-columns: 0.5fr 2fr 1fr 1fr 1fr;
-    align-items: start;
-    gap: 15px; // 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
     border: 1px solid tomato;
+    background-color: #fff4f2;
     padding: 20px;
     font-size: 14px;
     color: #505050;    
-    margin: 30px 0px;
-    
-    background-color: #fff4f2;
+    margin: 30px 0px;    
+
+    img {
+        width: 40px;
+    }
+
+    hr {
+        background-color: tomato;
+    }
+
     &.delivered {
-        background-color: #e4ffe8; // #009933;
-        // color: white;
-        border-color: #009933;
+        background-color: #e4ffe8;
+
+        &, & .order-item-time, hr {
+            border-color: #009933;
+        }
+        hr { background-color: #009933; }
+    }
+    &.delivering {
+        background-color: #fff3cd; // halfway color
+
+        &, & .order-item-time, hr {
+            border-color: #ffc107;
+        }
+        hr { background-color: #ffc107; }
     }
 
     &:first-of-type {
         margin-top: 10px;
     }
 
-    &-food, &-name {
-        font-weight: 600;
+    &-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        // font-size: 12px;
+        // padding-bottom: 10px;
+        // border-bottom: 1px solid tomato;
+
+        // font-size: 12px;
     }
 
+    &-content {
+        position: relative;
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr;
+        align-items: start;
+        gap: 15px; // 30px;
+    }
+
+
+    &-food {
+        font-weight: 600;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+    }
+    
     &-name {
-        margin-top: 30px;
+        // margin-top: 30px;
+        font-weight: 600;
         margin-bottom: 5px;
     }
     &-address {
@@ -40,19 +84,23 @@
         // background-color: #ffe8e4;
         border: 1px solid tomato;
         border-color: inherit;
-        width: max(10vw, 120px);
+        width: 100%; // max(10vw, 120px);
+        max-width: 150px;
+        margin-left: auto;
         padding: 10px;
         outline: none;
     }
 
     @media (max-width: 1000px) {
         font-size: 12px;
-        grid-template-columns: 0.5fr 2fr 1fr;
         padding: 15px 8px;
+
+        // &-content { grid-template-columns: 2fr 1fr 1fr; }
 
         select {
             padding: 5px;
             font-size: 12px;
+            max-width: 130px;
         }
 
         img {
@@ -70,8 +118,15 @@
         padding-right: 0;
         margin-top: 0px;
         margin-bottom: 0;
+
         &:first-of-type {
             border-top-width: 5px; // #cacaca;
+        }
+
+        &-info { order: 2; }
+        select { 
+            order: 3; 
+            grid-column: 2 / span 2;
         }
     }
 }

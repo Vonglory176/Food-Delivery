@@ -4,10 +4,11 @@ import { useAdmin } from '../../context/adminContext'
 import Spinner from '../../components/spinner/Spinner'
 
 const Orders = () => {
-  const { getOrders, updateOrderStatus, isLoading } = useAdmin()
+  const { getOrders, updateOrderStatus, isLoading, setIsLoading } = useAdmin()
   const [orders, setOrders] = useState<any>([])
 
   useEffect(() => {
+    setIsLoading(true)
     getOrders(setOrders)
   }, [])
 
@@ -27,38 +28,62 @@ const Orders = () => {
 
           :
 
-          orders && orders.map((order, index: number) => {
+          orders && orders.map((order: any, index: number) => {
 
             const { firstName, lastName, street, city, state, country, zipcode, phone } = order.address
 
             return (
-              <div key={index} className={`order-item ${order.status === "Delivered" ? "delivered" : ""}`}>
-                <img src={assets.parcel_icon} alt="" />
+              <div key={index} className={`order-item ${order.status === "Delivered" ? "delivered" : order.status === "Out For Delivery" ? "delivering" : ""}`}>
 
-                <div>
+                {/* Timestamp */}
+                <div className="order-item-header">
+                  {/* Food Items */}
                   <p className="order-item-food">
-                    {order.items.map((item, index: number) => {
-                      return item.name + " x " + item.quantity + (index === order.items.length - 1 ? ", " : "")
+                    {order.items.map((item: any, index: number) => {
+                      return <span key={index}>{item.name} <span style={{ fontWeight: "normal" }}>x {item.quantity}</span> {index === order.items.length - 1 ? "" : ", "}</span>
                     })}
                   </p>
-
-                  <p className="order-item-name">{firstName + " " + lastName}</p>
-
-                  <div className="order-item-address">
-                    <p>{street + ","}</p>
-                    <p>{city + ", " + state + ", " + country + ", " + zipcode}</p>
-                  </div>
-
-                  <p className="order-item-phone">{phone}</p>
+                  <img src={assets.parcel_icon} alt="" />
                 </div>
 
-                <p>Items: {order.items.length}</p>
-                <p>Total: ${order.amount}.00</p>
-                <select name="" id="" onChange={(e) => updateOrderStatus(e, order._id, setOrders)} value={order.status}>
-                  <option value="Food Processing">Pending</option>
-                  <option value="Out For Delivery">Out For Delivery</option>
-                  <option value="Delivered">Delivered</option>
-                </select>
+                <hr />
+
+                <div className="order-item-content">
+
+                  {/* Time */}
+                  <div className="order-item-time">
+                    <p><b>Time:</b> {new Date(order.date).toLocaleString()}</p>
+                  </div>
+
+
+                  {/* Quanity / Cost */}
+                  <p><b>Items:</b> {order.items.length}</p>
+
+                  {/* Status */}
+                  <select name="" id="" onChange={(e) => updateOrderStatus(e, order._id, setOrders)} value={order.status}>
+                    <option value="Food Processing">Pending</option>
+                    <option value="Out For Delivery">Out For Delivery</option>
+                    <option value="Delivered">Delivered</option>
+                  </select>
+
+
+                  {/* Delivery Address */}
+                  <div className='order-item-info'>
+                    <p className="order-item-name">{firstName + " " + lastName}</p>
+
+                    <div className="order-item-address">
+                      <p>{street + ","}</p>
+                      <p>{city + ", " + state + ", " + country + ", " + zipcode}</p>
+                    </div>
+
+                    <p className="order-item-phone">{phone}</p>
+                  </div>     
+
+                  <p><b>Total:</b> ${order.amount}.00</p>
+
+
+                </div>
+
 
 
               </div>
