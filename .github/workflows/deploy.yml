@@ -59,6 +59,9 @@ jobs:
           name: production-files
           path: ./dist
 
+      - name: List downloaded artifacts # Debugging step
+        run: ls -R ./dist
+
       - name: Deploy frontend to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
