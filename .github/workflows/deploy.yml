@@ -62,12 +62,12 @@ jobs:
       - name: List downloaded artifacts # Debugging step
         run: ls -R ./dist
 
-      - name: Clean up gh-pages branch
-        run: |
-          git config --global user.name "github-actions"
-          git config --global user.email "github-actions@github.com"
-          git clone --depth=1 --branch=gh-pages https://github.com/${{ github.repository }} gh-pages
-          rm -rf gh-pages/*
+    #   - name: Clean up gh-pages branch
+    #     run: |
+    #       git config --global user.name "github-actions"
+    #       git config --global user.email "github-actions@github.com"
+    #       git clone --depth=1 --branch=gh-pages https://github.com/${{ github.repository }} gh-pages
+    #       rm -rf gh-pages/*
 
       - name: Deploy frontend to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
