@@ -69,6 +69,12 @@ jobs:
           name: production-files
           path: ./dist
 
+      - name: List contents of gh-pages directory
+        run: ls -la /home/runner/work/Food-Delivery/Food-Delivery/gh-pages
+        
+      - name: List contents of dist directory
+        run: ls -la /home/runner/work/Food-Delivery/Food-Delivery/dist
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
