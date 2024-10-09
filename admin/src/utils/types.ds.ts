@@ -43,12 +43,12 @@ declare global {
 
         foodList: FoodType[]
 
-        getFood: (setFood: any) => Promise<void>
-        addFood: (formData: any, resetForm: () => {}) => Promise<void>
-        removeFood: (id: string) => Promise<void>
+        getFood: () => Promise<void>
+        addFood: (formData: FormData, resetForm: () => void) => Promise<void>
+        removeFood: (foodId: string) => Promise<void>
 
         getOrders: (setOrders: any) => Promise<void>
-        updateOrderStatus: (orderId: string, status: string) => Promise<void>
+        updateOrderStatus: (status: string, orderId: string, setOrders: any) => Promise<void>
     }
 
     interface AdminContextProviderProps {
