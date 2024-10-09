@@ -165,8 +165,8 @@ const StoreContextProvider: React.FC<StoreContextProviderProps> = ({ children })
         const response = await generateAccessTokenHook()
         // console.log(response)
 
-        // If 403 FORBIDDEN, logout the user
-        
+        // If 403 FORBIDDEN, logout the user      
+        if (!response?.data.success) return false  
         // if (response.status === 403) return false
 
         const newAccessToken = response?.data?.accessToken || null
@@ -181,7 +181,10 @@ const StoreContextProvider: React.FC<StoreContextProviderProps> = ({ children })
     }
         
     // CUSTOM FETCH CALL FOR AUTHORIZATION REQUIREMENTS
+    // This function is used to make a request where, if failed due to expired/missing access token,
+    // a second request is made to refresh the token before then retrying the original request again
     async function authCustomFetch(url: string, options: CustomFetchOptions) {
+
         // console.log(options)
 
         // Inject the Authorization header with the access token
@@ -196,39 +199,34 @@ const StoreContextProvider: React.FC<StoreContextProviderProps> = ({ children })
         let response
         try {
 
-            response = await axios({ url, ...options }) // First request
-            // console.log(response)       
+            // PRIMARY REQUEST ---
+            response = await axios({ url, ...options })
+            // console.log(response)      
 
         } catch (error: any) {
-            console.error(error)
 
-            // If unauthorized, try refreshing the token and retrying the request once
+            // TOKEN REFRESH REQUEST --- (If unauthorized, try refreshing the token and retrying the request once)
             if (error.response.status === 403) {
-                console.log("Refreshing Token")
 
                 const success = await generateAccessToken()
                 const newAccessToken = sessionStorage.getItem('accessToken')
-    
-                if (success && newAccessToken) { // If a new token was given, re-send the request
-                    console.log(options)
+
+                // RE-TRY REQUEST --- (If a new token was given, re-send the request)
+                if (success && newAccessToken) {
                     options.headers.Authorization = `Bearer ${newAccessToken}`
                     response = await axios({ url, ...options })
+                    // console.log(response)
                 }
-                else { // Otherwise (refresh-token was lost/expired), logout and send user to login/signup
+                else {
+                    // RE-TRY FAILED --- (Refresh-token was lost/expired, logout user)
                     userLogout()
                     // window.location.replace("/?login")
                 }
             }
-            else {
-                // console.log("ERROR: " + error.response.statusText)
-                return error.response
-            }
+            // Non-403 Error
+            else return error.response
         }
 
-
-        // if (!response.ok) {console.error("ERROR WHILE FETCHING: " + response.statusText)}
-
-        // console.log(response)
         return response
     }
 
