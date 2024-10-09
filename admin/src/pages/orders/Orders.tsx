@@ -60,7 +60,7 @@ const Orders = () => {
                   <p><b>Items:</b> {order.items.length}</p>
 
                   {/* Status */}
-                  <select name="" id="" onChange={(e) => updateOrderStatus(e, order._id, setOrders)} value={order.status}>
+                  <select name="status" onChange={(e) => updateOrderStatus(e.target.value, order._id, setOrders)} value={order.status}>
                     <option value="Food Processing">Pending</option>
                     <option value="Out For Delivery">Out For Delivery</option>
                     <option value="Delivered">Delivered</option>
