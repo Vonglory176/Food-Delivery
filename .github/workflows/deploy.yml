@@ -35,12 +35,12 @@ jobs:
         working-directory: admin
         run: npm run build
 
-      - name: Move dist contents to parent directories
-        run: |
-          mv frontend/dist/* frontend/
-          mv admin/dist/* admin/
-          rm -rf frontend/dist
-          rm -rf admin/dist
+    #   - name: Move dist contents to parent directories
+    #     run: |
+    #       mv frontend/dist/* frontend/
+    #       mv admin/dist/* admin/
+    #       rm -rf frontend/dist
+    #       rm -rf admin/dist
 
       - name: Prepare directories for deployment # Create directories for deployment
         run: |
