@@ -19,8 +19,8 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Set environment variable # This is needed to force the use of Node.js 20
-        run: echo "FORCE_JAVASCRIPT_ACTIONS_TO_NODE20=true" >> $GITHUB_ENV
+    #   - name: Set environment variable # This is needed to force the use of Node.js 20
+    #     run: echo "FORCE_JAVASCRIPT_ACTIONS_TO_NODE20=true" >> $GITHUB_ENV
 
       - name: Install dependencies for frontend
         working-directory: frontend
@@ -50,7 +50,7 @@ jobs:
     name: Deploy
     needs: build
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/deployment-tests'
 
     steps:
       - name: Download artifact
