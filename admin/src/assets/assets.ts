@@ -17,5 +17,3 @@ export const assets: AssetsType = {
     cross_icon,
     logout_icon
 }
-
-export const url = 'http://localhost:4000'
