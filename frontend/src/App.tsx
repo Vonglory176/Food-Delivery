@@ -45,18 +45,19 @@ export default App
 
     Check TS Declarations
     
-    // Frontend -----
+  // Frontend -----
+
     Post-Fetch logic to StoreContext?
     
 
-    // Backend -----
+  // Backend -----
     
     Add rate limiting?
     
     
-    // Admin -----
+  // Admin -----
+  
     Automatic Order updates
     Add/Edit Item Modal
 
-    Error: Submitting food w/out image
 */
