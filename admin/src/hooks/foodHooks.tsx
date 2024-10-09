@@ -1,4 +1,4 @@
-import axios from "axios"
+import axios, { AxiosError } from "axios"
 
 // FOOD HOOKS ////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -11,10 +11,10 @@ export const getFoodHook = async () => {
         return response
         
     } catch (error) {
-        // console.log(error)
+        // console.error("ERROR: Could not get food items")
 
-        console.error("ERROR: Could not get food items")
-        return error.response
+        const axiosError = error as AxiosError
+        return axiosError.response
     }
 }
 
@@ -32,9 +32,10 @@ export const addFoodHook = async (authCustomFetch: any, formData: FormData) => {
         return response
 
     } catch (error) {
+        // console.error("ERROR: Could not add food item")
 
-        console.error("ERROR: Could not add food item")
-        return error.response
+        const axiosError = error as AxiosError
+        return axiosError.response
 
     }
 }
@@ -48,8 +49,10 @@ export const removeFoodHook = async (authCustomFetch: any, foodId: string) => {
         return response
 
     } catch (error) {
-        console.error("ERROR: Could not remove food item")
-        return error.response
+        // console.error("ERROR: Could not remove food item")
+
+        const axiosError = error as AxiosError
+        return axiosError.response
     }
 }
 

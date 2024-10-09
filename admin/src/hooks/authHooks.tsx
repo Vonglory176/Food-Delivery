@@ -1,4 +1,4 @@
-import axios from "axios"
+import axios, { AxiosError } from "axios"
 
 // AUTH HOOKS ////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -8,9 +8,9 @@ export const generateAccessTokenHook = async () => {
         const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/auth/generate-access-token`)
         return response
 
-    } catch (error: any) {
-        console.error(error)
-        return error.response
+    } catch (error) {
+        const axiosError = error as AxiosError
+        return axiosError.response
     }
 }
 
@@ -24,9 +24,9 @@ export const loginSignupHook = async (data: object, action: string) => { // , up
 
         return response
     }
-    catch (error: any) {
-        console.error(error)
-        return error.response
+    catch (error) {
+        const axiosError = error as AxiosError
+        return axiosError.response
     }
 }
 
@@ -41,8 +41,8 @@ export const logoutHook = async () => { // updateAuthState
 
         return response
     }
-    catch (error: any) {
-        console.error(error)
-        return error.response
+    catch (error) {
+        const axiosError = error as AxiosError
+        return axiosError.response
     }
 }

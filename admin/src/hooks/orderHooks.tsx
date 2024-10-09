@@ -1,4 +1,4 @@
-// import axios from "axios"
+import { AxiosError } from "axios"
 
 // ORDER HOOKS ////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -11,9 +11,9 @@ export const getOrdersHook = async (authCustomFetch: any) => {
 
         return response
 
-    } catch (error: any) {
-        console.log(error)
-        return error.response
+    } catch (error) {
+        const axiosError = error as AxiosError
+        return axiosError.response
     }
 }
 
@@ -29,9 +29,9 @@ export const updateOrderStatusHook = async (authCustomFetch: any, orderId: strin
         })
         return response
 
-    } catch (error: any) {
-        console.log(error)
-        return error.response
+    } catch (error) {
+        const axiosError = error as AxiosError
+        return axiosError.response
     }
 }
 
