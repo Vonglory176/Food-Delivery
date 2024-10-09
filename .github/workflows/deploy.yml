@@ -35,14 +35,14 @@ jobs:
         working-directory: admin
         run: npm run build
 
-      - name: Prepare directories for deployment # Create directories for deployment
-        run: |
-          mkdir -p gh-pages/frontend/dist
-          mkdir -p gh-pages/admin/dist
-          cp -R frontend/dist/* gh-pages/frontend/dist/
-          cp -R admin/dist/* gh-pages/admin/dist/
-          touch gh-pages/frontend/.nojekyll
-          touch gh-pages/admin/.nojekyll
+    #   - name: Prepare directories for deployment # Create directories for deployment
+    #     run: |
+    #       mkdir -p gh-pages/frontend/dist
+    #       mkdir -p gh-pages/admin/dist
+    #       cp -R frontend/dist/* gh-pages/frontend/dist/
+    #       cp -R admin/dist/* gh-pages/admin/dist/
+    #       touch gh-pages/frontend/.nojekyll
+    #       touch gh-pages/admin/.nojekyll
 
       - name: Upload production-ready build files
         uses: actions/upload-artifact@v4
@@ -60,20 +60,31 @@ jobs:
     if: github.ref == 'refs/heads/deployment-tests'
 
     steps:
+      - name: Create gh-pages directory
+        run: mkdir -p gh-pages
+        
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
           name: production-files
-          path: ./dist
+          path: gh-pages/ # ./dist
 
       - name: Prepare directories for deployment
         run: |
           mkdir -p gh-pages/frontend/dist
-          cp -R frontend/dist/* gh-pages/frontend/dist/
-          mkdir -p gh-pages/admin/dist
-          cp -R admin/dist/* gh-pages/admin/dist/
-          touch gh-pages/frontend/.nojekyll
-          touch gh-pages/admin/.nojekyll
+            if [ -d frontend/dist ] && [ "$(ls -A frontend/dist)" ]; then
+              cp -R frontend/dist/* gh-pages/frontend/dist/
+            else
+              echo "Warning: frontend/dist is empty or does not exist"
+            fi
+            mkdir -p gh-pages/admin/dist
+            if [ -d admin/dist ] && [ "$(ls -A admin/dist)" ]; then
+              cp -R admin/dist/* gh-pages/admin/dist/
+            else
+              echo "Warning: admin/dist is empty or does not exist"
+            fi
+            touch gh-pages/frontend/.nojekyll
+            touch gh-pages/admin/.nojekyll
             
     #   - name: List contents of dist directory
     #     run: ls -la /home/runner/work/Food-Delivery/Food-Delivery/dist
