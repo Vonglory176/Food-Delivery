@@ -3,7 +3,7 @@ import { validateLoginForm } from '../../helpers/helper'
 import { useAdmin } from '../../context/adminContext'
 
 const LoginPopup = ({ isRegister }: { isRegister: boolean }) => {
-  const { setShowLogin, userLoginSignup } = useAdmin()
+  const { userLoginSignup } = useAdmin()
   // const [currentState, setCurrentState] = useState<string>("Sign Up")
   const [formData, setFormData] = useState<any>({
     name: 'Admin Demo',

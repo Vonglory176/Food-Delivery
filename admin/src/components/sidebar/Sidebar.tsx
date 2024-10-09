@@ -1,6 +1,6 @@
 // import React from 'react'
 import { FaList, FaUtensils, FaPlusCircle } from 'react-icons/fa'
-import { assets } from '../../assets/assets'
+// import { assets } from '../../assets/assets'
 import { NavLink } from 'react-router-dom'
 
 const Sidebar = () => {
