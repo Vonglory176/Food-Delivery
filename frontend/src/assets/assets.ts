@@ -12,36 +12,6 @@ import menu_7 from './menu_7.webp'
 import menu_8 from './menu_8.webp'
 
 // import food_1 from './food_1.webp'
-// import food_2 from './food_2.webp'
-// import food_3 from './food_3.webp'
-// import food_4 from './food_4.webp'
-// import food_5 from './food_5.webp'
-// import food_6 from './food_6.webp'
-// import food_7 from './food_7.webp'
-// import food_8 from './food_8.webp'
-// import food_9 from './food_9.webp'
-// import food_10 from './food_10.webp'
-// import food_11 from './food_11.webp'
-// import food_12 from './food_12.webp'
-// import food_13 from './food_13.webp'
-// import food_14 from './food_14.webp'
-// import food_15 from './food_15.webp'
-// import food_16 from './food_16.webp'
-// import food_17 from './food_17.webp'
-// import food_18 from './food_18.webp'
-// import food_19 from './food_19.webp'
-// import food_20 from './food_20.webp'
-// import food_21 from './food_21.webp'
-// import food_22 from './food_22.webp'
-// import food_23 from './food_23.webp'
-// import food_24 from './food_24.webp'
-// import food_25 from './food_25.webp'
-// import food_26 from './food_26.webp'
-// import food_27 from './food_27.webp'
-// import food_28 from './food_28.webp'
-// import food_29 from './food_29.webp'
-// import food_30 from './food_30.webp'
-// import food_31 from './food_31.webp'
 // import food_32 from './food_32.webp'
 
 import add_icon_white from './add_icon_white.webp'
@@ -59,28 +29,6 @@ import profile_icon from './profile_icon.webp'
 import bag_icon from './bag_icon.webp'
 import logout_icon from './logout_icon.webp'
 import parcel_icon from './parcel_icon.webp'
-
-// interface Assets {
-//     logo: string;
-//     basket_icon: string;
-//     header_img: string;
-//     search_icon: string;
-//     rating_starts: string;
-//     add_icon_green: string;
-//     add_icon_white: string;
-//     remove_icon_red: string;
-//     app_store: string;
-//     play_store: string;
-//     linkedin_icon: string;
-//     facebook_icon: string;
-//     twitter_icon: string;
-//     cross_icon: string;
-//     selector_icon: string;
-//     profile_icon: string;
-//     logout_icon: string;
-//     bag_icon: string;
-//     parcel_icon: string;
-// }
 
 export const assets: AssetsType = {
     logo,
@@ -103,11 +51,6 @@ export const assets: AssetsType = {
     bag_icon,
     parcel_icon
 }
-
-// interface Menu {
-//     menu_name: string;
-//     menu_image: string;
-// }
 
 export const menu_list: MenuType[] = [
     {
@@ -143,15 +86,6 @@ export const menu_list: MenuType[] = [
         menu_image: menu_8
     }
 ]
-
-// interface Food {
-//     _id: string;
-//     name: string;
-//     image: string;
-//     price: number;
-//     description: string;
-//     category: string;
-// }
 
 
 // export const food_list: FoodType[] = [
