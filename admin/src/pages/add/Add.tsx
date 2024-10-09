@@ -8,7 +8,7 @@ import { useAdmin } from '../../context/adminContext'
 const Add = () => {
 
     const { addFood } = useAdmin()
-    const [image, setImage] = useState<string | null>(null)
+    const [image, setImage] = useState<File | null>(null)
     const [data, setData] = useState<any>({
         name: '',
         description: '',
@@ -16,12 +16,14 @@ const Add = () => {
         category: 'salad',
     })
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         // Set Image
-        if (e.target.name === 'image') setImage(e.target.files[0])
+        if (e.target.files) setImage(e.target.files[0] || null)
+    }
 
-        // Set Other Data
-        else setData({ ...data, [e.target.name]: e.target.value })
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+        // Set Non-Image Data
+        setData({ ...data, [e.target.name]: e.target.value })
     }
 
     const resetForm = () => {
@@ -29,7 +31,7 @@ const Add = () => {
         setImage(null)
     }
 
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement | HTMLTextAreaElement>) => {
         e.preventDefault()
         // console.log(data)
 
@@ -57,9 +59,10 @@ const Add = () => {
                 <div className="add-img-upload flex-col">
                     <p>Upload Image</p>
                     <button type="button" onClick={() => document.getElementById('image')?.click()} aria-label='Upload Image'>
+                        {/* <FaUpload size={50} /> */}
                         <img src={image ? URL.createObjectURL(image) : assets.upload_area} alt="" />
                     </button>
-                    <input onChange={handleChange} type="file" name='image' id="image" hidden required />
+                    <input onChange={handleUpload} type="file" name='image' id="image" hidden />
                 </div>
 
                 <div className="add-product-name flex-col">
