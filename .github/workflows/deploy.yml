@@ -57,7 +57,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: production-files
-          path: ./dist
+          path: /dist
 
       - name: List downloaded artifacts # Debugging step
         run: ls -R ./dist
@@ -66,13 +66,13 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist/frontend/dist
+          publish_dir: /dist/frontend/dist
 
       - name: Deploy admin to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist/admin/dist
+          publish_dir: /dist/admin/dist
 
 # ORIGINAL ----------------------------------------------
 
