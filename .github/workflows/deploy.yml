@@ -19,9 +19,6 @@ jobs:
         with:
           node-version: '20'
 
-    #   - name: Set environment variable # This is needed to force the use of Node.js 20
-    #     run: echo "FORCE_JAVASCRIPT_ACTIONS_TO_NODE20=true" >> $GITHUB_ENV
-
       - name: Install dependencies for frontend
         working-directory: frontend
         run: npm install
@@ -69,11 +66,21 @@ jobs:
           name: production-files
           path: ./dist
 
-      - name: List contents of gh-pages directory
-        run: ls -la /home/runner/work/Food-Delivery/Food-Delivery/gh-pages
+      - name: Prepare directories for deployment
+        run: |
+          mkdir -p gh-pages/frontend/dist
+          cp -R frontend/dist/* gh-pages/frontend/dist/
+          mkdir -p gh-pages/admin/dist
+          cp -R admin/dist/* gh-pages/admin/dist/
+          touch gh-pages/frontend/.nojekyll
+          touch gh-pages/admin/.nojekyll
+            
+    #   - name: List contents of dist directory
+    #     run: ls -la /home/runner/work/Food-Delivery/Food-Delivery/dist
+
+    #   - name: List contents of gh-pages directory
+    #     run: ls -la gh-pages
         
-      - name: List contents of dist directory
-        run: ls -la /home/runner/work/Food-Delivery/Food-Delivery/dist
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
