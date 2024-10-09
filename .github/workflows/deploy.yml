@@ -89,7 +89,7 @@ jobs:
             cp -R ./dist/admin/* gh-pages/admin/
           else
             echo "Warning: ./dist/admin is empty or does not exist"
-        #   fi
+          fi
         #   touch gh-pages/frontend/.nojekyll
         #   touch gh-pages/admin/.nojekyll
         
