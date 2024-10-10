@@ -42,7 +42,9 @@ export default App
 /* TODO:
 
   // General -----
+
     Issue with nested url not being maintained after refresh (Currently diverts to '/')
+    - Read this more --> https://stackoverflow.com/questions/74312482/getting-404-not-found-when-refreshing-a-page-that-has-a-nested-route-because
 
     Check TS Declarations
     
