@@ -42,6 +42,7 @@ export default App
 /* TODO:
 
   // General -----
+    Issue with nested url not being maintained after refresh (Currently diverts to '/')
 
     Check TS Declarations
     
