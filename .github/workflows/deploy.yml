@@ -5,6 +5,13 @@ on:
     branches:
       - deployment-tests
 
+env: # Global environment variables
+#   NODE_ENV: 'production'
+#   ANOTHER_VAR: 'value'
+  VITE_FRONTEND_URL: "https://food-delivery.skylergconley.com/"
+  VITE_ADMIN_URL: "https://food-delivery.skylergconley.com/admin/"
+  VITE_BACKEND_URL: "https://food-delivery-api-nx22.onrender.com"
+
 jobs:
   build:
     name: Build
@@ -18,6 +25,12 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '20'
+
+    #   - name: Load environment variables
+    #     run: |
+    #         echo "VITE_FRONTEND_URL=${{ secrets.VITE_FRONTEND_URL }}" >> $GITHUB_ENV
+    #         echo "VITE_ADMIN_URL=${{ secrets.VITE_ADMIN_URL }}" >> $GITHUB_ENV
+    #         echo "VITE_BACKEND_URL=${{ secrets.VITE_BACKEND_URL }}" >> $GITHUB_ENV
 
       - name: Install dependencies for frontend
         working-directory: frontend
