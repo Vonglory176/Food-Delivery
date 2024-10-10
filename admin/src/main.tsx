@@ -11,7 +11,7 @@ axios.defaults.withCredentials = true
 axios.defaults.headers.common['x-request-source'] = 'admin' // Tells the Back-End that requests are from the Admin-Panel
 
 createRoot(document.getElementById('root')!).render(
-  <BrowserRouter basename='/Food-Delivery/admin'>
+  <BrowserRouter basename='/admin'> {/* /Food-Delivery/admin/ */}
     <AdminContextProvider>
       <App />
     </AdminContextProvider>

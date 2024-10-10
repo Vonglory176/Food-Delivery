@@ -9,7 +9,7 @@ import axios from 'axios'
 axios.defaults.withCredentials = true
 
 createRoot(document.getElementById('root')!).render(
-  <BrowserRouter basename='/Food-Delivery/'>
+  <BrowserRouter basename='/'> {/* /Food-Delivery/ */}
     <StoreContextProvider>
       <App />
     </StoreContextProvider>
