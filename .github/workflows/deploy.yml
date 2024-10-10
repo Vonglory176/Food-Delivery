@@ -49,9 +49,6 @@ jobs:
         with:
           name: production-files
           path: ./dist # gh-pages/
-        #   path: |
-        #     frontend/dist
-        #     admin/dist
 
   deploy:
     name: Deploy
@@ -74,7 +71,7 @@ jobs:
         run: |
           mkdir -p gh-pages/frontend
           if [ -d ./dist/frontend ] && [ "$(ls -A ./dist/frontend)" ]; then
-            cp -R ./dist/frontend/* gh-pages/frontend/
+            cp -R ./dist/frontend/* gh-pages/
           else
             echo "Warning: ./dist/frontend is empty or does not exist"
           fi
