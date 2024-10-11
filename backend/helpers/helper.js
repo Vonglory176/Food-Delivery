@@ -34,7 +34,8 @@ const sendLoginDetails = (res, user, isAdmin = false) => {
     const refreshToken = createRefreshToken(user, isAdmin)
     
     // Send the refreshToken in an HttpOnly cookie
-    res.cookie('refreshToken', refreshToken, { 
+    const refreshTokenName = isAdmin ? 'adminRefreshToken' : 'refreshToken'
+    res.cookie(refreshTokenName, refreshToken, { 
         httpOnly: true, 
         path:"/", 
         secure: process.env.USE_HTTPS === "true",

@@ -175,7 +175,8 @@ const accountLogout = async (req, res, next) => {
     console.log("\n IN LOGOUT ACCOUNT --------------------------- \n")
     
     try {
-        res.clearCookie('refreshToken', {
+        const refreshTokenName = isAdmin ? 'adminRefreshToken' : 'refreshToken'
+        res.clearCookie(refreshTokenName, {
             httpOnly: true, 
             path: "/", 
             secure: process.env.USE_HTTPS === "true", 
