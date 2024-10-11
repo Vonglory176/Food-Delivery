@@ -5,7 +5,7 @@ import axios, { AxiosError } from "axios"
 // Generate Access Token
 export const generateAccessTokenHook = async () => {
     try {
-        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/auth/generate-access-token`)
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/auth/generate-access-token`, { withCredentials: true })
         return response
 
     } catch (error) {
