@@ -15,6 +15,7 @@ const generateAccessToken = (req, res, next) => {
         // Grab both refresh tokens, only use one
         const { refreshToken, adminRefreshToken } = req.cookies
         console.log("Refresh Token: " + refreshToken)
+        console.log("Admin Refresh Token: " + adminRefreshToken)
         
         if (!refreshToken) return res.status(200).json({ success: false, message: "Please log in to obtain a new token" })
             
@@ -25,7 +26,10 @@ const generateAccessToken = (req, res, next) => {
 
         // Verify the refreshToken, returning an error if expired
         jwt.verify(selectedToken, secretKey, (err, decoded) => {
-            if (err) return res.status(403).json({ success: false, error: "Refresh token is not valid" })
+            if (err) {
+                console.log("Error in Refresh Token Verification:" + err)
+                return res.status(403).json({ success: false, error: "Refresh token is not valid" })
+            }
 
             // If valid, generate and return a new accessToken
             const accessToken = createAccessToken({ id: decoded.user.id }, isAdmin)
