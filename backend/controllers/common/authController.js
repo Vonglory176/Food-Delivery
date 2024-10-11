@@ -12,17 +12,19 @@ const generateAccessToken = (req, res, next) => {
     console.log("\n IN ACCESS TOKEN GENERATION --------------------------- \n")
 
     try {
-        const { refreshToken } = req.cookies
+        // Grab both refresh tokens, only use one
+        const { refreshToken, adminRefreshToken } = req.cookies
         console.log("Refresh Token: " + refreshToken)
-
+        
         if (!refreshToken) return res.status(200).json({ success: false, message: "Please log in to obtain a new token" })
-
+            
         // Determine the secret key based on the request origin
         const isAdmin = Boolean(req.headers['x-request-source'] === 'admin')
         const secretKey = isAdmin ? process.env.ADMIN_REFRESH_TOKEN_SECRET : process.env.FRONTEND_REFRESH_TOKEN_SECRET
+        const selectedToken = isAdmin ? adminRefreshToken : refreshToken
 
         // Verify the refreshToken, returning an error if expired
-        jwt.verify(refreshToken, secretKey, (err, decoded) => {
+        jwt.verify(selectedToken, secretKey, (err, decoded) => {
             if (err) return res.status(403).json({ success: false, error: "Refresh token is not valid" })
 
             // If valid, generate and return a new accessToken
@@ -173,6 +175,7 @@ const accountLogin = async (req, res, next) => {
 // Logout Account
 const accountLogout = async (req, res, next) => {
     console.log("\n IN LOGOUT ACCOUNT --------------------------- \n")
+    const isAdmin = Boolean(req.headers['x-request-source'] === 'admin')
     
     try {
         const refreshTokenName = isAdmin ? 'adminRefreshToken' : 'refreshToken'
