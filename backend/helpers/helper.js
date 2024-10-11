@@ -37,7 +37,7 @@ const sendLoginDetails = (res, user, isAdmin = false) => {
     const refreshTokenName = isAdmin ? 'adminRefreshToken' : 'refreshToken'
     res.cookie(refreshTokenName, refreshToken, { 
         httpOnly: true, 
-        path: isAdmin ? '/admin/' : '/', 
+        path: '/', 
         secure: true, // process.env.USE_HTTPS || true,
         sameSite: process.env.SAME_SITE || 'Lax', // CHANGE FOR PRODUCTION
         maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
