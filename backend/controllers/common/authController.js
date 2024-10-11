@@ -17,10 +17,10 @@ const generateAccessToken = (req, res, next) => {
         console.log("Refresh Token: " + refreshToken)
         console.log("Admin Refresh Token: " + adminRefreshToken)
         
-        if (!refreshToken) return res.status(200).json({ success: false, message: "Please log in to obtain a new token" })
+        const isAdmin = Boolean(req.headers['x-request-source'] === 'admin')
+        if ((!isAdmin && !refreshToken) || (isAdmin && !adminRefreshToken)) return res.status(200).json({ success: false, message: "Please log in to obtain a new token" })
             
         // Determine the secret key based on the request origin
-        const isAdmin = Boolean(req.headers['x-request-source'] === 'admin')
         const secretKey = isAdmin ? process.env.ADMIN_REFRESH_TOKEN_SECRET : process.env.FRONTEND_REFRESH_TOKEN_SECRET
         const selectedToken = isAdmin ? adminRefreshToken : refreshToken
 
