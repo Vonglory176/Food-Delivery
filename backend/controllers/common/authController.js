@@ -14,6 +14,7 @@ const generateAccessToken = (req, res, next) => {
     try {
         // Grab both refresh tokens, only use one
         const { refreshToken, adminRefreshToken } = req.cookies
+        console.log(req.cookies)
         console.log("Refresh Token: " + refreshToken)
         console.log("Admin Refresh Token: " + adminRefreshToken)
         
