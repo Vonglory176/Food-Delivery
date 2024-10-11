@@ -36,10 +36,10 @@ const App = () => {
 
           <Routes>
             {/* Default */}
-            <Route path="/" element={<Navigate to="/add" replace />} />
+            {/* <Route path="/" element={<Navigate to="/add" replace />} /> */}
 
             {/* Main pages */}
-            <Route path="/add" element={<Add />} />
+            <Route path="/" element={<Add />} />
             <Route path="/foods" element={<Foods />} />
             <Route path="/orders" element={<Orders />} />
           </Routes>

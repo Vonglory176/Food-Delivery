@@ -8,7 +8,7 @@ const Sidebar = () => {
     <div className='sidebar'>
       <div className="sidebar-options">
 
-        <NavLink to="/add" className="sidebar-option" title='Add Food' aria-label='Add Food'>
+        <NavLink to="/" className="sidebar-option" title='Add Food' aria-label='Add Food'>
           {/* <img src={assets.add_icon} alt="" /> */}
           <FaPlusCircle size={24} />
           <p>Add Food</p>
