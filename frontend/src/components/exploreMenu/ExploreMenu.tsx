@@ -13,7 +13,7 @@ const ExploreMenu: React.FC<ExploreMenuProps> = ({ category, setCategory }) => {
             {menu_list.map((item, index) => {
                 return (
                 <button onClick={() => setCategory(prev => prev === item.menu_name ? 'All' : item.menu_name)} key={index} className={`explore-menu-list-item`} aria-label={item.menu_name}> {/*  ${category === item.menu_name ? 'active' : ''} */}
-                    <img className={category === item.menu_name ? 'active' : ''} src={item.menu_image} alt={item.menu_name} />
+                    <img className={category === item.menu_name ? 'active' : ''} src={item.menu_image} alt="" />
                     {/* <h3>{item.name}</h3> */}
                     <p>{item.menu_name}</p>
                 </button>

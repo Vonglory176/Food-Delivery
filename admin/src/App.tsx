@@ -1,5 +1,5 @@
 // import React from 'react'
-import { Routes, Route, Navigate } from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
 import Navbar from './components/navbar/Navbar'
 import Sidebar from './components/sidebar/Sidebar'
 import Add from './pages/add/Add'
@@ -36,10 +36,10 @@ const App = () => {
 
           <Routes>
             {/* Default */}
-            <Route path="/" element={<Navigate to="/add" replace />} />
+            {/* <Route path="/" element={<Navigate to="/add" replace />} /> */}
 
             {/* Main pages */}
-            <Route path="/add" element={<Add />} />
+            <Route path="/" element={<Add />} />
             <Route path="/foods" element={<Foods />} />
             <Route path="/orders" element={<Orders />} />
           </Routes>

@@ -5,10 +5,10 @@ import { validateLoginForm } from '../../helpers/helper'
 
 const LoginPopup = () => {
   const { setShowLogin, userLoginSignup } = useStore()
-  const [currentState, setCurrentState] = useState<string>("Sign Up")
+  const [currentState, setCurrentState] = useState<string>("Login")
   const [data, setData] = useState<any>({
-    name: 'test',
-    email: 'test@gmail.com',
+    name: 'John Doe',
+    email: 'JohnDoe@gmail.com',
     password: 'abc123@W',
     terms: false
   })
@@ -28,8 +28,14 @@ const LoginPopup = () => {
     setErrors({ name: false, email: false, password: false, terms: false, errorExists: false })
   }
 
+  const resetData = () => {
+    setData({ name: '', email: '', password: '', terms: false })
+  }
+
   const changeFormState = (state: string) => {
     setCurrentState(state)
+    
+    resetData()
     resetErrors()
   }
 

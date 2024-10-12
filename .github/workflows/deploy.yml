@@ -1,9 +1,15 @@
-name: Deploy
+name: Deploy # ONLY FRONTEND
 
 on:
   push:
     branches:
       - main
+
+env: # Global environment variables
+  VITE_FRONTEND_URL: "https://food-delivery.skylergconley.com"
+  VITE_ADMIN_URL: "https://food-delivery-admin.skylergconley.com"
+  VITE_BACKEND_URL: "https://food-delivery-api.skylergconley.com"
+
 
 jobs:
   build:
@@ -17,7 +23,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: '16'
+          node-version: '20'
 
       - name: Install dependencies for frontend
         working-directory: frontend
@@ -27,21 +33,17 @@ jobs:
         working-directory: frontend
         run: npm run build
 
-      - name: Install dependencies for admin
-        working-directory: admin
-        run: npm install
-
-      - name: Build admin project
-        working-directory: admin
-        run: npm run build
+      - name: Prepare directories for deployment # Create directories for deployment
+        run: |
+          mkdir -p ./dist/frontend
+          cp -R frontend/dist/* ./dist/frontend/
+          touch ./dist/frontend/.nojekyll
 
       - name: Upload production-ready build files
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: production-files
-          path: |
-            frontend/dist
-            admin/dist
+          path: ./dist # gh-pages/
 
   deploy:
     name: Deploy
@@ -50,32 +52,48 @@ jobs:
     if: github.ref == 'refs/heads/main'
 
     steps:
+      - name: Create directory
+        run: mkdir -p ./dist # gh-pages
+
       - name: Download artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: production-files
-          path: ./dist
+          path: ./dist # gh-pages/
 
-      - name: Deploy frontend to GitHub Pages
+      - name: Prepare directories for deployment
+        # frontend/ (TAKEN OUT TO MOVE TO GH-PAGES ROOT)
+        run: |
+          mkdir -p gh-pages/frontend
+          if [ -d ./dist/frontend ] && [ "$(ls -A ./dist/frontend)" ]; then
+            cp -R ./dist/frontend/* gh-pages/
+          else
+            echo "Warning: ./dist/frontend is empty or does not exist"
+          fi
+        #   touch gh-pages/frontend/.nojekyll
+        
+
+      - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist/frontend
+          publish_dir: ./gh-pages
 
-      - name: Deploy admin to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist/admin
-
-# ORIGINAL ----------------------------------------------
+# ORIGINAL ( Both Frontend AND Admin ) ----------------------------------------------
 
 # name: Deploy
 
 # on:
 #   push:
 #     branches:
-#       - main
+#       - deployment-tests
+
+# env: # Global environment variables
+# #   NODE_ENV: 'production'
+# #   ANOTHER_VAR: 'value'
+#   VITE_FRONTEND_URL: "https://food-delivery.skylergconley.com/"
+#   VITE_ADMIN_URL: "https://food-delivery.skylergconley.com/admin/"
+#   VITE_BACKEND_URL: "https://food-delivery-api-nx22.onrender.com"
 
 # jobs:
 #   build:
@@ -88,34 +106,83 @@ jobs:
 
 #       - name: Setup Node
 #         uses: actions/setup-node@v3
+#         with:
+#           node-version: '20'
 
-#       - name: Install dependencies
-#         uses: bahmutov/npm-install@v1
+#     #   - name: Load environment variables
+#     #     run: |
+#     #         echo "VITE_FRONTEND_URL=${{ secrets.VITE_FRONTEND_URL }}" >> $GITHUB_ENV
+#     #         echo "VITE_ADMIN_URL=${{ secrets.VITE_ADMIN_URL }}" >> $GITHUB_ENV
+#     #         echo "VITE_BACKEND_URL=${{ secrets.VITE_BACKEND_URL }}" >> $GITHUB_ENV
 
-#       - name: Build project
+#       - name: Install dependencies for frontend
+#         working-directory: frontend
+#         run: npm install
+
+#       - name: Build frontend project
+#         working-directory: frontend
 #         run: npm run build
 
+#       - name: Install dependencies for admin
+#         working-directory: admin
+#         run: npm install
+
+#       - name: Build admin project
+#         working-directory: admin
+#         run: npm run build
+
+#       - name: Prepare directories for deployment # Create directories for deployment
+#         run: |
+#           mkdir -p ./dist/frontend
+#           mkdir -p ./dist/admin
+#           cp -R frontend/dist/* ./dist/frontend/
+#           cp -R admin/dist/* ./dist/admin/
+#           touch ./dist/frontend/.nojekyll
+#           touch ./dist/admin/.nojekyll
+
 #       - name: Upload production-ready build files
-#         uses: actions/upload-artifact@v3
+#         uses: actions/upload-artifact@v4
 #         with:
 #           name: production-files
-#           path: ./dist
+#           path: ./dist # gh-pages/
 
 #   deploy:
 #     name: Deploy
 #     needs: build
 #     runs-on: ubuntu-latest
-#     if: github.ref == 'refs/heads/main'
+#     if: github.ref == 'refs/heads/deployment-tests'
 
 #     steps:
+#       - name: Create directory
+#         run: mkdir -p ./dist # gh-pages
+
 #       - name: Download artifact
-#         uses: actions/download-artifact@v3
+#         uses: actions/download-artifact@v4
 #         with:
 #           name: production-files
-#           path: ./dist
+#           path: ./dist # gh-pages/
+
+#       - name: Prepare directories for deployment
+#         # frontend/ (TAKEN OUT TO MOVE TO GH-PAGES ROOT)
+#         run: |
+#           mkdir -p gh-pages/frontend
+#           if [ -d ./dist/frontend ] && [ "$(ls -A ./dist/frontend)" ]; then
+#             cp -R ./dist/frontend/* gh-pages/
+#           else
+#             echo "Warning: ./dist/frontend is empty or does not exist"
+#           fi
+#           mkdir -p gh-pages/admin
+#           if [ -d ./dist/admin ] && [ "$(ls -A ./dist/admin)" ]; then
+#             cp -R ./dist/admin/* gh-pages/admin/
+#           else
+#             echo "Warning: ./dist/admin is empty or does not exist"
+#           fi
+#         #   touch gh-pages/frontend/.nojekyll
+#         #   touch gh-pages/admin/.nojekyll
+        
 
 #       - name: Deploy to GitHub Pages
 #         uses: peaceiris/actions-gh-pages@v3
 #         with:
 #           github_token: ${{ secrets.GITHUB_TOKEN }}
-#           publish_dir: ./dist
+#           publish_dir: ./gh-pages

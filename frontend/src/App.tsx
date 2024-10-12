@@ -43,12 +43,15 @@ export default App
 
   // General -----
 
+    Add Max sizes to content/text (Larger views make it look worse after a certain point)
+
     Check TS Declarations
+
     
   // Frontend -----
 
     Post-Fetch logic to StoreContext?
-    
+
 
   // Backend -----
     
@@ -58,6 +61,7 @@ export default App
   // Admin -----
   
     Automatic Order updates
+    
     Add/Edit Item Modal
 
 */

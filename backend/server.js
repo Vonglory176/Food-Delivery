@@ -51,11 +51,12 @@ app.use(errorHandler)
 
 
 
-app.get("/", (req, res) => {
-    res.send("API is running...")
-})
+// app.get("/", (req, res) => {
+//     res.send("API is running...")
+// })
 
 app.listen(port, () => {
+    console.log('API is running at ' + process.env.BACKEND_URL)
     console.log(`Server is running at http://localhost:${port}`)
 })
 

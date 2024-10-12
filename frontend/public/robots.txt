@@ -1,0 +1,5 @@
+User-agent: *
+
+Disallow: /myorders
+Disallow: /checkout
+Disallow: /verify

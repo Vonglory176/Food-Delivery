@@ -116,7 +116,8 @@
 }
 .login-popup-container {
   place-self: center;
-  width: max(23vw, 330px);
+  width: 100%;
+  max-width: 330px;
   color: #808080;
   background-color: white;
   display: flex;
@@ -216,14 +217,30 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
 }
 .spinner-circle {
-  width: 100px;
-  height: 100px;
+  width: 30px;
+  height: 30px;
   border: 5px solid #bdbdbd;
   border-top-color: tomato;
   border-radius: 50%;
   animation: rotate 1s linear infinite;
+}
+.spinner-loading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+.spinner-message {
+  color: #555555;
+  text-align: center;
+  width: 100%;
 }
 
 .add {
@@ -417,6 +434,9 @@
 .order-item hr {
   background-color: tomato;
 }
+.order-item select {
+  border-color: #505050 !important;
+}
 .order-item.delivered {
   background-color: #e4ffe8;
 }
@@ -535,6 +555,24 @@ body {
 a {
   text-decoration: none;
   color: inherit;
+}
+
+input, select, textarea {
+  border-radius: 5px;
+  height: 40px;
+  min-height: 40px;
+  background-color: white;
+  border: 1px solid #a9a9a9;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 hr {

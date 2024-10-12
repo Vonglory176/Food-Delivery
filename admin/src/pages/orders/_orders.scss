@@ -22,6 +22,10 @@
         background-color: tomato;
     }
 
+    select {
+        border-color: #505050 !important;
+    }
+
     &.delivered {
         background-color: #e4ffe8;
 
