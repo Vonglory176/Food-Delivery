@@ -3,7 +3,7 @@ name: Deploy # ONLY FRONTEND
 on:
   push:
     branches:
-      - deployment-tests
+      - main
 
 env: # Global environment variables
   VITE_FRONTEND_URL: "https://food-delivery.skylergconley.com"
@@ -49,7 +49,7 @@ jobs:
     name: Deploy
     needs: build
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/deployment-tests'
+    if: github.ref == 'refs/heads/main'
 
     steps:
       - name: Create directory
