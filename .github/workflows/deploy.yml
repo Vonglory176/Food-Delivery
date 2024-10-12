@@ -6,9 +6,9 @@ on:
       - deployment-tests
 
 env: # Global environment variables
-  VITE_FRONTEND_URL: "https://food-delivery.skylergconley.com/"
-  VITE_ADMIN_URL: "https://food-delivery-admin.skylergconley.com/"
-  VITE_BACKEND_URL: "https://food-delivery-api.skylergconley.com/"
+  VITE_FRONTEND_URL: "https://food-delivery.skylergconley.com"
+  VITE_ADMIN_URL: "https://food-delivery-admin.skylergconley.com"
+  VITE_BACKEND_URL: "https://food-delivery-api.skylergconley.com"
 
 
 jobs:
