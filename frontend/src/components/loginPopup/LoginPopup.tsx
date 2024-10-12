@@ -112,7 +112,7 @@ const LoginPopup = () => {
 
           :
 
-          <p>Already have an account? <button className='login-popup-login' onClick={() => changeFormState("Login")} aria-label='Login'>Login</button></p>
+          <p>Already have an account? <button type='button' className='login-popup-login' onClick={() => changeFormState("Login")} aria-label='Login'>Login</button></p>
         }
       </form>
     </div>
