@@ -39,11 +39,12 @@ a {
     color: inherit;
 }
 
-select {
+input, select, textarea {
+    border-radius: 5px;
     height: 40px;
+    min-height: 40px;
     background-color: white;
-    border-radius: 2px;
-    border: 1px solid #505050; // #6d6d6d; // 
+    border: 1px solid #a9a9a9; // #6d6d6d; // 
 }
 
 input[type=number] {
