@@ -352,8 +352,9 @@
   align-items: center;
   gap: 30px;
   text-align: center;
-  margin: 20px 0px;
+  padding: 20px 0px;
   overflow-x: scroll;
+  overflow-y: hidden;
 }
 .explore-menu-list::-webkit-scrollbar {
   display: none;
@@ -524,14 +525,30 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
 }
 .spinner-circle {
-  width: 100px;
-  height: 100px;
+  width: 30px;
+  height: 30px;
   border: 5px solid #bdbdbd;
   border-top-color: tomato;
   border-radius: 50%;
   animation: rotate 1s linear infinite;
+}
+.spinner-loading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+.spinner-message {
+  color: #555555;
+  text-align: center;
+  width: 100%;
 }
 
 .footer {
@@ -837,12 +854,15 @@
   font-weight: 500;
   color: #454545;
 }
+.my-orders-order hr {
+  border: 1px solid tomato;
+}
 .my-orders-order button {
   border: none;
   padding: 12px 0px;
   border-radius: 4px;
   background-color: white;
-  border: 1px solid tomato;
+  border: 1px solid #454545;
   cursor: pointer;
   color: #454545;
   transition: 0.3s;
@@ -856,13 +876,13 @@
 .my-orders-order.delivered {
   background-color: #e4ffe8;
 }
-.my-orders-order.delivered, .my-orders-order.delivered button {
+.my-orders-order.delivered, .my-orders-order.delivered hr {
   border-color: #009933;
 }
 .my-orders-order.delivering {
   background-color: #fff3cd;
 }
-.my-orders-order.delivering, .my-orders-order.delivering button {
+.my-orders-order.delivering, .my-orders-order.delivering hr {
   border-color: #ffc107;
 }
 @media (max-width: 900px) {
@@ -905,6 +925,12 @@ a {
 }
 a:hover {
   color: tomato;
+}
+
+select {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
 }
 
 .App {
