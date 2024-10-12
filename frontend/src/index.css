@@ -927,12 +927,6 @@ a:hover {
   color: tomato;
 }
 
-select {
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-}
-
 .App {
   width: 80%;
   margin: auto;
