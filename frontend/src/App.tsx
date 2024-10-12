@@ -43,6 +43,8 @@ export default App
 
   // General -----
 
+    Test in other browsers
+
     Cookies not being saved(?)/sent on mobile
 
     Issue with nested url not being maintained after refresh (Currently diverts to '/')
