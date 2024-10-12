@@ -260,7 +260,7 @@ const AdminContextProvider: React.FC<AdminContextProviderProps> = ({ children })
                 // RE-TRY REQUEST --- (If a new token was given, re-send the request)
                 if (success && newAccessToken) {
                     options.headers.Authorization = `Bearer ${newAccessToken}`
-                    response = await axios({ url, ...options, withCredentials: true })
+                    response = await axios({ url, ...options })
                     // console.log(response)
                 }
                 else {
