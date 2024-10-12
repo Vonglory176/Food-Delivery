@@ -39,6 +39,23 @@ a {
     color: inherit;
 }
 
+select {
+    height: 40px;
+    background-color: white;
+    border-radius: 2px;
+    border: 1px solid #505050; // #6d6d6d; // 
+}
+
+input[type=number] {
+    -moz-appearance: textfield; // For Firefox
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none; // For WebKit browsers like Chrome and Safari
+    margin: 0;
+}
+
 hr {
     border: none;
     height: 1px;
