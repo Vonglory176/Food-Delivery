@@ -6,4 +6,5 @@ Both the Frontend and Admin-Panel were written using Vite/React & TypeScript.
 The Backend was written using NodeJS & ExpressJS with support from MongoDB for data storage.
 
 MAIN SITE: https://food-delivery.skylergconley.com/
+
 ADMIN PANEL: https://food-delivery-admin.skylergconley.com/
