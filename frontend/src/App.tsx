@@ -42,10 +42,9 @@ export default App
 /* TODO:
 
   // General -----
-
+    
     Test in other browsers
-
-    Cookies not being saved(?)/sent on mobile
+    Add Max sizes to content/text (Larger views make it look worse after a certain point)
 
     Issue with nested url not being maintained after refresh (Currently diverts to '/')
     - Read this more --> https://stackoverflow.com/questions/74312482/getting-404-not-found-when-refreshing-a-page-that-has-a-nested-route-because
